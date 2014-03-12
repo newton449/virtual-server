@@ -1,0 +1,29 @@
+.panel {
+	background-color: #F9EDBE;
+	border: 1px solid #F0C36C;
+	padding: 3px 25px;
+	padding-right: 25px;
+	font-weight: bold;
+	font-size: 14px;
+	margin: 0 10%;
+}
+
+.message {
+	color: #222;
+}
+
+.error {
+	color:red;
+}
+.reload{
+    color: #222;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 20px;
+}
+.close{
+    color: #222;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 20px;
+}

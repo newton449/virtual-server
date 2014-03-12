@@ -1,0 +1,58 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:s="urn:import:com.newton449.virtualserverclient.installer.client">
+    <ui:with field='res' type='com.newton449.virtualserverclient.installer.client.Resources'/>
+    <ui:style>
+        .top{
+        margin: 20px;
+        }
+        .intro{
+        float: left;
+        font-size: 120%;
+        line-height: 25px;
+        text-shadow: 1px 1px #F2F2F2;
+        }
+        .checkboxButton{
+        float: right;
+        margin: 0 20px;
+        width: 100px;
+        }
+        .clear{
+        clear: both;
+        }
+        .error{
+        color: #FF0000;
+        margin: 3px 3% 3px 0;
+        text-align: right;
+        }
+        .actions{
+        margin: 10px 3% 0 0;
+        padding: 0 0 40px;
+        }
+        .actionButton{
+        float: right;
+        margin: 0 0 0 25px;
+        width: 80px;
+        }
+    </ui:style>
+    <g:HTMLPanel>
+        <g:Image resource='{res.step1}'/>
+        <div class="{style.top}">
+            <div class="{style.intro}">Please choose modules for your cloned server:</div>
+            <g:Button addStyleNames="{style.checkboxButton}" ui:field="uncheckAllButton">Uncheck All</g:Button>
+            <g:Button addStyleNames="{style.checkboxButton}" ui:field="checkAllButton">Check All</g:Button>
+        </div>
+        <div class="{style.clear}"></div>
+        <s:ModulesTable ui:field="table"></s:ModulesTable>
+        <g:HTML addStyleNames="{style.error}" ui:field="error">Error Message</g:HTML>
+        <div class="{style.actions}">
+            <g:Button addStyleNames="{style.actionButton}" ui:field="nextButton">Next</g:Button>
+<!--            <g:Button addStyleNames="{style.actionButton}" ui:field="previousButton">Previous</g:Button>-->
+        </div>
+        <div class="{style.clear}"></div>
+    </g:HTMLPanel>
+</ui:UiBinder>

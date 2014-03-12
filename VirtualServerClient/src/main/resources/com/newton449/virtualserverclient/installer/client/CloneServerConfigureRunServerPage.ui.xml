@@ -1,0 +1,39 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field='res' type='com.newton449.virtualserverclient.installer.client.Resources'/>
+    <ui:style>
+        .clear{
+        clear: both;
+        }
+        .error{
+        color: #FF0000;
+        margin: 3px 3% 3px 0;
+        text-align: right;
+        }
+        .actions{
+        margin: 10px 3% 0 0;
+        padding: 0 0 40px;
+        }
+        .actionButton{
+        float: right;
+        margin: 0 0 0 25px;
+        width: 80px;
+        }
+
+    </ui:style>
+    <g:HTMLPanel>
+        <g:Image resource='{res.step4}'/>
+        <div>
+            Instructions to run your server.
+        </div>
+        <div class="{style.actions}">
+            <!--            <g:Button addStyleNames="{style.actionButton}" ui:field="nextButton">Next</g:Button>-->
+            <g:Button addStyleNames="{style.actionButton}" ui:field="previousButton">Previous</g:Button>
+        </div>
+        <div class="{style.clear}"></div>
+    </g:HTMLPanel>
+</ui:UiBinder>

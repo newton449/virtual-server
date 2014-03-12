@@ -1,0 +1,99 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style>
+        .background{
+        text-align: center;
+        background: url("/style/blackground.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+        }
+        .frame{
+        width: 1000px;
+        display: inline-block;
+        text-align: left;
+        blackground-color: #3DA8D6;
+        }
+        .north{
+        height: 75px;
+        }
+        .east{
+        background-color: #F0F0F0;
+        border-radius: 8px 8px 0 0;
+        float: left;
+        width: 145px;
+        }
+        .center{
+        background-color: #FFFFFF;
+        margin: 0 0 0 155px;
+        padding: 10px;
+        }
+        .south{
+        border-top: 2px solid #F0F0F0;
+        clear: both;
+        margin: 10px;
+        padding: 5px;
+        text-align: center;
+        color: #505050;
+        }
+        .clear{
+        clear: both;
+        }
+        
+        <!-- for north panel -->
+        .title{
+        color: #FFFFFF;
+        font-size: 150%;
+        font-weight: bolder;
+        padding: 22px 0 0 30px;
+        text-shadow: 2px 2px #444444;
+        }
+        
+        <!-- for east panel -->
+        .menu{
+        background: url("/style/menu.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+        border-radius: 6px 6px 0 0;
+        color: #F0F0F0;
+        font-size: 110%;
+        font-weight: bold;
+        height: 20px;
+        letter-spacing: 1px;
+        padding: 3px 14px;
+        text-shadow: 1px 1px #101010;
+        }
+        .item{
+        background-color: #187AE1;
+        border-radius: 3px;
+        color: #FFFFFF;
+        margin: 10px 14px;
+        padding: 4px 10px;
+        text-shadow: 1px 1px #333333;
+        display: block;
+        }
+        .item:hover{
+        text-decoration: underline;
+        cursor: pointer;
+        }
+    </ui:style>
+    <g:HTMLPanel styleName="{style.background}">
+        <div class="{style.frame}">
+            <div class="{style.north}">
+                <div class="{style.title}">Virtual Server Console</div>
+            </div>
+            <div class="{style.east}">
+                <div class="{style.menu}">Menu</div>
+                <g:FlowPanel ui:field="menuPanel">
+<!--                    <a class="{style.item}">Home</a>
+                    <a class="{style.item}">Clone</a>
+                    <a class="{style.item}">About</a>-->
+                </g:FlowPanel>
+            </div>
+            <g:SimplePanel ui:field="centerPanel" styleName="{style.center}">
+                <g:Label>Center Panel</g:Label>
+            </g:SimplePanel>
+            <div class="{style.clear}"></div>
+            <div class="{style.south}">© All right reserved.</div>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>
