@@ -1,0 +1,1398 @@
+14/03 void __thiscall AggregateHttpServletMapping::addServletMapping(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,class IServletFactory *,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Added servlet mapping: /home/menu_list -> MenuListServlet
+14/03 void __thiscall AggregateHttpServletMapping::addResourcesMapping(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Added static resources mapping: /home -> ./Home/web/
+14/03 void __thiscall AggregateHttpServletMapping::addResourcesMapping(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &,const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Added static resources mapping: /style -> ./_web/style/
+14/03 void __thiscall RequestHandlerThread::run(void) #0 Starting a handler thread.
+14/03 void __thiscall RequestHandlerThread::run(void) #0 Starting a handler thread.#1 Starting a handler thread.
+14/03 void __thiscall RequestHandlerThread::run(void) #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.
+14/03 void __thiscall RequestHandlerThread::run(void) #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.
+14/03 void __thiscall HttpServer::run(void) #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.
+14/03 void __thiscall RequestHandlerThread::run(void) #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.#4 Starting a handler thread.
+14/03 void __thiscall RequestHandlerThread::run(void) #0 Got a socket from 127.0.0.1
+14/03 void __thiscall RequestHandlerThread::run(void) #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1
+14/03 void __thiscall RequestHandlerThread::run(void) #1 Got a socket from 127.0.0.1
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #0 Executing servlet for url: /home/
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Creating a servlet for url:/home/
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Found static resource mapping: ./Home/web/
+14/03 void __thiscall StaticResourcesServlet::doMethod(class IHttpServletRequest &,class IHttpServletResponse &) Sending file: ./Home/web/index.html
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #0 Will keep socket alive for next request.
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #0 Executing servlet for url: /home/home.nocache.js
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Creating a servlet for url:/home/home.nocache.js
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Found static resource mapping: ./Home/web/
+14/03 void __thiscall StaticResourcesServlet::doMethod(class IHttpServletRequest &,class IHttpServletResponse &) Sending file: ./Home/web/home.nocache.js
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #0 Will keep socket alive for next request.
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #0 Executing servlet for url: /home/gwt/standard/standard.css
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Creating a servlet for url:/home/gwt/standard/standard.css
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) Creating a servlet for url:/home/gwt/standard/standard.css#3 Executing servlet for url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Found static resource mapping: ./Home/web/
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+14/03 void __thiscall StaticResourcesServlet::doMethod(class IHttpServletRequest &,class IHttpServletResponse &) Sending file: ./Home/web/gwt/standard/standard.css
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Found static resource mapping: ./Home/web/
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #0 Will keep socket alive for next request.
+14/03 void __thiscall StaticResourcesServlet::doMethod(class IHttpServletRequest &,class IHttpServletResponse &) Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #3 Will keep socket alive for next request.
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #1 Executing servlet for url: /style/menu.png
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #1 Executing servlet for url: /style/menu.png#3 Executing servlet for url: /user/menu_list
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #1 Executing servlet for url: /style/menu.png#3 Executing servlet for url: /user/menu_list#0 Executing servlet for url: /style/blackground.png
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Creating a servlet for url:/style/menu.png
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Creating a servlet for url:/user/menu_list
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Creating a servlet for url:/style/blackground.png
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Found static resource mapping: ./_web/style/
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Failed to find a servlet. Returning NULL.
+14/03 class IHttpServlet *__thiscall AggregateHttpServletMapping::createServlet(const class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &) Found static resource mapping: ./_web/style/
+14/03 void __thiscall StaticResourcesServlet::doMethod(class IHttpServletRequest &,class IHttpServletResponse &) Sending file: ./_web/style/menu.png
+14/03 void __thiscall RequestHandlerThread::executeServlet(void) #3 Got NULL servlet pointer
+14/03 void __thiscall StaticResourcesServlet::doMethod(class IHttpServletRequest &,class IHttpServletResponse &) Sending file: ./_web/style/blackground.png
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #1 Will keep socket alive for next request.
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #3 Will keep socket alive for next request.
+14/03 void __thiscall RequestHandlerThread::handleOneRequest(void) #0 Will keep socket alive for next request.
+14/03 void __thisc03/14 21:3848 [] INFO  Loading module: Home
+03/14 21:3848 [] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/14 21:3848 [] TRACE Added static resources mapping: /home -> ./Home/web/
+03/14 21:3848 [] TRACE Added static resources mapping: /style -> ./_web/style/
+03/14 21:3848 [] TRACE #0 Starting a handler thread.
+03/14 21:3848 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.
+03/14 21:3848 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.
+03/14 21:3848 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.
+03/14 21:3848 [] INFO  #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.
+03/14 21:3848 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.#4 Starting a handler thread.
+03/14 21:3859 [] DEBUG #0 Got a socket from 127.0.0.1
+03/14 21:3900 [] DEBUG #2 Got a socket from 127.0.0.1
+03/14 21:3900 [] TRACE #0 Executing servlet for url: /user/menu_list
+03/14 21:3900 [] TRACE Creating a servlet for url:/user/menu_list
+03/14 21:3900 [] DEBUG Found servlet mapping: MenuListServlet
+03/14 21:3900 [] INFO  Module can log!
+03/14 21:3900 [] TRACE #0 Will keep socket alive for next request.
+03/14 21:3916 [] TRACE Got an empty header.
+03/14 21:3916 [] DEBUG #2 Clearing a socket because: the socket is closed (typically by the client)
+03/14 21:3946 [] TRACE #0 Executing servlet for url: /home/
+03/14 21:3946 [] TRACE Creating a servlet for url:/home/
+03/14 21:3946 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 21:3946 [] TRACE Sending file: ./Home/web/index.html
+03/14 21:3946 [] TRACE #0 Will keep socket alive for next request.
+03/14 21:3946 [] TRACE #0 Executing servlet for url: /home/home.nocache.js
+03/14 21:3946 [] TRACE Creating a servlet for url:/home/home.nocache.js
+03/14 21:3946 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 21:3946 [] TRACE Sending file: ./Home/web/home.nocache.js
+03/14 21:3946 [] TRACE #0 Will keep socket alive for next request.
+03/14 21:3946 [] TRACE #0 Executing servlet for url: /home/gwt/standard/standard.css
+03/14 21:3946 [] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/14 21:3946 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 21:3946 [] TRACE Sending file: ./Home/web/gwt/standard/standard.css
+03/14 21:3946 [] TRACE #0 Will keep socket alive for next request.
+03/14 21:3946 [] DEBUG #3 Got a socket from 127.0.0.1
+03/14 21:3946 [] DEBUG #3 Got a socket from 127.0.0.1#1 Got a socket from 127.0.0.1
+03/14 21:3946 [] DEBUG #3 Got a socket from 127.0.0.1#1 Got a socket from 127.0.0.1#4 Got a socket from 127.0.0.1
+03/14 21:3946 [] TRACE #0 Executing servlet for url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 21:3946 [] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 21:3946 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 21:3946 [] TRACE Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 21:3946 [] TRACE #0 Will keep socket alive for next request.
+03/14 21:3947 [] DEBUG #2 Got a socket from 127.0.0.1
+03/14 21:3947 [] TRACE #1 Executing servlet for url: /style/menu.png
+03/14 21:3947 [] TRACE #1 Executing servlet for url: /style/menu.png#3 Executing servlet for url: /style/blackground.png
+03/14 21:3947 [] TRACE Creating a servlet for url:/style/menu.png
+03/14 21:3947 [] TRACE Creating a servlet for url:/style/menu.png#0 Executing servlet for url: /user/menu_list
+03/14 21:3947 [] TRACE Creating a servlet for url:/style/blackground.png
+03/14 21:3947 [] DEBUG Found static resource mapping: ./_web/style/
+03/14 21:3947 [] TRACE Creating a servlet for url:/user/menu_list
+03/14 21:3947 [] DEBUG Found static resource mapping: ./_web/style/
+03/14 21:3947 [] TRACE Sending file: ./_web/style/menu.png
+03/14 21:3947 [] DEBUG Found servlet mapping: MenuListServlet
+03/103/14 22:1731 [] INFO  Loading module: Home
+03/14 22:1731 [] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/14 22:1731 [] TRACE Added static resources mapping: /home -> ./Home/web/
+03/14 22:1731 [] TRACE Added static resources mapping: /style -> ./_web/style/
+03/14 22:1731 [] TRACE #0 Starting a handler thread.
+03/14 22:1731 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.
+03/14 22:1731 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.
+03/14 22:1731 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.
+03/14 22:1731 [] INFO  #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.
+03/14 22:1731 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.#4 Starting a handler thread.
+03/14 22:1737 [] DEBUG #0 Got a socket from 127.0.0.1
+03/14 22:1737 [] DEBUG #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1
+03/14 22:1737 [] DEBUG #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1#1 Got a socket from 127.0.0.1
+03/14 22:1737 [] DEBUG #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1#1 Got a socket from 127.0.0.1#2 Got a socket from 127.0.0.1
+03/14 22:1737 [] DEBUG #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1#1 Got a socket from 127.0.0.1#2 Got a socket from 127.0.0.1#4 Got a socket from 127.0.0.1
+03/14 22:1738 [] TRACE #0 Executing servlet for url: /home/
+03/14 22:1738 [] TRACE Creating a servlet for url:/home/
+03/14 22:1738 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:1738 [] TRACE Sending file: ./Home/web/index.html
+03/14 22:1738 [] TRACE #0 Will keep socket alive for next request.
+03/14 22:1738 [] TRACE #0 Executing servlet for url: /home/home.nocache.js
+03/14 22:1738 [] TRACE Creating a servlet for url:/home/home.nocache.js
+03/14 22:1738 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:1738 [] TRACE Sending file: ./Home/web/home.nocache.js
+03/14 22:1738 [] TRACE #0 Will keep socket alive for next request.
+03/14 22:1738 [] TRACE #0 Executing servlet for url: /home/gwt/standard/standard.css
+03/14 22:1738 [] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/14 22:1738 [] TRACE Creating a servlet for url:/home/gwt/standard/standard.css#3 Executing servlet for url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 22:1738 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:1738 [] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 22:1738 [] TRACE Sending file: ./Home/web/gwt/standard/standard.css
+03/14 22:1738 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:1738 [] TRACE Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 22:1738 [] TRACE #0 Will keep socket alive for next request.
+03/14 22:1738 [] TRACE #3 Will keep socket alive for next request.
+03/14 22:1739 [] TRACE #0 Executing servlet for url: /style/blackground.png
+03/14 22:1739 [] TRACE #0 Executing servlet for url: /style/blackground.png#3 Executing servlet for url: /user/menu_list
+03/14 22:1739 [] TRACE #0 Executing servlet for url: /style/blackground.png#3 Executing servlet for url: /user/menu_list#1 Executing servlet for url: /style/menu.png
+03/14 22:1739 [] TRACE Creating a servlet for url:/style/blackground.png
+03/14 22:1739 [] TRACE Creating a servlet for url:/user/menu_list
+03/14 22:1739 [] TRACE Creating a servlet for url:/style/menu.png
+03/14 22:1739 [] DEBUG Found static resource mapping: ./_web/style/
+03/14 22:1739 [] DEBUG Found servlet mapping: MenuListServlet
+03/14 22:1739 [] DEBUG Found static resource mapping: ./_web/style/
+03/14 22:1739 [] TRACE Sending file: ./_web/style/blackground.png
+03/14 22:1742 [] INFO  Module can log!
+03/14 22:1742 [] TRACE Sending file: ./_web/style/menu.png
+03/14 22:1742 [] TRACE #0 Will keep socket alive for next request.
+03/03/14 22:3451 [] INFO  Loading module: Home
+03/14 22:3451 [] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/14 22:3451 [] TRACE Added static resources mapping: /home -> ./Home/web/
+03/14 22:3451 [] TRACE Added static resources mapping: /style -> ./_web/style/
+03/14 22:3451 [] TRACE #0 Starting a handler thread.
+03/14 22:3451 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.
+03/14 22:3451 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.
+03/14 22:3451 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.
+03/14 22:3451 [] INFO  #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.
+03/14 22:3451 [] TRACE #0 Starting a handler thread.#1 Starting a handler thread.#2 Starting a handler thread.#3 Starting a handler thread.Server has started.#4 Starting a handler thread.
+03/14 22:3541 [] DEBUG #0 Got a socket from 127.0.0.1
+03/14 22:3541 [] DEBUG #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1
+03/14 22:3541 [] DEBUG #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1#1 Got a socket from 127.0.0.1
+03/14 22:3541 [] DEBUG #0 Got a socket from 127.0.0.1#3 Got a socket from 127.0.0.1#1 Got a socket from 127.0.0.1#2 Got a socket from 127.0.0.1
+03/14 22:3542 [] DEBUG #4 Got a socket from 127.0.0.1
+03/14 22:3542 [] TRACE #0 Executing servlet for url: /user/menu_list
+03/14 22:3542 [] TRACE Creating a servlet for url:/user/menu_list
+03/14 22:3542 [] DEBUG Found servlet mapping: MenuListServlet
+03/14 22:3542 [] INFO  Module can log!
+03/14 22:3542 [] TRACE #0 Will keep socket alive for next request.
+03/14 22:3558 [] TRACE îþîþîþîþîþîþîþîþîþîþ
+03/14 22:3558 [] TRACE Got an empty header.Got an empty header.
+03/14 22:3558 [] TRACE Got an empty header.Got an empty header.Got an empty header.Got 
+03/14 22:3558 [] TRACE Got an empty header.Got an empty header.Got an empty header.Got an empty header.
+03/14 22:3558 [] DEBUG #3 Clearing a socket because: the socket is closed (typically by the client)
+03/14 22:3558 [] DEBUG #1 Clearing a socket because: the socket is closed (typically by the client)
+03/14 22:3558 [] DEBUG #4 Clearing a socket because: the socket is closed (typically by the client)
+03/14 22:3558 [] DEBUG #2 Clearing a socket because: the socket is closed (typically by the client)
+03/14 22:3629 [] TRACE #0 Executing servlet for url: /home/
+03/14 22:3629 [] TRACE Creating a servlet for url:/home/
+03/14 22:3629 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:3629 [] TRACE Sending file: ./Home/web/index.html
+03/14 22:3629 [] TRACE #0 Will keep socket alive for next request.
+03/14 22:3629 [] TRACE #0 Executing servlet for url: /home/home.nocache.js
+03/14 22:3629 [] TRACE Creating a servlet for url:/home/home.nocache.js
+03/14 22:3629 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:3629 [] TRACE Sending file: ./Home/web/home.nocache.js
+03/14 22:3629 [] TRACE #0 Will keep socket alive for next request.
+03/14 22:3629 [] TRACE #0 Executing servlet for url: /home/gwt/standard/standard.css
+03/14 22:3629 [] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/14 22:3629 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:3629 [] TRACE Sending file: ./Home/web/gwt/standard/standard.css
+03/14 22:3629 [] TRACE #0 Will keep socket alive for next request.
+03/14 22:3629 [] TRACE #0 Executing servlet for url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 22:3629 [] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 22:3629 [] DEBUG Found static resource mapping: ./Home/web/
+03/14 22:3629 [] TRACE Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 22:3629 [] DEBUG Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html#3 Got a socket from 127.0.0.1
+03/14 22:3629 [] DEBUG #1 Got a socket from 127.0.0.1
+03/14 22:3629 [] TRACE #0 Will keep socket alive for next request.03/14 23:3141 [4756] INFO  Loading module: Home
+03/14 23:3142 [4756] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/14 23:3142 [4756] TRACE Added static resources mapping: /home -> ./Home/web/
+03/14 23:3142 [4756] TRACE Added static resources mapping: /style -> ./_web/style/
+03/14 23:3142 [9300] TRACE #0 Starting a handler thread.
+03/14 23:3142 [10884] TRACE #1 Starting a handler thread.
+03/14 23:3142 [13200] TRACE #2 Starting a handler thread.
+03/14 23:3142 [8876] TRACE #3 Starting a handler thread.
+03/14 23:3142 [10664] INFO  Server has started.
+03/14 23:3142 [10344] TRACE #4 Starting a handler thread.
+03/14 23:3146 [9300] DEBUG #0 Got a socket from 127.0.0.1
+03/14 23:3146 [10884] DEBUG #1 Got a socket from 127.0.0.1
+03/14 23:3146 [13200] DEBUG #2 Got a socket from 127.0.0.1
+03/14 23:3146 [8876] DEBUG #3 Got a socket from 127.0.0.1
+03/14 23:3146 [10344] DEBUG #4 Got a socket from 127.0.0.1
+03/14 23:3146 [9300] TRACE #0 Executing servlet for url: /home/
+03/14 23:3146 [9300] TRACE Creating a servlet for url:/home/
+03/14 23:3146 [9300] DEBUG Found static resource mapping: ./Home/web/
+03/14 23:3146 [9300] TRACE Sending file: ./Home/web/index.html
+03/14 23:3146 [9300] TRACE #0 Will keep socket alive for next request.
+03/14 23:3146 [9300] TRACE #0 Executing servlet for url: /home/home.nocache.js
+03/14 23:3146 [9300] TRACE Creating a servlet for url:/home/home.nocache.js
+03/14 23:3146 [9300] DEBUG Found static resource mapping: ./Home/web/
+03/14 23:3146 [9300] TRACE Sending file: ./Home/web/home.nocache.js
+03/14 23:3146 [9300] TRACE #0 Will keep socket alive for next request.
+03/14 23:3146 [9300] TRACE #0 Executing servlet for url: /home/gwt/standard/standard.css
+03/14 23:3146 [9300] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/14 23:3146 [10884] TRACE #1 Executing servlet for url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 23:3146 [9300] DEBUG Found static resource mapping: ./Home/web/
+03/14 23:3146 [10884] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 23:3146 [9300] TRACE Sending file: ./Home/web/gwt/standard/standard.css
+03/14 23:3146 [10884] DEBUG Found static resource mapping: ./Home/web/
+03/14 23:3146 [10884] TRACE Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/14 23:3146 [9300] TRACE #0 Will keep socket alive for next request.
+03/14 23:3147 [10884] TRACE #1 Will keep socket alive for next request.
+03/14 23:3147 [10884] TRACE #1 Executing servlet for url: /user/menu_list
+03/14 23:3147 [13200] TRACE #2 Executing servlet for url: /style/menu.png
+03/14 23:3147 [9300] TRACE #0 Executing servlet for url: /style/blackground.png
+03/14 23:3147 [10884] TRACE Creating a servlet for url:/user/menu_list
+03/14 23:3147 [13200] TRACE Creating a servlet for url:/style/menu.png
+03/14 23:3147 [9300] TRACE Creating a servlet for url:/style/blackground.png
+03/14 23:3147 [10884] DEBUG Found servlet mapping: MenuListServlet
+03/14 23:3147 [13200] DEBUG Found static resource mapping: ./_web/style/
+03/14 23:3147 [9300] DEBUG Found static resource mapping: ./_web/style/
+03/14 23:3147 [10884] INFO  Module can log!
+03/14 23:3147 [13200] TRACE Sending file: ./_web/style/menu.png
+03/14 23:3147 [9300] TRACE Sending file: ./_web/style/blackground.png
+03/14 23:3147 [10884] TRACE #1 Will keep socket alive for next request.
+03/14 23:3147 [13200] TRACE #2 Will keep socket alive for next request.
+03/14 23:3147 [9300] TRACE #0 Will keep socket alive for next request.
+03/14 23:3206 [8876] DEBUG #3 The socket was closed (typically by the client)
+03/14 23:3206 [10344] DEBUG #4 The socket was closed (typically by the client)
+03/14 23:3206 [8876] TRACE #3 Closing socket.
+03/14 23:3206 [10344] TRACE #4 Closing socket.
+03/14 23:3206 [8876] DEBUG #3 Got a socket from 127.0.0.1
+03/14 23:3206 [8876] DEBUG #3 The socket was closed (typically by the client)
+03/14 23:3206 [8876] TRACE #3 Closing socket.
+03/14 23:3656 [10884] DEBUG #1 The socket was closed (typically by the client)
+03/14 23:3656 [13200] DEBUG #2 The socket was closed (typically by t03/14 23:5510 [3660] INFO  Starting server.
+03/14 23:5510 [3660] DEBUG Loading all modules.
+03/14 23:5510 [3660] INFO  Loading module: Home
+03/14 23:5510 [3660] TRACE Added client menu item: Home -> /home/
+03/14 23:5510 [3660] TRACE Added client menu item: About -> /home/#about
+03/14 23:5510 [3660] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/14 23:5510 [3660] TRACE Added static resources mapping: /home -> ./Home/web/
+03/14 23:5510 [3660] TRACE Added static resources mapping: /style -> ./_web/style/
+03/14 23:5510 [3660] INFO  Finished loading module: Home
+03/14 23:5510 [6772] DEBUG Starting a handler thread.
+03/14 23:5510 [11352] DEBUG Starting a handler thread.
+03/14 23:5510 [6644] DEBUG Starting a handler thread.
+03/14 23:5510 [10524] DEBUG Starting a handler thread.
+03/14 23:5510 [12004] INFO  Server has started.
+03/14 23:5510 [10656] DEBUG Starting a handler thread.
+03/15 00:0100 [6772] DEBUG Got a socket from 127.0.0.1
+03/15 00:0100 [11352] DEBUG Got a socket from 127.0.0.1
+03/15 00:0100 [6644] DEBUG Got a socket from 127.0.0.1
+03/15 00:0100 [10524] DEBUG Got a socket from 127.0.0.1
+03/15 00:0100 [10656] DEBUG Got a socket from 127.0.0.1
+03/15 00:0101 [6772] TRACE Executing servlet for url: /home/
+03/15 00:0101 [6772] TRACE Creating a servlet for url:/home/
+03/15 00:0101 [6772] DEBUG Found static resource mapping: ./Home/web/
+03/15 00:0101 [6772] TRACE Sending file: ./Home/web/index.html
+03/15 00:0101 [6772] TRACE Will keep socket alive for next request.
+03/15 00:0101 [6772] TRACE Executing servlet for url: /home/home.nocache.js
+03/15 00:0101 [6772] TRACE Creating a servlet for url:/home/home.nocache.js
+03/15 00:0101 [6772] DEBUG Found static resource mapping: ./Home/web/
+03/15 00:0101 [6772] TRACE Sending file: ./Home/web/home.nocache.js
+03/15 00:0101 [6772] TRACE Will keep socket alive for next request.
+03/15 00:0101 [6772] TRACE Executing servlet for url: /home/gwt/standard/standard.css
+03/15 00:0101 [11352] TRACE Executing servlet for url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:0101 [6772] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/15 00:0101 [11352] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:0101 [6772] DEBUG Found static resource mapping: ./Home/web/
+03/15 00:0101 [11352] DEBUG Found static resource mapping: ./Home/web/
+03/15 00:0101 [6772] TRACE Sending file: ./Home/web/gwt/standard/standard.css
+03/15 00:0101 [11352] TRACE Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:0101 [6772] TRACE Will keep socket alive for next request.
+03/15 00:0101 [11352] TRACE Will keep socket alive for next request.
+03/15 00:0101 [6772] TRACE Executing servlet for url: /style/blackground.png
+03/15 00:0101 [11352] TRACE Executing servlet for url: /user/menu_list
+03/15 00:0101 [6644] TRACE Executing servlet for url: /style/menu.png
+03/15 00:0101 [6772] TRACE Creating a servlet for url:/style/blackground.png
+03/15 00:0101 [11352] TRACE Creating a servlet for url:/user/menu_list
+03/15 00:0101 [6644] TRACE Creating a servlet for url:/style/menu.png
+03/15 00:0101 [6772] DEBUG Found static resource mapping: ./_web/style/
+03/15 00:0101 [11352] DEBUG Found servlet mapping: MenuListServlet
+03/15 00:0101 [6644] DEBUG Found static resource mapping: ./_web/style/
+03/15 00:0101 [6772] TRACE Sending file: ./_web/style/blackground.png
+03/15 00:0101 [11352] INFO  Module can log!
+03/15 00:0101 [6644] TRACE Sending file: ./_web/style/menu.png
+03/15 00:0101 [6772] TRACE Will keep socket alive for next request.
+03/15 00:0101 [11352] TRACE Will keep socket alive for next request.
+03/15 00:0101 [6644] TRACE Will keep socket alive for next request.
+03/15 00:0114 [10524] DEBUG The socket was closed (typically by the client)
+03/15 00:0117 [10656] DEBUG The socket was closed (typically by the client)
+03/15 00:0117 [10524] TRACE Closing socket.
+03/15 00:0117 [10656] TRACE Closing socket.
+03/15 00:0117 [10524] DEBUG Got a socket from 127.0.0.1
+03/15 00:0117 [10524] DEBUG The socket was closed (typically by the clie03/15 00:1319 [4160] INFO  Starting server.
+03/15 00:1319 [4160] DEBUG Loading all modules.
+03/15 00:1319 [4160] INFO  Loading module: Home
+03/15 00:1319 [4160] TRACE Added client menu item: Home -> /home/
+03/15 00:1319 [4160] TRACE Added client menu item: About -> /home/#about
+03/15 00:1319 [4160] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/15 00:1319 [4160] TRACE Added static resources mapping: /home -> ./Home/web/
+03/15 00:1319 [4160] TRACE Added static resources mapping: /style -> ./_web/style/
+03/15 00:1319 [4160] INFO  Finished loading module: Home
+03/15 00:1319 [13204] DEBUG Starting a handler thread.
+03/15 00:1319 [5460] DEBUG Starting a handler thread.
+03/15 00:1319 [7424] DEBUG Starting a handler thread.
+03/15 00:1319 [7268] DEBUG Starting a handler thread.
+03/15 00:1319 [6136] INFO  Server has started.
+03/15 00:1319 [5820] DEBUG Starting a handler thread.
+03/15 00:1323 [13204] DEBUG Got a socket from 127.0.0.1
+03/15 00:1323 [5460] DEBUG Got a socket from 127.0.0.1
+03/15 00:1323 [7424] DEBUG Got a socket from 127.0.0.1
+03/15 00:1323 [7268] DEBUG Got a socket from 127.0.0.1
+03/15 00:1323 [5820] DEBUG Got a socket from 127.0.0.1
+03/15 00:1324 [13204] DEBUG Handling a request of url: /home/
+03/15 00:1324 [13204] TRACE Creating a servlet for url:/home/
+03/15 00:1324 [13204] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1324 [13204] DEBUG Sending file: ./Home/web/index.html
+03/15 00:1324 [13204] TRACE Will keep socket alive for next request.
+03/15 00:1324 [13204] DEBUG Handling a request of url: /home/home.nocache.js
+03/15 00:1324 [13204] TRACE Creating a servlet for url:/home/home.nocache.js
+03/15 00:1324 [13204] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1324 [13204] DEBUG Sending file: ./Home/web/home.nocache.js
+03/15 00:1324 [13204] TRACE Will keep socket alive for next request.
+03/15 00:1324 [13204] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+03/15 00:1324 [5460] DEBUG Handling a request of url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:1324 [13204] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/15 00:1324 [5460] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:1324 [13204] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1324 [5460] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1324 [13204] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+03/15 00:1324 [5460] DEBUG Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:1324 [13204] TRACE Will keep socket alive for next request.
+03/15 00:1324 [5460] TRACE Will keep socket alive for next request.
+03/15 00:1324 [5460] DEBUG Handling a request of url: /user/menu_list
+03/15 00:1324 [5460] TRACE Creating a servlet for url:/user/menu_list
+03/15 00:1324 [5460] TRACE Found servlet mapping: MenuListServlet
+03/15 00:1324 [5460] INFO  Module can log!
+03/15 00:1324 [5460] TRACE Will keep socket alive for next request.
+03/15 00:1324 [7424] DEBUG Handling a request of url: /style/menu.png
+03/15 00:1324 [13204] DEBUG Handling a request of url: /style/blackground.png
+03/15 00:1324 [7424] TRACE Creating a servlet for url:/style/menu.png
+03/15 00:1324 [13204] TRACE Creating a servlet for url:/style/blackground.png
+03/15 00:1324 [7424] TRACE Found static resource mapping: ./_web/style/
+03/15 00:1324 [13204] TRACE Found static resource mapping: ./_web/style/
+03/15 00:1324 [7424] DEBUG Sending file: ./_web/style/menu.png
+03/15 00:1324 [13204] DEBUG Sending file: ./_web/style/blackground.png
+03/15 00:1324 [7424] TRACE Will keep socket alive for next request.
+03/15 00:1324 [13204] TRACE Will keep socket alive for next request.
+03/15 00:1334 [7268] DEBUG The socket was closed (typically by the client)
+03/15 00:1334 [5820] DEBUG The socket was closed (typically by the client)
+03/15 00:1334 [7268] TRACE Closing socket.
+03/15 00:1334 [5820] TRACE Closing socket.
+03/15 00:1334 [7268] DEBUG Got a socket from 127.0.0.1
+03/15 00:1334 [7268] DEBUG The socket was closed (typically by the clien03/15 00:1911 [340] INFO  Starting server.
+03/15 00:1911 [340] DEBUG Loading all modules.
+03/15 00:1911 [340] INFO  Loading module: Home
+03/15 00:1911 [340] TRACE Added client menu item: Home -> /home/
+03/15 00:1911 [340] TRACE Added client menu item: About -> /home/#about
+03/15 00:1911 [340] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/15 00:1911 [340] TRACE Added static resources mapping: /home -> ./Home/web/
+03/15 00:1911 [340] TRACE Added static resources mapping: /style -> ./_web/style/
+03/15 00:1911 [340] INFO  Finished loading module: Home
+03/15 00:1911 [11548] DEBUG Starting a handler thread.
+03/15 00:1911 [6664] DEBUG Starting a handler thread.
+03/15 00:1911 [5768] DEBUG Starting a handler thread.
+03/15 00:1911 [2636] DEBUG Starting a handler thread.
+03/15 00:1911 [6688] INFO  Server has started.
+03/15 00:1911 [12892] DEBUG Starting a handler thread.
+03/15 00:1916 [11548] DEBUG Got a socket from 127.0.0.1
+03/15 00:1916 [6664] DEBUG Got a socket from 127.0.0.1
+03/15 00:1916 [5768] DEBUG Got a socket from 127.0.0.1
+03/15 00:1916 [2636] DEBUG Got a socket from 127.0.0.1
+03/15 00:1916 [12892] DEBUG Got a socket from 127.0.0.1
+03/15 00:1916 [11548] DEBUG Handling a request of url: /home/
+03/15 00:1916 [11548] TRACE Creating a servlet for url:/home/
+03/15 00:1916 [11548] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1916 [11548] DEBUG Sending file: ./Home/web/index.html
+03/15 00:1916 [11548] TRACE Will keep socket alive for next request.
+03/15 00:1917 [11548] DEBUG Handling a request of url: /home/home.nocache.js
+03/15 00:1917 [11548] TRACE Creating a servlet for url:/home/home.nocache.js
+03/15 00:1917 [11548] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1917 [11548] DEBUG Sending file: ./Home/web/home.nocache.js
+03/15 00:1917 [11548] TRACE Will keep socket alive for next request.
+03/15 00:1917 [11548] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+03/15 00:1917 [11548] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/15 00:1917 [11548] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1917 [6664] DEBUG Handling a request of url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:1917 [11548] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+03/15 00:1917 [6664] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:1917 [6664] TRACE Found static resource mapping: ./Home/web/
+03/15 00:1917 [6664] DEBUG Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 00:1917 [11548] TRACE Will keep socket alive for next request.
+03/15 00:1917 [6664] TRACE Will keep socket alive for next request.
+03/15 00:1917 [5768] DEBUG Handling a request of url: /style/menu.png
+03/15 00:1917 [11548] DEBUG Handling a request of url: /style/blackground.png
+03/15 00:1917 [5768] TRACE Creating a servlet for url:/style/menu.png
+03/15 00:1917 [6664] DEBUG Handling a request of url: /user/menu_list
+03/15 00:1917 [11548] TRACE Creating a servlet for url:/style/blackground.png
+03/15 00:1917 [5768] TRACE Found static resource mapping: ./_web/style/
+03/15 00:1917 [6664] TRACE Creating a servlet for url:/user/menu_list
+03/15 00:1917 [11548] TRACE Found static resource mapping: ./_web/style/
+03/15 00:1917 [5768] DEBUG Sending file: ./_web/style/menu.png
+03/15 00:1917 [6664] TRACE Found servlet mapping: MenuListServlet
+03/15 00:1917 [11548] DEBUG Sending file: ./_web/style/blackground.png
+03/15 00:1917 [5768] TRACE Will keep socket alive for next request.
+03/15 00:1917 [6664] INFO  Module can log!
+03/15 00:1917 [11548] TRACE Will keep socket alive for next request.
+03/15 00:1917 [6664] TRACE Will keep socket alive for next request.
+03/15 00:1927 [2636] DEBUG Got nothing from client socket.
+03/15 00:1927 [12892] DEBUG Got nothing from client socket.
+03/15 00:1927 [2636] TRACE Closing socket.
+03/15 00:1927 [12892] TRACE Closing socket.
+03/15 00:1927 [2636] DEBUG Got a socket from 127.0.0.1
+03/15 00:1927 [2636] DEBUG Got nothing from client socket.
+03/15 00:1927 [2636] TRACE Closing socket.
+03/15 003/15 15:2237 [7840] INFO  Starting server.
+03/15 15:2237 [7840] DEBUG Loading all modules.
+03/15 15:2237 [7840] INFO  Loading module: Home
+03/15 15:2237 [7840] TRACE Added client menu item: Home -> /home/
+03/15 15:2237 [7840] TRACE Added client menu item: About -> /home/#about
+03/15 15:2237 [7840] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+03/15 15:2237 [7840] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+03/15 15:2237 [7840] TRACE Added static resources mapping: /home -> ./Home/web/
+03/15 15:2237 [7840] TRACE Added static resources mapping:  -> ./_web/
+03/15 15:2237 [7840] INFO  Finished loading module: Home
+03/15 15:2238 [15344] DEBUG Starting a handler thread.
+03/15 15:2238 [10024] DEBUG Starting a handler thread.
+03/15 15:2238 [14084] DEBUG Starting a handler thread.
+03/15 15:2238 [9524] DEBUG Starting a handler thread.
+03/15 15:2238 [14988] INFO  Server has started.
+03/15 15:2238 [6052] DEBUG Starting a handler thread.
+03/15 15:2246 [15344] DEBUG Got a socket from 127.0.0.1
+03/15 15:2247 [10024] DEBUG Got a socket from 127.0.0.1
+03/15 15:2247 [15344] DEBUG Handling a request of url: /
+03/15 15:2247 [15344] TRACE Creating a servlet for url:/
+03/15 15:2247 [15344] TRACE Found servlet mapping: RedirectToHomeServlet
+03/15 15:2247 [15344] TRACE Will keep socket alive for next request.
+03/15 15:2247 [15344] DEBUG Handling a request of url: /home/
+03/15 15:2247 [15344] TRACE Creating a servlet for url:/home/
+03/15 15:2247 [15344] TRACE Found static resource mapping: ./Home/web/
+03/15 15:2247 [15344] DEBUG Sending file: ./Home/web/index.html
+03/15 15:2247 [15344] TRACE Will keep socket alive for next request.
+03/15 15:2247 [15344] DEBUG Handling a request of url: /home/home.nocache.js
+03/15 15:2247 [15344] TRACE Creating a servlet for url:/home/home.nocache.js
+03/15 15:2247 [15344] TRACE Found static resource mapping: ./Home/web/
+03/15 15:2247 [15344] DEBUG Sending file: ./Home/web/home.nocache.js
+03/15 15:2247 [15344] TRACE Will keep socket alive for next request.
+03/15 15:2247 [15344] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+03/15 15:2247 [15344] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+03/15 15:2247 [15344] TRACE Found static resource mapping: ./Home/web/
+03/15 15:2248 [15344] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+03/15 15:2248 [10024] DEBUG Handling a request of url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 15:2248 [10024] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 15:2248 [10024] TRACE Found static resource mapping: ./Home/web/
+03/15 15:2248 [15344] TRACE Will keep socket alive for next request.
+03/15 15:2248 [10024] DEBUG Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+03/15 15:2248 [10024] TRACE Will keep socket alive for next request.
+03/15 15:2248 [15344] DEBUG Handling a request of url: /style/blackground.png
+03/15 15:2248 [10024] DEBUG Handling a request of url: /user/menu_list
+03/15 15:2248 [15344] TRACE Creating a servlet for url:/style/blackground.png
+03/15 15:2248 [10024] TRACE Creating a servlet for url:/user/menu_list
+03/15 15:2248 [15344] TRACE Found static resource mapping for empty context path.
+03/15 15:2248 [10024] TRACE Found servlet mapping: MenuListServlet
+03/15 15:2248 [15344] DEBUG Sending file: ./_web/style/blackground.png
+03/15 15:2248 [10024] INFO  Module can log!
+03/15 15:2248 [15344] TRACE Will keep socket alive for next request.
+03/15 15:2248 [10024] TRACE Will keep socket alive for next request.
+03/15 15:2248 [15344] DEBUG Handling a request of url: /style/menu.png
+03/15 15:2248 [15344] TRACE Creating a servlet for url:/style/menu.png
+03/15 15:2248 [15344] TRACE Found static resource mapping for empty context path.
+03/15 15:2248 [15344] DEBUG Sending file: ./_web/style/menu.png
+03/15 15:2248 [15344] TRACE Will keep socket alive for next request.
+03/15 15:2248 [14084] DEBUG Got a socket from 127.0.0.1
+03/15 15:2305 [14084] TRACE Got nothing from client socket.
+03/15 15:2305 [14084] DEBUG Closing socket.
+03/15 15:22014-03-15 15:3200 [13768] INFO  Starting server.
+2014-03-15 15:3200 [13768] DEBUG Loading all modules.
+2014-03-15 15:3200 [13768] INFO  Loading module: Home
+2014-03-15 15:3200 [13768] TRACE Added client menu item: Home -> /home/
+2014-03-15 15:3200 [13768] TRACE Added client menu item: About -> /home/#about
+2014-03-15 15:3200 [13768] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 15:3200 [13768] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+2014-03-15 15:3200 [13768] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 15:3200 [13768] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 15:3200 [13768] INFO  Finished loading module: Home
+2014-03-15 15:3200 [15396] DEBUG Starting a handler thread.
+2014-03-15 15:3200 [11756] DEBUG Starting a handler thread.
+2014-03-15 15:3200 [3512] DEBUG Starting a handler thread.
+2014-03-15 15:3200 [7980] DEBUG Starting a handler thread.
+2014-03-15 15:3200 [14648] INFO  Server has started.
+2014-03-15 15:3200 [13668] DEBUG Starting a handler thread.
+2014-03-15 15:3202 [15396] DEBUG Got a socket from 127.0.0.1
+2014-03-15 15:3202 [11756] DEBUG Got a socket from 127.0.0.1
+2014-03-15 15:3203 [3512] DEBUG Got a socket from 127.0.0.1
+2014-03-15 15:3203 [7980] DEBUG Got a socket from 127.0.0.1
+2014-03-15 15:3203 [13668] DEBUG Got a socket from 127.0.0.1
+2014-03-15 15:3203 [15396] DEBUG Handling a request of url: /home/
+2014-03-15 15:3203 [15396] TRACE Creating a servlet for url:/home/
+2014-03-15 15:3203 [15396] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 15:3203 [15396] DEBUG Sending file: ./Home/web/index.html
+2014-03-15 15:3203 [15396] TRACE Will keep socket alive for next request.
+2014-03-15 15:3203 [15396] DEBUG Handling a request of url: /home/home.nocache.js
+2014-03-15 15:3203 [15396] TRACE Creating a servlet for url:/home/home.nocache.js
+2014-03-15 15:3204 [15396] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 15:3204 [15396] DEBUG Sending file: ./Home/web/home.nocache.js
+2014-03-15 15:3204 [15396] TRACE Will keep socket alive for next request.
+2014-03-15 15:3204 [15396] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+2014-03-15 15:3204 [15396] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+2014-03-15 15:3204 [15396] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 15:3204 [15396] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+2014-03-15 15:3204 [15396] TRACE Will keep socket alive for next request.
+2014-03-15 15:3204 [11756] DEBUG Handling a request of url: /home/0A13E47CFAC10428B200865EF10685DA.cache.html
+2014-03-15 15:3204 [11756] TRACE Creating a servlet for url:/home/0A13E47CFAC10428B200865EF10685DA.cache.html
+2014-03-15 15:3204 [11756] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 15:3204 [11756] DEBUG Sending file: ./Home/web/0A13E47CFAC10428B200865EF10685DA.cache.html
+2014-03-15 15:3204 [11756] TRACE Will keep socket alive for next request.
+2014-03-15 15:3204 [11756] DEBUG Handling a request of url: /user/menu_list
+2014-03-15 15:3204 [11756] TRACE Creating a servlet for url:/user/menu_list
+2014-03-15 15:3204 [11756] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 15:3204 [11756] INFO  Module can log!
+2014-03-15 15:3204 [11756] TRACE Will keep socket alive for next request.
+2014-03-15 15:3204 [3512] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 15:3204 [15396] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 15:3204 [3512] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 15:3204 [15396] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 15:3204 [3512] TRACE Found static resource mapping for empty context path.
+2014-03-15 15:3204 [15396] TRACE Found static resource mapping for empty context path.
+2014-03-15 15:3204 [3512] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 15:3204 [15396] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 15:3204 [3512] TRACE Will keep socket alive for next request.
+2014-03-15 15:3204 [15396] TRACE Will keep socket2014-03-15 16:1248 [2472] INFO  Starting server.
+2014-03-15 16:1248 [2472] DEBUG Loading all modules.
+2014-03-15 16:1248 [2472] INFO  Loading module: Home
+2014-03-15 16:1248 [2472] TRACE Added client menu item: Home -> /home/
+2014-03-15 16:1248 [2472] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 16:1248 [2472] TRACE Added client menu item: About -> /home/#about
+2014-03-15 16:1248 [2472] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 16:1248 [2472] TRACE Added servlet mapping: /user/menu_list -> MenuListServlet
+2014-03-15 16:1248 [2472] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 16:1248 [2472] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 16:1248 [2472] INFO  Finished loading module: Home
+2014-03-15 16:1248 [2472] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 16:1248 [2472] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 16:1248 [8420] DEBUG Starting a handler thread.
+2014-03-15 16:1248 [13384] DEBUG Starting a handler thread.
+2014-03-15 16:1248 [15072] DEBUG Starting a handler thread.
+2014-03-15 16:1248 [3856] DEBUG Starting a handler thread.
+2014-03-15 16:1248 [6120] INFO  Server has started.
+2014-03-15 16:1248 [7692] DEBUG Starting a handler thread.
+2014-03-15 16:1257 [8420] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1257 [13384] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1257 [15072] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1257 [3856] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1257 [7692] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1258 [8420] DEBUG Handling a request of url: /home/
+2014-03-15 16:1258 [8420] TRACE Creating a servlet for url:/home/
+2014-03-15 16:1258 [8420] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1258 [8420] DEBUG Sending file: ./Home/web/index.html
+2014-03-15 16:1258 [8420] TRACE Will keep socket alive for next request.
+2014-03-15 16:1258 [8420] DEBUG Handling a request of url: /home/home.nocache.js
+2014-03-15 16:1258 [8420] TRACE Creating a servlet for url:/home/home.nocache.js
+2014-03-15 16:1258 [8420] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1258 [8420] DEBUG Sending file: ./Home/web/home.nocache.js
+2014-03-15 16:1258 [8420] TRACE Will keep socket alive for next request.
+2014-03-15 16:1258 [8420] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+2014-03-15 16:1258 [8420] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+2014-03-15 16:1258 [8420] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1258 [8420] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+2014-03-15 16:1258 [13384] DEBUG Handling a request of url: /home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:1258 [8420] TRACE Will keep socket alive for next request.
+2014-03-15 16:1258 [13384] TRACE Creating a servlet for url:/home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:1258 [13384] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1258 [13384] DEBUG Sending file: ./Home/web/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:1258 [13384] TRACE Will keep socket alive for next request.
+2014-03-15 16:1259 [3856] DEBUG Handling a request of url: /favicon.ico
+2014-03-15 16:1259 [3856] TRACE Creating a servlet for url:/favicon.ico
+2014-03-15 16:1259 [15072] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:1259 [13384] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:1259 [8420] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:1259 [3856] TRACE Found static resource mapping: ./_web/
+2014-03-15 16:1259 [15072] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:1259 [13384] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:1259 [8420] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 16:1259 [3856] DEBUG Failed to find a file for "favicon.ico" in directory "./_web/"
+2014-03-15 16:1259 [15072] TRACE Found static resource mapping for empty contex2014-03-15 16:1332 [12936] INFO  Starting server.
+2014-03-15 16:1332 [12936] DEBUG Loading all modules.
+2014-03-15 16:1332 [12936] INFO  Loading module: Home
+2014-03-15 16:1332 [12936] TRACE Added client menu item: Home -> /home/
+2014-03-15 16:1332 [12936] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 16:1332 [12936] TRACE Added client menu item: About -> /home/#about
+2014-03-15 16:1332 [12936] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 16:1332 [12936] TRACE Added servlet mapping: /home/menu_list -> MenuListServlet
+2014-03-15 16:1332 [12936] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 16:1332 [12936] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 16:1332 [12936] INFO  Finished loading module: Home
+2014-03-15 16:1332 [12936] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 16:1332 [12936] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 16:1332 [1508] DEBUG Starting a handler thread.
+2014-03-15 16:1332 [15116] DEBUG Starting a handler thread.
+2014-03-15 16:1332 [9188] DEBUG Starting a handler thread.
+2014-03-15 16:1332 [14916] DEBUG Starting a handler thread.
+2014-03-15 16:1332 [14308] INFO  Server has started.
+2014-03-15 16:1332 [14756] DEBUG Starting a handler thread.
+2014-03-15 16:1335 [1508] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1335 [15116] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1335 [9188] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1335 [14916] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1335 [14756] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:1336 [1508] DEBUG Handling a request of url: /home/
+2014-03-15 16:1336 [1508] TRACE Creating a servlet for url:/home/
+2014-03-15 16:1336 [1508] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1336 [1508] DEBUG Sending file: ./Home/web/index.html
+2014-03-15 16:1336 [1508] TRACE Will keep socket alive for next request.
+2014-03-15 16:1336 [1508] DEBUG Handling a request of url: /home/home.nocache.js
+2014-03-15 16:1336 [1508] TRACE Creating a servlet for url:/home/home.nocache.js
+2014-03-15 16:1336 [1508] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1336 [1508] DEBUG Sending file: ./Home/web/home.nocache.js
+2014-03-15 16:1336 [1508] TRACE Will keep socket alive for next request.
+2014-03-15 16:1336 [1508] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+2014-03-15 16:1336 [1508] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+2014-03-15 16:1336 [15116] DEBUG Handling a request of url: /home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:1336 [1508] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1336 [15116] TRACE Creating a servlet for url:/home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:1336 [1508] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+2014-03-15 16:1336 [15116] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:1336 [15116] DEBUG Sending file: ./Home/web/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:1336 [1508] TRACE Will keep socket alive for next request.
+2014-03-15 16:1336 [15116] TRACE Will keep socket alive for next request.
+2014-03-15 16:1337 [15116] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:1337 [1508] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:1337 [9188] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:1337 [15116] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:1337 [1508] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 16:1337 [9188] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:1337 [15116] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:1337 [1508] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:1337 [9188] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:1337 [15116] INFO  Module can log!
+2014-03-15 16:1337 [1508] DEBUG Sending file: ./_web/style/blackground.png
+2014-032014-03-15 16:2252 [6928] INFO  Starting server.
+2014-03-15 16:2252 [6928] DEBUG Loading all modules.
+2014-03-15 16:2252 [6928] INFO  Loading module: Home
+2014-03-15 16:2252 [6928] TRACE Added client menu item: Home -> /home/
+2014-03-15 16:2252 [6928] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 16:2252 [6928] TRACE Added client menu item: About -> /home/#about
+2014-03-15 16:2255 [6928] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 16:2255 [6928] TRACE Added servlet mapping: /home/menu_list -> MenuListServlet
+2014-03-15 16:2255 [6928] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 16:2255 [6928] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 16:2255 [6928] INFO  Finished loading module: Home
+2014-03-15 16:2256 [6928] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 16:2256 [6928] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 16:2256 [7676] DEBUG Starting a handler thread.
+2014-03-15 16:2256 [9520] DEBUG Starting a handler thread.
+2014-03-15 16:2256 [11580] DEBUG Starting a handler thread.
+2014-03-15 16:2256 [9948] DEBUG Starting a handler thread.
+2014-03-15 16:2256 [16120] INFO  Server has started.
+2014-03-15 16:2256 [15288] DEBUG Starting a handler thread.
+2014-03-15 16:2313 [7676] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:2313 [9520] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:2313 [11580] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:2313 [9948] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:2313 [15288] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:2314 [7676] DEBUG Handling a request of url: /
+2014-03-15 16:2317 [7676] TRACE Creating a servlet for url:/
+2014-03-15 16:2317 [7676] TRACE Found servlet mapping: RedirectToHomeServlet
+2014-03-15 16:2317 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2317 [7676] DEBUG Handling a request of url: /home/
+2014-03-15 16:2317 [7676] TRACE Creating a servlet for url:/home/
+2014-03-15 16:2317 [7676] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:2317 [7676] DEBUG Sending file: ./Home/web/index.html
+2014-03-15 16:2317 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2317 [7676] DEBUG Handling a request of url: /home/home.nocache.js
+2014-03-15 16:2317 [7676] TRACE Creating a servlet for url:/home/home.nocache.js
+2014-03-15 16:2317 [7676] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:2317 [7676] DEBUG Sending file: ./Home/web/home.nocache.js
+2014-03-15 16:2317 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2317 [7676] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+2014-03-15 16:2317 [9520] DEBUG Handling a request of url: /home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:2317 [7676] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+2014-03-15 16:2317 [9520] TRACE Creating a servlet for url:/home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:2317 [7676] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:2317 [9520] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 16:2317 [7676] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+2014-03-15 16:2317 [9520] DEBUG Sending file: ./Home/web/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 16:2317 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2317 [9520] TRACE Will keep socket alive for next request.
+2014-03-15 16:2317 [9520] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:2317 [11580] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:2317 [7676] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:2317 [9520] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:2317 [11580] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:2317 [7676] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 16:2317 [9520] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:2317 [11580] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:2317 [7676] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:2317 [9520] INFO  Module can log!
+2014-03-15 16:2317 [11580] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 16:2317 [7676] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 16:2317 [9520] TRACE Will keep socket alive for next request.
+2014-03-15 16:2317 [11580] TRACE Will keep socket alive for next request.
+2014-03-15 16:2317 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [7676] DEBUG Handling a request of url: /installer/
+2014-03-15 16:2321 [7676] TRACE Creating a servlet for url:/installer/
+2014-03-15 16:2321 [7676] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:2321 [7676] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 16:2321 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [7676] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 16:2321 [7676] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 16:2321 [7676] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:2321 [7676] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 16:2321 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [11580] DEBUG Handling a request of url: /installer/D321428410D365933CF927173123A56E.cache.html
+2014-03-15 16:2321 [7676] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 16:2321 [11580] TRACE Creating a servlet for url:/installer/D321428410D365933CF927173123A56E.cache.html
+2014-03-15 16:2321 [7676] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 16:2321 [11580] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:2321 [7676] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:2321 [11580] DEBUG Sending file: ./Installer/web/D321428410D365933CF927173123A56E.cache.html
+2014-03-15 16:2321 [7676] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 16:2321 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [11580] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [11580] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:2321 [11580] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:2321 [11580] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:2321 [11580] INFO  Module can log!
+2014-03-15 16:2321 [11580] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [9520] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:2321 [7676] DEBUG Handling a request of url: /installer/modules_list
+2014-03-15 16:2321 [9948] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:2321 [9520] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 16:2321 [7676] TRACE Creating a servlet for url:/installer/modules_list
+2014-03-15 16:2321 [9948] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:2321 [9520] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:2321 [7676] TRACE Found servlet mapping: ModulesListServlet
+2014-03-15 16:2321 [9948] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:2321 [9520] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 16:2321 [7676] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [9948] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 16:2321 [9520] TRACE Will keep socket alive for next request.
+2014-03-15 16:2321 [9948] TRACE Will keep socket alive for next request.
+2014-03-15 16:2332 [15288] TRACE Got nothing from client socket.
+2014-03-15 16:2341 [15288] DEBUG Closing socket.
+2014-03-15 16:2341 [15288] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:2341 [15288] TRACE Got nothing from client socket.
+2014-03-15 16:2341 [15288] DEBUG Closing socket.
+2014-03-15 16:2822 [11580] TRACE Got nothing from client socket.
+2014-03-15 16:2822 [9520] TRACE Got nothing from client socket.2014-03-15 16:3532 [12652] INFO  Starting server.
+2014-03-15 16:3532 [12652] DEBUG Loading all modules.
+2014-03-15 16:3532 [12652] INFO  Loading module: Home
+2014-03-15 16:3532 [12652] TRACE Added client menu item: Home -> /home/
+2014-03-15 16:3532 [12652] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 16:3532 [12652] TRACE Added client menu item: About -> /home/#about
+2014-03-15 16:3537 [12652] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 16:3537 [12652] TRACE Added servlet mapping: /home/menu_list -> MenuListServlet
+2014-03-15 16:3537 [12652] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 16:3537 [12652] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 16:3537 [12652] INFO  Finished loading module: Home
+2014-03-15 16:3537 [12652] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 16:3537 [12652] TRACE Added servlet mapping: /installer/check_dependencies -> CheckDependenciesServlet
+2014-03-15 16:3537 [12652] TRACE Added servlet mapping: /installer/create_server -> CreateServerServlet
+2014-03-15 16:3537 [12652] TRACE Added servlet mapping: /installer/get_url -> GetUrlServlet
+2014-03-15 16:3537 [12652] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 16:3537 [15820] DEBUG Starting a handler thread.
+2014-03-15 16:3537 [15128] DEBUG Starting a handler thread.
+2014-03-15 16:3537 [10656] DEBUG Starting a handler thread.
+2014-03-15 16:3537 [11088] DEBUG Starting a handler thread.
+2014-03-15 16:3537 [14148] INFO  Server has started.
+2014-03-15 16:3537 [14556] DEBUG Starting a handler thread.
+2014-03-15 16:3542 [15820] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:3542 [15128] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:3542 [10656] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:3542 [11088] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:3542 [14556] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:3543 [15820] DEBUG Handling a request of url: /installer/
+2014-03-15 16:3543 [15820] TRACE Creating a servlet for url:/installer/
+2014-03-15 16:3543 [15820] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:3543 [15820] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 16:3543 [15820] TRACE Will keep socket alive for next request.
+2014-03-15 16:3543 [15820] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 16:3543 [15820] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 16:3543 [15820] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:3543 [15820] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 16:3543 [15820] TRACE Will keep socket alive for next request.
+2014-03-15 16:3543 [15820] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 16:3543 [15820] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 16:3543 [15820] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:3543 [15820] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 16:3543 [15128] DEBUG Handling a request of url: /installer/D321428410D365933CF927173123A56E.cache.html
+2014-03-15 16:3543 [15820] TRACE Will keep socket alive for next request.
+2014-03-15 16:3543 [15128] TRACE Creating a servlet for url:/installer/D321428410D365933CF927173123A56E.cache.html
+2014-03-15 16:3543 [15128] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:3543 [15128] DEBUG Sending file: ./Installer/web/D321428410D365933CF927173123A56E.cache.html
+2014-03-15 16:3543 [15128] TRACE Will keep socket alive for next request.
+2014-03-15 16:3543 [15128] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:3543 [15128] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:3543 [15128] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:3543 [10656] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:3543 [11088] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:3543 [15128] INFO  M2014-03-15 16:4119 [14996] INFO  Starting server.
+2014-03-15 16:4119 [14996] DEBUG Loading all modules.
+2014-03-15 16:4119 [14996] INFO  Loading module: Home
+2014-03-15 16:4119 [14996] TRACE Added client menu item: Home -> /home/
+2014-03-15 16:4119 [14996] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 16:4119 [14996] TRACE Added client menu item: About -> /home/#about
+2014-03-15 16:4119 [14996] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 16:4119 [14996] TRACE Added servlet mapping: /home/menu_list -> MenuListServlet
+2014-03-15 16:4119 [14996] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 16:4119 [14996] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 16:4119 [14996] INFO  Finished loading module: Home
+2014-03-15 16:4119 [14996] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 16:4119 [14996] TRACE Added servlet mapping: /installer/check_dependencies -> CheckDependenciesServlet
+2014-03-15 16:4119 [14996] TRACE Added servlet mapping: /installer/create_server -> CreateServerServlet
+2014-03-15 16:4119 [14996] TRACE Added servlet mapping: /installer/get_url -> GetUrlServlet
+2014-03-15 16:4119 [14996] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 16:4119 [276] DEBUG Starting a handler thread.
+2014-03-15 16:4119 [14580] DEBUG Starting a handler thread.
+2014-03-15 16:4119 [8776] DEBUG Starting a handler thread.
+2014-03-15 16:4119 [4320] DEBUG Starting a handler thread.
+2014-03-15 16:4119 [14100] INFO  Server has started.
+2014-03-15 16:4119 [13216] DEBUG Starting a handler thread.
+2014-03-15 16:4125 [276] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4125 [14580] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4125 [8776] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4125 [4320] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4125 [13216] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4126 [276] DEBUG Handling a request of url: /installer/
+2014-03-15 16:4126 [276] TRACE Creating a servlet for url:/installer/
+2014-03-15 16:4126 [276] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4126 [276] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 16:4126 [276] TRACE Will keep socket alive for next request.
+2014-03-15 16:4126 [276] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 16:4126 [276] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 16:4126 [276] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4126 [276] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 16:4126 [276] TRACE Will keep socket alive for next request.
+2014-03-15 16:4126 [276] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 16:4126 [14580] DEBUG Handling a request of url: /installer/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4126 [276] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 16:4126 [14580] TRACE Creating a servlet for url:/installer/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4126 [276] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4126 [14580] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4126 [276] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 16:4126 [14580] DEBUG Sending file: ./Installer/web/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4126 [276] TRACE Will keep socket alive for next request.
+2014-03-15 16:4126 [14580] TRACE Will keep socket alive for next request.
+2014-03-15 16:4126 [14580] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:4126 [14580] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:4126 [14580] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:4126 [4320] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:4126 [8776] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:4126 [14580] INFO  Module can log!
+2014-03-15 16:4126 [276] DEBUG Handling a request of url: /installer/modules_list
+2014-03-15 16:4126 [4320] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:4126 [8776] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 16:4126 [14580] TRACE Will keep socket alive for next request.
+2014-03-15 16:4127 [276] TRACE Creating a servlet for url:/installer/modules_list
+2014-03-15 16:4127 [4320] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:4127 [8776] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:4127 [276] TRACE Found servlet mapping: ModulesListServlet
+2014-03-15 16:4127 [4320] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 16:4127 [8776] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 16:4127 [276] TRACE Will keep socket alive for next request.
+2014-03-15 16:4127 [4320] TRACE Will keep socket alive for next request.
+2014-03-15 16:4127 [8776] TRACE Will keep socket alive for next request.
+2014-03-15 16:4136 [13216] TRACE Got nothing from client socket.
+2014-03-15 16:4136 [13216] DEBUG Closing socket.
+2014-03-15 16:4136 [13216] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4146 [13216] TRACE Got nothing from client socket.
+2014-03-15 16:4146 [13216] DEBUG Closing socket.
+2014-03-15 16:4146 [8776] DEBUG Handling a request of url: /installer/check_dependencies
+2014-03-15 16:4146 [8776] TRACE Creating a servlet for url:/installer/check_dependencies
+2014-03-15 16:4146 [8776] TRACE Found servlet mapping: CheckDependenciesServlet
+2014-03-15 16:4146 [8776] TRACE Will keep socket alive for next request.
+2014-03-15 16:4157 [8776] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:4157 [8776] DEBUG Closing socket.
+2014-03-15 16:4408 [4320] DEBUG Handling a request of url: /installer/
+2014-03-15 16:4408 [4320] TRACE Creating a servlet for url:/installer/
+2014-03-15 16:4408 [4320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4408 [4320] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 16:4408 [4320] TRACE Will keep socket alive for next request.
+2014-03-15 16:4412 [13216] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4412 [8776] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4412 [4320] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 16:4412 [4320] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 16:4412 [4320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4412 [4320] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 16:4412 [4320] TRACE Will keep socket alive for next request.
+2014-03-15 16:4412 [4320] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 16:4412 [4320] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 16:4412 [276] DEBUG Handling a request of url: /installer/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4412 [4320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4412 [276] TRACE Creating a servlet for url:/installer/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4412 [4320] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 16:4412 [276] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4412 [276] DEBUG Sending file: ./Installer/web/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4412 [4320] TRACE Will keep socket alive for next request.
+2014-03-15 16:4412 [276] TRACE Will keep socket alive for next request.
+2014-03-15 16:4413 [276] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:4413 [276] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:4413 [276] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:4413 [13216] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:4413 [276] INFO  Module can log!
+2014-03-15 16:4413 [14580] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:4413 [4320] DEBUG Handling a request of url: /installer/modules_list
+2014-03-15 16:4413 [13216] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:4413 [276] TRACE Will keep socket alive for next request.
+2014-03-15 16:4413 [14580] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 16:4413 [4320] TRACE Creating a servlet for url:/installer/modules_list
+2014-03-15 16:4413 [13216] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:4413 [14580] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:4413 [4320] TRACE Found servlet mapping: ModulesListServlet
+2014-03-15 16:4413 [13216] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 16:4413 [14580] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 16:4413 [4320] TRACE Will keep socket alive for next request.
+2014-03-15 16:4413 [13216] TRACE Will keep socket alive for next request.
+2014-03-15 16:4413 [14580] TRACE Will keep socket alive for next request.
+2014-03-15 16:4419 [14580] DEBUG Handling a request of url: /installer/check_dependencies
+2014-03-15 16:4419 [14580] TRACE Creating a servlet for url:/installer/check_dependencies
+2014-03-15 16:4419 [14580] TRACE Found servlet mapping: CheckDependenciesServlet
+2014-03-15 16:4419 [14580] TRACE Will keep socket alive for next request.
+2014-03-15 16:4426 [8776] TRACE Got nothing from client socket.
+2014-03-15 16:4426 [8776] DEBUG Closing socket.
+2014-03-15 16:4426 [8776] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4431 [8776] TRACE Got nothing from client socket.
+2014-03-15 16:4431 [8776] DEBUG Closing socket.
+2014-03-15 16:4436 [14580] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:4436 [14580] DEBUG Closing socket.
+2014-03-15 16:4509 [13216] DEBUG Handling a request of url: /installer/
+2014-03-15 16:4509 [13216] TRACE Creating a servlet for url:/installer/
+2014-03-15 16:4509 [13216] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4509 [13216] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 16:4509 [13216] TRACE Will keep socket alive for next request.
+2014-03-15 16:4509 [13216] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 16:4509 [13216] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 16:4509 [13216] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4509 [13216] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 16:4509 [13216] TRACE Will keep socket alive for next request.
+2014-03-15 16:4509 [13216] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 16:4509 [13216] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 16:4509 [13216] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4509 [13216] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 16:4509 [4320] DEBUG Handling a request of url: /installer/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4509 [4320] TRACE Creating a servlet for url:/installer/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4509 [4320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:4509 [4320] DEBUG Sending file: ./Installer/web/371074A8F667FE05AD74F920E143A31E.cache.html
+2014-03-15 16:4509 [13216] TRACE Will keep socket alive for next request.
+2014-03-15 16:4509 [8776] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:4509 [4320] TRACE Will keep socket alive for next request.
+2014-03-15 16:4510 [4320] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:4510 [4320] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:4510 [4320] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:4510 [4320] INFO  Module can log!
+2014-03-15 16:4510 [8776] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:4510 [276] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:4510 [4320] TRACE Will keep socket alive for next request.
+2014-03-15 16:4510 [8776] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:4510 [13216] DEBUG Handling a request of url: /installer/modules_list
+2014-03-15 16:45102014-03-15 16:5710 [6132] INFO  Starting server.
+2014-03-15 16:5710 [6132] DEBUG Loading all modules.
+2014-03-15 16:5710 [6132] INFO  Loading module: Home
+2014-03-15 16:5710 [6132] TRACE Added client menu item: Home -> /home/
+2014-03-15 16:5710 [6132] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 16:5710 [6132] TRACE Added client menu item: About -> /home/#about
+2014-03-15 16:5710 [6132] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 16:5710 [6132] TRACE Added servlet mapping: /home/menu_list -> MenuListServlet
+2014-03-15 16:5710 [6132] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 16:5710 [6132] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 16:5710 [6132] INFO  Finished loading module: Home
+2014-03-15 16:5710 [6132] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 16:5710 [6132] TRACE Added servlet mapping: /installer/check_dependencies -> CheckDependenciesServlet
+2014-03-15 16:5711 [6132] TRACE Added servlet mapping: /installer/create_server -> CreateServerServlet
+2014-03-15 16:5711 [6132] TRACE Added servlet mapping: /installer/get_url -> GetUrlServlet
+2014-03-15 16:5711 [6132] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 16:5711 [11520] DEBUG Starting a handler thread.
+2014-03-15 16:5711 [8028] DEBUG Starting a handler thread.
+2014-03-15 16:5711 [14720] DEBUG Starting a handler thread.
+2014-03-15 16:5711 [15720] DEBUG Starting a handler thread.
+2014-03-15 16:5711 [6116] INFO  Server has started.
+2014-03-15 16:5711 [8696] DEBUG Starting a handler thread.
+2014-03-15 16:5714 [11520] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5714 [8028] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5714 [14720] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5715 [15720] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5715 [11520] DEBUG Handling a request of url: /installer/
+2014-03-15 16:5715 [11520] TRACE Creating a servlet for url:/installer/
+2014-03-15 16:5715 [11520] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:5715 [11520] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 16:5715 [11520] TRACE Will keep socket alive for next request.
+2014-03-15 16:5715 [11520] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 16:5715 [11520] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 16:5715 [11520] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:5715 [11520] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 16:5715 [11520] TRACE Will keep socket alive for next request.
+2014-03-15 16:5715 [11520] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 16:5715 [11520] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 16:5715 [11520] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:5715 [8028] DEBUG Handling a request of url: /installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 16:5715 [11520] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 16:5715 [8028] TRACE Creating a servlet for url:/installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 16:5715 [8028] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 16:5715 [8028] DEBUG Sending file: ./Installer/web/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 16:5715 [11520] TRACE Will keep socket alive for next request.
+2014-03-15 16:5716 [8028] TRACE Will keep socket alive for next request.
+2014-03-15 16:5716 [8028] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 16:5716 [8028] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 16:5716 [15720] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 16:5716 [8028] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 16:5716 [14720] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 16:5716 [11520] DEBUG Handling a request of url: /installer/modules_list
+2014-03-15 16:5716 [15720] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 16:5716 [8028] INFO  Module can log!
+2014-03-15 16:5716 [14720] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 16:5716 [11520] TRACE Creating a servlet for url:/installer/modules_list
+2014-03-15 16:5716 [15720] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:5716 [8028] TRACE Will keep socket alive for next request.
+2014-03-15 16:5716 [14720] TRACE Found static resource mapping for empty context path.
+2014-03-15 16:5716 [11520] TRACE Found servlet mapping: ModulesListServlet
+2014-03-15 16:5716 [15720] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 16:5716 [14720] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 16:5716 [11520] TRACE Will keep socket alive for next request.
+2014-03-15 16:5716 [15720] TRACE Will keep socket alive for next request.
+2014-03-15 16:5716 [14720] TRACE Will keep socket alive for next request.
+2014-03-15 16:5717 [14720] DEBUG Handling a request of url: /installer/check_dependencies
+2014-03-15 16:5717 [14720] TRACE Creating a servlet for url:/installer/check_dependencies
+2014-03-15 16:5717 [14720] TRACE Found servlet mapping: CheckDependenciesServlet
+2014-03-15 16:5717 [14720] TRACE Will keep socket alive for next request.
+2014-03-15 16:5718 [14720] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:5718 [14720] DEBUG Closing socket.
+2014-03-15 16:5720 [15720] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 16:5720 [15720] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 16:5720 [15720] TRACE Found servlet mapping: CreateServerServlet
+2014-03-15 16:5720 [15720] TRACE Will keep socket alive for next request.
+2014-03-15 16:5720 [15720] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:5720 [15720] DEBUG Closing socket.
+2014-03-15 16:5723 [11520] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 16:5723 [11520] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 16:5723 [11520] TRACE Found servlet mapping: CreateServerServlet
+2014-03-15 16:5723 [11520] TRACE Will keep socket alive for next request.
+2014-03-15 16:5723 [11520] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:5723 [11520] DEBUG Closing socket.
+2014-03-15 16:5726 [8028] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 16:5726 [8028] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 16:5726 [8028] TRACE Found servlet mapping: CreateServerServlet
+2014-03-15 16:5726 [8028] TRACE Will keep socket alive for next request.
+2014-03-15 16:5726 [8028] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:5726 [8028] DEBUG Closing socket.
+2014-03-15 16:5734 [8696] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5735 [14720] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5735 [8696] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 16:5735 [8696] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 16:5735 [8696] TRACE Found servlet mapping: CreateServerServlet
+2014-03-15 16:5735 [8696] TRACE Will keep socket alive for next request.
+2014-03-15 16:5735 [8696] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:5735 [8696] DEBUG Closing socket.
+2014-03-15 16:5738 [14720] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 16:5738 [14720] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 16:5738 [14720] TRACE Found servlet mapping: CreateServerServlet
+2014-03-15 16:5738 [14720] TRACE Will keep socket alive for next request.
+2014-03-15 16:5738 [14720] DEBUG Skipped handling a request because of bad request.
+2014-03-15 16:5738 [14720] DEBUG Closing socket.
+2014-03-15 16:5755 [15720] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5756 [11520] DEBUG Got a socket from 127.0.0.1
+2014-03-15 16:5756 [15720] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 16:5756 [15720] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 16:5756 [12014-03-15 17:1458 [3052] INFO  Starting server.
+2014-03-15 17:1458 [3052] DEBUG Loading all modules.
+2014-03-15 17:1458 [3052] INFO  Loading module: Home
+2014-03-15 17:1458 [3052] TRACE Added client menu item: Home -> /home/
+2014-03-15 17:1458 [3052] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 17:1458 [3052] TRACE Added client menu item: About -> /home/#about
+2014-03-15 17:1458 [3052] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 17:1458 [3052] TRACE Added servlet mapping: /home/menu_list -> MenuListServlet
+2014-03-15 17:1458 [3052] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 17:1458 [3052] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 17:1458 [3052] INFO  Finished loading module: Home
+2014-03-15 17:1458 [3052] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 17:1458 [3052] TRACE Added servlet mapping: /installer/check_dependencies -> CheckDependenciesServlet
+2014-03-15 17:1458 [3052] TRACE Added servlet mapping: /installer/create_server -> CreateServerServlet
+2014-03-15 17:1458 [3052] TRACE Added servlet mapping: /installer/get_url -> GetUrlServlet
+2014-03-15 17:1458 [3052] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 17:1459 [12096] DEBUG Starting a handler thread.
+2014-03-15 17:1459 [13284] DEBUG Starting a handler thread.
+2014-03-15 17:1459 [7020] DEBUG Starting a handler thread.
+2014-03-15 17:1459 [13992] DEBUG Starting a handler thread.
+2014-03-15 17:1459 [11620] INFO  Server has started.
+2014-03-15 17:1459 [6912] DEBUG Starting a handler thread.
+2014-03-15 17:1501 [12096] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:1501 [13284] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:1501 [7020] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:1502 [13992] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:1502 [12096] DEBUG Handling a request of url: /installer/
+2014-03-15 17:1502 [12096] TRACE Creating a servlet for url:/installer/
+2014-03-15 17:1502 [12096] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:1502 [12096] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 17:1502 [12096] TRACE Will keep socket alive for next request.
+2014-03-15 17:1502 [12096] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 17:1502 [12096] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 17:1502 [12096] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:1502 [12096] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 17:1502 [12096] TRACE Will keep socket alive for next request.
+2014-03-15 17:1502 [12096] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 17:1502 [12096] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 17:1502 [13284] DEBUG Handling a request of url: /installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:1502 [12096] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:1502 [13284] TRACE Creating a servlet for url:/installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:1502 [12096] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 17:1502 [13284] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:1502 [13284] DEBUG Sending file: ./Installer/web/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:1502 [12096] TRACE Will keep socket alive for next request.
+2014-03-15 17:1502 [13284] TRACE Will keep socket alive for next request.
+2014-03-15 17:1503 [13284] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 17:1503 [13284] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 17:1503 [13992] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 17:1503 [7020] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 17:1503 [13284] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 17:1503 [13992] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 17:1503 [12096] DEBUG Handling a request of url: /installer/modules_list
+2014-03-15 17:1503 [7020] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 17:1503 [13284] INFO  Module can log!
+2014-03-15 17:1503 [13992] TRACE Found static resource mapping for empty context path.
+2014-03-15 17:1503 [12096] TRACE Creating a servlet for url:/installer/modules_list
+2014-03-15 17:1503 [7020] TRACE Found static resource mapping for empty context path.
+2014-03-15 17:1503 [13284] TRACE Will keep socket alive for next request.
+2014-03-15 17:1503 [13992] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 17:1503 [12096] TRACE Found servlet mapping: ModulesListServlet
+2014-03-15 17:1503 [7020] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 17:1503 [13992] TRACE Will keep socket alive for next request.
+2014-03-15 17:1503 [12096] TRACE Will keep socket alive for next request.
+2014-03-15 17:1503 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1505 [7020] DEBUG Handling a request of url: /installer/check_dependencies
+2014-03-15 17:1505 [7020] TRACE Creating a servlet for url:/installer/check_dependencies
+2014-03-15 17:1505 [7020] TRACE Found servlet mapping: CheckDependenciesServlet
+2014-03-15 17:1505 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1506 [7020] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 17:1506 [7020] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 17:1506 [7020] TRACE Found servlet mapping: CreateServerServlet
+2014-03-15 17:1506 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1506 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1506 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1506 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1506 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1508 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1508 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1508 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1508 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1510 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1510 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1510 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1510 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1512 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1512 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1512 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1512 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1514 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1514 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1514 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1514 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1516 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1516 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1516 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1516 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1518 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1518 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1518 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1518 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1520 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1520 [7020] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:1520 [7020] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:1520 [7020] TRACE Will keep socket alive for next request.
+2014-03-15 17:1523 [7020] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:1523 [7020] TRACE Creating2014-03-15 17:2539 [11532] INFO  Starting server.
+2014-03-15 17:2539 [11532] DEBUG Loading all modules.
+2014-03-15 17:2539 [11532] INFO  Loading module: Home
+2014-03-15 17:2539 [11532] TRACE Added client menu item: Home -> /home/
+2014-03-15 17:2539 [11532] TRACE Added client menu item: Clone -> /installer/
+2014-03-15 17:2539 [11532] TRACE Added client menu item: About -> /home/#about
+2014-03-15 17:2539 [11532] TRACE Added servlet mapping: / -> RedirectToHomeServlet
+2014-03-15 17:2539 [11532] TRACE Added servlet mapping: /home/menu_list -> MenuListServlet
+2014-03-15 17:2539 [11532] TRACE Added static resources mapping: /home -> ./Home/web/
+2014-03-15 17:2539 [11532] TRACE Added static resources mapping:  -> ./_web/
+2014-03-15 17:2539 [11532] INFO  Finished loading module: Home
+2014-03-15 17:2539 [11532] TRACE Added servlet mapping: /installer/modules_list -> ModulesListServlet
+2014-03-15 17:2539 [11532] TRACE Added servlet mapping: /installer/check_dependencies -> CheckDependenciesServlet
+2014-03-15 17:2539 [11532] TRACE Added servlet mapping: /installer/create_server -> CreateServerServlet
+2014-03-15 17:2539 [11532] TRACE Added servlet mapping: /installer/get_url -> GetUrlServlet
+2014-03-15 17:2539 [11532] TRACE Added static resources mapping: /installer -> ./Installer/web/
+2014-03-15 17:2539 [15320] DEBUG Starting a handler thread.
+2014-03-15 17:2539 [15540] DEBUG Starting a handler thread.
+2014-03-15 17:2539 [14976] DEBUG Starting a handler thread.
+2014-03-15 17:2539 [12776] DEBUG Starting a handler thread.
+2014-03-15 17:2539 [14624] INFO  Server has started.
+2014-03-15 17:2539 [6068] DEBUG Starting a handler thread.
+2014-03-15 17:2547 [15320] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:2548 [15540] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:2548 [15320] DEBUG Handling a request of url: /installer/
+2014-03-15 17:2548 [15320] TRACE Creating a servlet for url:/installer/
+2014-03-15 17:2548 [15320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2548 [15320] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 17:2548 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2548 [15320] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 17:2548 [15320] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 17:2548 [15320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2548 [15320] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 17:2548 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2548 [15320] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 17:2548 [15320] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 17:2548 [15540] DEBUG Handling a request of url: /installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:2548 [15320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2548 [15540] TRACE Creating a servlet for url:/installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:2548 [15320] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 17:2548 [15540] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2548 [15540] DEBUG Sending file: ./Installer/web/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:2548 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2548 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2549 [15540] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 17:2549 [15540] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 17:2549 [15540] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 17:2549 [15540] INFO  Module can log!
+2014-03-15 17:2549 [15320] DEBUG Handling a request of url: /installer/modules_list
+2014-03-15 17:2549 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2549 [15320] TRACE Creating a servlet for url:/installer/modules_list
+2014-03-15 17:2549 [15320] TRACE Found servlet mapping: ModulesListServlet
+2014-03-15 17:2549 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2549 [15540] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 17:2549 [15540] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 17:2549 [15540] TRACE Found static resource mapping for empty context path.
+2014-03-15 17:2549 [15540] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 17:2549 [15320] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 17:2549 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2549 [15320] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 17:2549 [15320] TRACE Found static resource mapping for empty context path.
+2014-03-15 17:2549 [15320] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 17:2549 [14976] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:2549 [12776] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:2549 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2549 [15540] DEBUG Handling a request of url: /installer/gwt/standard/images/hborder.png
+2014-03-15 17:2549 [15540] TRACE Creating a servlet for url:/installer/gwt/standard/images/hborder.png
+2014-03-15 17:2549 [15540] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2549 [15540] DEBUG Sending file: ./Installer/web/gwt/standard/images/hborder.png
+2014-03-15 17:2549 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2550 [6068] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:2550 [15540] DEBUG Handling a request of url: /installer/check_dependencies
+2014-03-15 17:2550 [15540] TRACE Creating a servlet for url:/installer/check_dependencies
+2014-03-15 17:2550 [15540] TRACE Found servlet mapping: CheckDependenciesServlet
+2014-03-15 17:2550 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2550 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2551 [15540] DEBUG Handling a request of url: /installer/create_server
+2014-03-15 17:2551 [15540] TRACE Creating a servlet for url:/installer/create_server
+2014-03-15 17:2551 [15540] TRACE Found servlet mapping: CreateServerServlet
+2014-03-15 17:2551 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2551 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2552 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2552 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2552 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2552 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2552 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2554 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2554 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2554 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2554 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2554 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2556 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2556 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2556 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2556 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2556 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2558 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2558 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2558 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2558 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2558 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2600 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2600 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2600 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2600 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2600 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2602 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2602 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2602 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2602 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2602 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2604 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2604 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2604 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2604 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2604 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2607 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2607 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2607 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2607 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2607 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2607 [14976] TRACE Got nothing from client socket.
+2014-03-15 17:2607 [12776] TRACE Got nothing from client socket.
+2014-03-15 17:2607 [6068] TRACE Got nothing from client socket.
+2014-03-15 17:2607 [14976] DEBUG Closing socket.
+2014-03-15 17:2607 [12776] DEBUG Closing socket.
+2014-03-15 17:2607 [6068] DEBUG Closing socket.
+2014-03-15 17:2609 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2609 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2609 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2609 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2609 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2611 [15540] DEBUG Handling a request of url: /installer/get_url
+2014-03-15 17:2611 [15540] TRACE Creating a servlet for url:/installer/get_url
+2014-03-15 17:2611 [15540] TRACE Found servlet mapping: GetUrlServlet
+2014-03-15 17:2611 [15540] TRACE Clearing unused request body.
+2014-03-15 17:2611 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2612 [15540] DEBUG Handling a request of url: /_file/VirtualServer-all.zip
+2014-03-15 17:2612 [15540] TRACE Creating a servlet for url:/_file/VirtualServer-all.zip
+2014-03-15 17:2612 [15540] TRACE Found static resource mapping for empty context path.
+2014-03-15 17:2612 [15540] DEBUG Sending file: ./_web/_file/VirtualServer-all.zip
+2014-03-15 17:2612 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2616 [15540] DEBUG Handling a request of url: /home/
+2014-03-15 17:2616 [15540] TRACE Creating a servlet for url:/home/
+2014-03-15 17:2616 [15540] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 17:2616 [15540] DEBUG Sending file: ./Home/web/index.html
+2014-03-15 17:2616 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2616 [15540] DEBUG Handling a request of url: /home/home.nocache.js
+2014-03-15 17:2616 [15540] TRACE Creating a servlet for url:/home/home.nocache.js
+2014-03-15 17:2616 [15540] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 17:2616 [15540] DEBUG Sending file: ./Home/web/home.nocache.js
+2014-03-15 17:2616 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2616 [15540] DEBUG Handling a request of url: /home/gwt/standard/standard.css
+2014-03-15 17:2616 [15540] TRACE Creating a servlet for url:/home/gwt/standard/standard.css
+2014-03-15 17:2616 [15540] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 17:2616 [15540] DEBUG Sending file: ./Home/web/gwt/standard/standard.css
+2014-03-15 17:2616 [15320] DEBUG Handling a request of url: /home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 17:2616 [15320] TRACE Creating a servlet for url:/home/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 17:2616 [15320] TRACE Found static resource mapping: ./Home/web/
+2014-03-15 17:2616 [15320] DEBUG Sending file: ./Home/web/42D2428EC9E649C73C2AE0E3BFB1D5A8.cache.html
+2014-03-15 17:2616 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2616 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2617 [15320] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 17:2617 [15540] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 17:2617 [15320] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 17:2617 [15540] TRACE Creating a servlet for url:/style/blackground.png
+2014-03-15 17:2617 [15320] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 17:2617 [15540] TRACE Found static resource mapping for empty context path.
+2014-03-15 17:2617 [15320] INFO  Module can log!
+2014-03-15 17:2617 [15540] DEBUG Sending file: ./_web/style/blackground.png
+2014-03-15 17:2617 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2617 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2617 [15540] DEBUG Handling a request of url: /style/menu.png
+2014-03-15 17:2617 [15540] TRACE Creating a servlet for url:/style/menu.png
+2014-03-15 17:2617 [15540] TRACE Found static resource mapping for empty context path.
+2014-03-15 17:2617 [15540] DEBUG Sending file: ./_web/style/menu.png
+2014-03-15 17:2617 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2617 [14976] DEBUG Got a socket from 127.0.0.1
+2014-03-15 17:2619 [15540] DEBUG Handling a request of url: /installer/
+2014-03-15 17:2619 [15540] TRACE Creating a servlet for url:/installer/
+2014-03-15 17:2619 [15540] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2619 [15540] DEBUG Sending file: ./Installer/web/index.html
+2014-03-15 17:2619 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2619 [15540] DEBUG Handling a request of url: /installer/installer.nocache.js
+2014-03-15 17:2619 [15540] TRACE Creating a servlet for url:/installer/installer.nocache.js
+2014-03-15 17:2619 [15540] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2619 [15540] DEBUG Sending file: ./Installer/web/installer.nocache.js
+2014-03-15 17:2619 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2619 [15540] DEBUG Handling a request of url: /installer/gwt/standard/standard.css
+2014-03-15 17:2619 [15540] TRACE Creating a servlet for url:/installer/gwt/standard/standard.css
+2014-03-15 17:2619 [15540] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2619 [15540] DEBUG Sending file: ./Installer/web/gwt/standard/standard.css
+2014-03-15 17:2619 [15320] DEBUG Handling a request of url: /installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:2619 [15320] TRACE Creating a servlet for url:/installer/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:2619 [15320] TRACE Found static resource mapping: ./Installer/web/
+2014-03-15 17:2619 [15320] DEBUG Sending file: ./Installer/web/1466638166A5A73A329EE55305F8A6F8.cache.html
+2014-03-15 17:2619 [15540] TRACE Will keep socket alive for next request.
+2014-03-15 17:2619 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2620 [15320] DEBUG Handling a request of url: /home/menu_list
+2014-03-15 17:2620 [15320] TRACE Creating a servlet for url:/home/menu_list
+2014-03-15 17:2620 [15320] TRACE Found servlet mapping: MenuListServlet
+2014-03-15 17:2620 [15320] INFO  Module can log!
+2014-03-15 17:2620 [15320] TRACE Will keep socket alive for next request.
+2014-03-15 17:2620 [14976] DEBUG Handling a request of url: /style/blackground.png
+2014-03-15 17:2620 [15540] DEBUG Handling

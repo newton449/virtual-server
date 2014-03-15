@@ -4,3 +4,8 @@
 *.opensdf
 *.user
 Debug/
+*.exp
+*.ilk
+*.pdb
+*.lib
+*.log

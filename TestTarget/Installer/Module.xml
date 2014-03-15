@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <displayName>Installer</displayName>
+	<description>Allows the server to be cloned.</description>
+	
+	<!-- Configure dynamic libraries. -->
+	<dynamicLibraries>
+	    <dynamicLibrary>
+		    <path>Installer.dll</path>
+			<platform>Windows</platform>
+			<version>0.1</version>
+		</dynamicLibrary>
+		<dynamicLibrary>
+		    <path>Installer_x86.so</path>
+			<platform>Linux x86</platform>
+			<version>0.1</version>
+		</dynamicLibrary>
+	</dynamicLibraries>
+	
+	<!-- Configure client menu which will be should in all client pages. -->
+	<clientMenu>
+        <item>
+		    <name>Clone</name> 
+			<description>Create a local server in your machine.</description> 
+			<url>/clone/</url>
+			<orderNumber>80</orderNumber>
+		</item>
+	</clientMenu>
+	
+	<!-- Map URLs and servlets. -->
+	<servlets>
+	    <serrvlet>
+		    <name>ModulesListServlet</name>
+			<url>/installer/modules_list</url>
+		</servlet>
+	    <serrvlet>
+		    <name>CheckDependenciesServlet</name>
+			<url>/installer/check_dependencies</url>
+		</servlet>
+	    <serrvlet>
+		    <name>CreateServerServlet</name>
+			<url>/installer/create_server</url>
+		</servlet>
+	    <serrvlet>
+		    <name>GetUrlServlet</name>
+			<url>/installer/get_url</url>
+		</servlet>
+	</servlets>
+	
+	<!-- Map static resources. -->
+	<staticResources>
+        <staticResource>
+		    <directory>/web</directory>
+			<contextPath>/installer</contextPath>
+	    </staticResource>
+	</staticResources>
+</module>

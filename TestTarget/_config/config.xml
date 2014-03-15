@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- Map static resources. -->
+	<staticResources>
+        <staticResource>
+		    <directory>/_web/</directory> <!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
+			<contextPath></contextPath> <!-- the context path for the resources -->
+	    </staticResource>
+	</staticResources>
+</config>
