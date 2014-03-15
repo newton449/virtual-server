@@ -303,6 +303,7 @@ public class CloneServerActivity extends AbstractActivity {
 
     private void onSubmitCheckModules(ModulesModel model) {
         checkDependenciesPage.lockUI();
+        checkDependenciesPage.showError(null);
 
         // build a string of the model
         String data = new JSONObject(model).toString();
