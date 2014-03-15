@@ -39,10 +39,10 @@ public class ModulesTable extends FlexTable {
         cellFormatter.addStyleName(0, 1, css.header());
         cellFormatter.addStyleName(0, 1, css.description());
 
-        // build versions
-        this.setText(0, 2, "Versions");
+        // build platform
+        this.setText(0, 2, "Platforms");
         cellFormatter.addStyleName(0, 2, css.header());
-        cellFormatter.addStyleName(0, 2, css.versions());
+        cellFormatter.addStyleName(0, 2, css.platforms());
 
         int versionCount = model.getVersions().length();
         for (int i = 0; i < versionCount; i++) {

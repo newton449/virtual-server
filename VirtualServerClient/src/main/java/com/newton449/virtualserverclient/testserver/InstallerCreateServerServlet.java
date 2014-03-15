@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * It accepts a {@link ModulesModel} which contains selected modules, and
+ * replies a {@link FileKeyModel} which contains file's key.
  *
  * @author Steven
  */
@@ -24,18 +26,16 @@ public class InstallerCreateServerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+        }
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet InstallerCreateServerServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet InstallerCreateServerServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            out.println("{\n"
+                    + "    \"fileKey\": \"VirtualServer-all\"\n"
+                    + "}");
         }
     }
 

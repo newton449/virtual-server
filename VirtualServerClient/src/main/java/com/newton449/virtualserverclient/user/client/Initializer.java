@@ -49,7 +49,7 @@ public class Initializer {
     }
 
     private void prepare(final MainFrame mainFrame) {
-        RequestSender sender = new RequestSender(RequestBuilder.GET, "/user/menu_list");
+        RequestSender sender = new RequestSender(RequestBuilder.GET, "/home/menu_list");
         sender.setErrorHandler(new GlobalMessagePanel());
         sender.setCallback(new AbstractRequestCallback() {
 

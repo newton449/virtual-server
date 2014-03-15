@@ -43,7 +43,7 @@ interface Resources extends ClientBundle {
 
         String description();
 
-        String versions();
+        String platforms();
 
         String specificVersion();
 

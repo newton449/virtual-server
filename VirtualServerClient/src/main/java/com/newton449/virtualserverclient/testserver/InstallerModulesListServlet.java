@@ -24,6 +24,10 @@ public class InstallerModulesListServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+        }
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println("       {\n"

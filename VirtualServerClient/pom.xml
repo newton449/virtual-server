@@ -12,7 +12,7 @@
         <gwt.version>2.6.0</gwt.version>
     </properties>
     <dependencies>
-       <dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
@@ -98,11 +98,32 @@
                     <debugPort>9999</debugPort>
                     <debugSuspend>false</debugSuspend>
                     <extraJvmArgs>-Xmx2048M</extraJvmArgs>
-<!--                    <workDir>${project.build.directory}/${project.build.finalName}</workDir>-->
-<!--                    <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
+                    <!--                    <workDir>${project.build.directory}/${project.build.finalName}</workDir>-->
+                    <!--                    <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>-->
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="../TestTarget/Home/web">
+                                    <fileset dir="${project.build.directory}/${project.build.finalName}/home"/>
+                                </copy>                             
+                                <copy todir="../TestTarget/Installer/web">
+                                    <fileset dir="${project.build.directory}/${project.build.finalName}/installer"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>        
         </plugins>
     </build>
 </project>

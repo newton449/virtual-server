@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Steven
  */
-public class InstallerServlet extends HttpServlet {
+public class HomeMenuListServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -24,8 +24,21 @@ public class InstallerServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("/WEB-INF/jsp/installer.jsp").forward(request, response);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+        }
+        response.setContentType("text/json;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            out.println("{");
+            out.println("  \"menu\":");
+            out.println("    [");
+            out.println("      { \"name\": \"Home\", \"url\": \"/home/?gwt.codesvr=127.0.0.1:9997#\" }, ");
+            out.println("      { \"name\": \"Clone\", \"url\": \"/installer/?gwt.codesvr=127.0.0.1:9997#\", \"title\": \"Create a local server in your machine.\" }, ");
+            out.println("      { \"name\": \"About\", \"url\": \"/home/?gwt.codesvr=127.0.0.1:9997#about\" } ");
+            out.println("    ]");
+            out.println("}");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

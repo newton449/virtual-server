@@ -1,5 +1,7 @@
 package com.newton449.virtualserverclient.testserver;
 
+import com.newton449.virtualserverclient.installer.client.model.FileKeyModel;
+import com.newton449.virtualserverclient.installer.client.model.FileUrlModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -8,10 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * It accepts a {@link FileKeyModel} which presents the requested file, and
+ * replies a {@link FileUrlModel} which contains the file URL (if it is created)
+ * or the creating process (if it is creating).
  *
  * @author Steven
  */
-public class UserMenuListServlet extends HttpServlet {
+public class InstallerGetUrlServlet extends HttpServlet {
+
+    private static int COUNT = 0;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -24,17 +31,30 @@ public class UserMenuListServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/json;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            out.println("{");
-            out.println("  \"menu\":");
-            out.println("    [");
-            out.println("      { \"name\": \"Home\", \"url\": \"home?gwt.codesvr=127.0.0.1:9997#\" }, ");
-            out.println("      { \"name\": \"Clone\", \"url\": \"installer?gwt.codesvr=127.0.0.1:9997#\", \"title\": \"Create a local server in your machine.\" }, ");
-            out.println("      { \"name\": \"About\", \"url\": \"home?gwt.codesvr=127.0.0.1:9997#about\" } ");
-            out.println("    ]");
-            out.println("}");
+            if (COUNT >= 9) {
+                // finished
+                out.print(buildResult("/_file/VirtualServer-all.zip", 500436, 100, 0));
+                if (COUNT == 10) {
+                    COUNT = 0;
+                }
+            } else {
+                // processing
+                out.print(buildResult(null, 0, COUNT * 10, 2000));
+            }
+            COUNT++;
         }
+    }
+
+    private String buildResult(String url, int size, float percentage, int waiting) {
+        String ret = "{\n"
+                + "    \"fileUrl\": " + (url == null ? "null" : '\"' + url + '\"') + ",\n"
+                + "    \"fileSize\": " + size + ",\n"
+                + "    \"percentage\": " + percentage + ",\n"
+                + "    \"waitingMillisecond\": " + waiting + "\n"
+                + "}";
+        return ret;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

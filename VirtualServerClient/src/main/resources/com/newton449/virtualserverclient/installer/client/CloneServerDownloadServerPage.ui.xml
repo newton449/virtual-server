@@ -3,7 +3,8 @@ Uncomment this for XHTML entities
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 -->
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:u="urn:import:com.newton449.virtualserverclient.user.client">
     <ui:with field='res' type='com.newton449.virtualserverclient.installer.client.Resources'/>
     <ui:style>
         .waiting{
@@ -11,6 +12,10 @@ Uncomment this for XHTML entities
         line-height: 25px;
         text-shadow: 1px 1px #F2F2F2;  
         text-align: center;
+        margin: 15px 0 0 0;
+        }
+        .progress{
+        margin: 15px 20px;
         }
         .finished{
         font-size: 120%;
@@ -43,9 +48,10 @@ Uncomment this for XHTML entities
         <g:HTMLPanel ui:field="waitingPanel" addStyleNames="{style.waiting}">
             <div>The server is building your file, please wait.</div>
         </g:HTMLPanel>
+        <u:ProgressBar addStyleNames="{style.progress}" ui:field="progressBar"></u:ProgressBar>
         <g:HTMLPanel ui:field="finishedPanel" addStyleNames="{style.finished}">
             <div>
-                Your file is ready, click <g:Anchor href="javascript:;" ui:field="link">here</g:Anchor> to download it.
+                Your file is ready, click <g:Anchor href="javascript:;" ui:field="link">here</g:Anchor> to download it. (Size: <g:InlineHTML ui:field="sizeLabel"></g:InlineHTML>)
             </div>
         </g:HTMLPanel>
         <g:HTML addStyleNames="{style.error}" ui:field="error">Error Message</g:HTML>

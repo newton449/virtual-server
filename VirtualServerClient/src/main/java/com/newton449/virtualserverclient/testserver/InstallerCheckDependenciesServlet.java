@@ -1,5 +1,6 @@
 package com.newton449.virtualserverclient.testserver;
 
+import com.newton449.virtualserverclient.installer.client.model.ModulesModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -8,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * It accepts a {@link ModulesModel} which contains selected modules, and
+ * replies a {@link ModulesModel} which contains full modules with solved
+ * dependencies. Depended modules will be selected in response model.
  *
  * @author Steven
  */
@@ -24,6 +28,10 @@ public class InstallerCheckDependenciesServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+        }
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println("       {\n"

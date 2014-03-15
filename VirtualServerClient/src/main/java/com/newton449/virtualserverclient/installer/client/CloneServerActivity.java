@@ -7,7 +7,10 @@ import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.newton449.virtualserverclient.installer.client.model.FileKeyModel;
+import com.newton449.virtualserverclient.installer.client.model.FileUrlModel;
 import com.newton449.virtualserverclient.installer.client.model.ModulesModel;
 import com.newton449.virtualserverclient.user.client.AbstractRequestCallback;
 import com.newton449.virtualserverclient.user.client.GlobalMessagePanel;
@@ -258,7 +261,7 @@ public class CloneServerActivity extends AbstractActivity {
     private void onSubmitChooseModules(ModulesModel model) {
         chooseModulesPage.lockUI();
 
-        // build a string for the json model
+        // build a string of the json model
         String data = new JSONObject(model).toString();
 
         // send a request to server
@@ -299,7 +302,86 @@ public class CloneServerActivity extends AbstractActivity {
     }
 
     private void onSubmitCheckModules(ModulesModel model) {
+        checkDependenciesPage.lockUI();
+
+        // build a string of the model
+        String data = new JSONObject(model).toString();
+
+        // send a request to server
+        RequestSender sender = new RequestSender(RequestBuilder.POST, "/installer/create_server");
+        sender.setErrorHandler(checkDependenciesPage);
+        sender.setRequestData(data);
+        sender.setCallback(new AbstractRequestCallback() {
+
+            @Override
+            public void onSuccess(Request request, Response response) {
+                checkDependenciesPage.unlockUI();
+                // parse response to model
+                String text = response.getText();
+                try {
+                    FileKeyModel key = JsonUtils.safeEval(text);
+                    // show DownloadServer page
+                    showDownloadServerPage(key);
+                } catch (IllegalArgumentException ex) {
+                    checkDependenciesPage.showError("Failed to get final modules. Got :" + (text.length() > 40 ? text.substring(0, 40) + "..." : text));
+                }
+            }
+
+            @Override
+            public boolean onErrorAny(Request request) {
+                checkDependenciesPage.unlockUI();
+                return true;
+            }
+
+        });
+        sender.send();
+    }
+
+    private Timer timer;
+    RequestSender sender;
+
+    private void showDownloadServerPage(FileKeyModel key) {
+        // show DownloadServer page
+        downloadServerPage.setDownloadable(false);
         container.setWidget(downloadServerPage);
+
+        // send request to get file url or creating state
+        sender = new RequestSender(RequestBuilder.POST, "/installer/get_url");
+        sender.setErrorHandler(downloadServerPage);
+        String data = new JSONObject(key).toString();
+        sender.setRequestData(data);
+        sender.setCallback(new AbstractRequestCallback() {
+
+            @Override
+            public void onSuccess(Request request, Response response) {
+                String text = response.getText();
+                try {
+                    FileUrlModel url = JsonUtils.safeEval(text);
+                    if (url.getFileUrl() == null) {
+                        // it is still in process
+                        downloadServerPage.setProgress(url.getPercentage());
+                        timer.schedule(url.getWaitingMillisecond());
+                    } else {
+                        // finished
+                        downloadServerPage.setProgress(url.getPercentage());
+                        downloadServerPage.setDownloadUrl(url.getFileUrl());
+                        downloadServerPage.setDownloadSize(url.getFileSize());
+                        downloadServerPage.setDownloadable(true);
+                    }
+                } catch (IllegalArgumentException ex) {
+                    downloadServerPage.showError("Failed to get final modules. Got :" + (text.length() > 40 ? text.substring(0, 40) + "..." : text));
+                }
+            }
+        });
+        timer = new Timer() {
+
+            @Override
+            public void run() {
+                downloadServerPage.showError(null);
+                sender.send();
+            }
+        };
+        timer.run();
     }
 
     private void onReturnCheckDependenciesPage() {
