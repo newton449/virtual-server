@@ -1,0 +1,4 @@
+#include "ILogger.h"
+
+_INITIALIZE_EASYLOGGINGPP
+
