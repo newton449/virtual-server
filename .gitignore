@@ -11,3 +11,4 @@ Debug/
 *.log
 log.txt
 *.dll
+*.exe
