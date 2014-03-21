@@ -393,6 +393,7 @@ void HttpServletResponseImpl::sendErrorWithMessage(int statusCode, String messag
 // Sets the preferred buffer size. 
 void HttpServletResponseImpl::setBufferSize(int size){
 	// TODO need more researchs.
+	throw IllegalOperationException("Not supported.");
 }
 
 // Sets the character encoding in the "Content-Type" header.

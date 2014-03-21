@@ -21,8 +21,6 @@ public:
 	AggregateHttpServletMapping* getAggregateHttpServletMapping();
 private:
 	static MainObjectFactoryImpl* INSTANCE;
-	IModuleManager* moduleManager;
-	IClientManager* clientManager;
 	AggregateHttpServletMapping* mapping;
 
 	unordered_map<string, void*> objectMap;

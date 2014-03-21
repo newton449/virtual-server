@@ -20,13 +20,15 @@ void ModuleManagerImpl::load(string modulePath){
 	ModuleStruct module;
 	module.displayName = "Home";
 	module.description = "Description for Home";
-	module.libraries = new DynamicLibraryStruct[2];
-	module.libraries[0].path = "Home.dll";
-	module.libraries[0].platform = "Windows";
-	module.libraries[0].version = "0.1";
-	module.libraries[1].path = "Home_x86.so";
-	module.libraries[1].platform = "Linux x86";
-	module.libraries[1].version = "0.1";
+	DynamicLibraryStruct libStr;
+	libStr.path = "Home.dll";
+	libStr.platform = "Windows";
+	libStr.version = "0.1";
+	module.libraries.push_back(libStr);
+	libStr.path = "Home_x86.so";
+	libStr.platform = "Linux x86";
+	libStr.version = "0.1";
+	module.libraries.push_back(libStr);
 	this->addModule(module);
 
 	// TODO Load the dynamic of the current platform.
