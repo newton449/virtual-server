@@ -52,11 +52,15 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
 	}
 }
 
-int main(){
+int main(int argc, char* argv[]){
 	MainObjectFactoryImpl* factory = MainObjectFactoryImpl::getInstance();
 
 	// Load configuration from file
-	el::Configurations conf("./_config/easylogging.conf");
+#ifdef WIN32
+	el::Configurations conf("./_config/easylogging_Windows.conf");
+#else
+	el::Configurations conf("./_config/easylogging_Linux.conf");
+#endif
 	// Reconfigure single logger
 	el::Loggers::reconfigureLogger("default", conf);
 	// Set logging storage
