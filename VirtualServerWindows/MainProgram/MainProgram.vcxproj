@@ -126,6 +126,7 @@
     <ClCompile Include="MainProgram.cpp" />
     <ClCompile Include="MainProgram_Windows.cpp" />
     <ClCompile Include="ModuleManagerImpl.cpp" />
+    <ClCompile Include="ModuleManagerImpl_Windows.cpp" />
     <ClCompile Include="Sockets_Windows.cpp" />
     <ClCompile Include="SocketStream.cpp" />
     <ClCompile Include="StringUtils.cpp" />
