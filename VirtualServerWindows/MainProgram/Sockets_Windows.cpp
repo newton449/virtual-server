@@ -9,11 +9,11 @@
 /////////////////////////////////////////////////////////////////////
 
 #include "Sockets.h"
-#include "locks.h"
+#include "Locks.h"
 #include <sstream>
 
 #ifdef TRACING
-  #include "locks.h"
+  #include "Locks.h"
   #define TRACE(msg) sout << "\n  " << msg;
 #else
   #define TRACE(msg) ;
