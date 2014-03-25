@@ -9,5 +9,21 @@
 // enable thread safe
 #define _ELPP_THREAD_SAFE
 
+// Do not put logs to "logs/myeasylog.log"
+#define _ELPP_NO_DEFAULT_LOG_FILE
+
+// We do not need VERBOSE logging.
+#define _ELPP_DISABLE_VERBOSE_LOGS
+
+#ifdef _DEBUG
+
+// It will stop when assertion fails.
+#define _ELPP_STOP_ON_FIRST_ASSERTION
+
+// It will show errors of easylogging.
+#define _ELPP_ENABLE_ERRORS
+
+#endif
+
 #include "easylogging++.h"
 
