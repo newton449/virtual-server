@@ -10,7 +10,7 @@
 - update codes for merged doXXX functions such as doGet() and doPost().
 - changed logging styles for new logging API.
 - now it uses return value instead of exceptions for empty client stream.
- */
+*/
 
 #include <regex>
 #include "HttpServer.h"
@@ -72,7 +72,8 @@ void RequestHandlerThread::handleOneRequest() {
             if (headerContents == NULL || headerContents->empty()) {
                 LOG(TRACE) << "Got nothing from client socket.";
                 needCloseConnection = true;
-            } else {
+            }
+            else {
                 if (buildRequest(*headerContents)) {
                     // Set the length of readable bytes
                     if (!pRequest->getHeader("Content-Length").empty()) {
@@ -86,7 +87,8 @@ void RequestHandlerThread::handleOneRequest() {
                         LOG(TRACE) << "Clearing unused request body.";
                         pInput->ignore(pInput->getExpectedBytesLength());
                     }
-                } else {
+                }
+                else {
                     LOG(DEBUG) << "Skipped handling a request because of bad request.";
                     pResponse->notifyOutputFinished();
                 }
@@ -95,7 +97,8 @@ void RequestHandlerThread::handleOneRequest() {
             if (needCloseConnection || !pResponse->isKeepAliveAllowed()) {
                 LOG(DEBUG) << "Closing socket.";
                 pSocket->disconnect();
-            } else {
+            }
+            else {
                 LOG(TRACE) << "Will keep socket alive for next request.";
             }
             // Finished.
@@ -108,7 +111,8 @@ void RequestHandlerThread::handleOneRequest() {
                 headerContents = NULL;
             }
         }
-    } catch (std::exception& ex) {
+    }
+    catch (std::exception& ex) {
         LOG(DEBUG) << "Clearing a socket because: " << +ex.what();
         if (pRequest != NULL) delete pRequest;
         if (pResponse != NULL) delete pResponse;
@@ -165,26 +169,85 @@ bool RequestHandlerThread::buildRequest(Vector& headerContents) {
 // the first line.
 
 bool RequestHandlerThread::analyzeFirstLine(String line) {
-    // Use regular expression to parse lines.
-    std::smatch match;
-    std::regex expression("^([A-Z]+)\\s+([^\\s\\?]+)(?:\\?(\\S+))?\\s+HTTP/1\\.1\\s*$");
-    if (!std::regex_search(line, match, expression)) {
-        pResponse->sendError(400); // 400 Bad Request
+    int index = 0;
+    int length = line.length();
+    char c;
+    // Parse method
+    String method;
+    c = line[index];
+    while (c != ' '){
+        method += c;
+        index++;
+        if (index == length){
+            return false;
+        }
+        c = line[index];
+    }
+    pRequest->setMethod(method);
+    // Parse URL
+    String url;
+    index++;
+    if (index == length){
         return false;
     }
-    pRequest->setMethod(match[1]);
-    pRequest->setRequestUrl(match[2]);
-    pRequest->setQueryString(match[3]);
-    // Parse params in queryString
-    Vector paramPairs = regexSplit(pRequest->getQueryString(), "&(?!#|(?:\\w+;))");
-    for (auto& param : paramPairs) {
-        size_t pos = param.find("=");
-        if (pos != String::npos) {
-            pRequest->addParameter(param.substr(0, pos), param.substr(pos + 1, param.length() - pos - 1));
+    c = line[index];
+    while (c != ' '&& c != '?'){
+        url += c;
+        index++;
+        if (index == length){
+            return false;
         }
+        c = line[index];
+    }
+    pRequest->setRequestUrl(url);
+    // Parse query string
+    String query;
+    if (c == '?'){
+        while (c != ' '){
+            query += c;
+            index++;
+            if (index == length){
+                return false;
+            }
+            c = line[index];
+        }
+    }
+    pRequest->setQueryString(query);
+    // TODO analyze parameters
+
+    // Parse "HTTP/1.1"
+    index++;
+    if (index == length){
+        return false;
+    }
+    String httpToken = line.substr(index, 8);
+    if (httpToken != "HTTP/1.1"){
+        return false;
     }
     return true;
 }
+// gcc does not support regex.
+//bool RequestHandlerThread::analyzeFirstLine(String line) {
+//    // Use regular expression to parse lines.
+//    std::smatch match;
+//    std::regex expression("^([A-Z]+)\\s+([^\\s\\?]+)(?:\\?(\\S+))?\\s+HTTP/1\\.1\\s$");
+//    if (!std::regex_search(line, match, expression)) {
+//        pResponse->sendError(400); // 400 Bad Request
+//        return false;
+//    }
+//    pRequest->setMethod(match[1]);
+//    pRequest->setRequestUrl(match[2]);
+//    pRequest->setQueryString(match[3]);
+//    // Parse params in queryString
+//    Vector paramPairs = regexSplit(pRequest->getQueryString(), "&(?!(?:#|(?:\\w+;)))");
+//    for (auto& param : paramPairs) {
+//        size_t pos = param.find("=");
+//        if (pos != String::npos) {
+//            pRequest->addParameter(param.substr(0, pos), param.substr(pos + 1, param.length() - pos - 1));
+//        }
+//    }
+//    return true;
+//}
 
 // Analyzes header names and values.
 
@@ -218,29 +281,34 @@ void RequestHandlerThread::executeServlet() {
         try {
             pServlet->doMethod(*pRequest, *pResponse);
             pResponse->notifyOutputFinished();
-        } catch (IllegalOperationException& ex) {
+        }
+        catch (IllegalOperationException& ex) {
             LOG(DEBUG) << "Got IllegalOperationException when executing servlets: " << ex.what();
             if (pResponse->isCommitted()) {
                 // Cannot recover the response. Will close it shortly.
                 needCloseConnection = true;
-            } else {
+            }
+            else {
                 // Send error
                 pResponse->reset();
                 pResponse->sendError(500);
             }
-        } catch (std::exception& ex) {
+        }
+        catch (std::exception& ex) {
             LOG(DEBUG) << "Got exceptions when executing servlets: " << ex.what();
             if (pResponse->isCommitted()) {
                 // Cannot recover the response. Will close it shortly.
                 needCloseConnection = true;
-            } else {
+            }
+            else {
                 // Send error
                 pResponse->reset();
                 pResponse->sendError(500);
             }
         }
         delete pServlet;
-    } else {
+    }
+    else {
         LOG(DEBUG) << "Got NULL servlet pointer";
         pResponse->sendError(404);
     }
@@ -293,7 +361,8 @@ void HttpServer::start() {
     }
     try {
         pListener = new SocketListener(port);
-    } catch (std::exception& ex) {
+    }
+    catch (std::exception& ex) {
         throw std::logic_error(ex.what());
     }
     ThreadBase::start();
@@ -336,7 +405,8 @@ void HttpServer::run() {
             Socket* pSocket = new Socket(pListener->waitForConnect());
             queue.enQ(pSocket);
         }
-    } catch (std::exception&) {
+    }
+    catch (std::exception&) {
         LOG(INFO) << "Closing server";
         // The connection is closed or something.
         // Close current sockets

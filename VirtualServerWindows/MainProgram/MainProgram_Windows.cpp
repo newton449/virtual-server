@@ -59,3 +59,7 @@ bool setupInterruptHandler(){
 	}
 	return true;
 }
+
+std::string getLoggingConfigFilePath(){
+    return "./_config/easylogging_Windows.conf";
+}

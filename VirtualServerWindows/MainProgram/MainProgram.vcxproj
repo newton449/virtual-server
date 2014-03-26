@@ -94,6 +94,7 @@
     <ClInclude Include="BlockingQueue_Windows.h" />
     <ClInclude Include="ClientManagerImpl.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="Locks.h" />
     <ClInclude Include="HttpServletsImpl.h" />
     <ClInclude Include="FileSystem_Windows.h" />
     <ClInclude Include="HttpServer.h" />

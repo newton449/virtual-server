@@ -211,6 +211,14 @@ private:
     String getStatusExplaination();
 };
 
+// In the ISO C++11 Standard, the noexcept operator is introduced, but support
+// for this feature is not yet present in Visual C++.
+#ifdef WIN32
+#define NOEXCEPT throw()
+#else
+#define NOEXCEPT noexcept(true)
+#endif
+
 /////////////////////////////////////////////////////////////////////////
 // An exception which is thrown when illegal arguments are passed to 
 // request/resposne or functions are called in illegal status.
@@ -225,7 +233,7 @@ public:
         : std::logic_error(what_arg){
     }
     // Destructor.
-    virtual ~IllegalOperationException() noexcept(true) {}
+    virtual ~IllegalOperationException() NOEXCEPT{}
 };
 
 #endif
