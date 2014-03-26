@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="94">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="interfaces" projectFiles="true">
+        <itemPath>../../VirtualServerWindows/interfaces/IClientManager.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/IHttpServlet.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/IHttpServletMapping.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/ILogger.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/IMainObjectFactory.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/IModuleManager.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/IModuleObjectFactory.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/IServletFactory.h</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/easylogging++.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="shared" projectFiles="true">
+        <itemPath>../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/BlockingQueue.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/ClientManagerImpl.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/FileSystem.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/HttpServer.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/HttpServerSupport.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/HttpServletsImpl.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/Locks.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/Logger.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/MainProgram.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/ModuleManagerImpl.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/SocketStream.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/Sockets.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/StringUtils.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/Threads.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/Utilities.h</itemPath>
+      </logicalFolder>
+      <itemPath>BlockingQueue_Linux.h</itemPath>
+      <itemPath>FileSystem_Linux.h</itemPath>
+      <itemPath>Locks_Linux.h</itemPath>
+      <itemPath>Sockets_Linux.h</itemPath>
+      <itemPath>Threads_Linux.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="shared" projectFiles="true">
+        <itemPath>../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/HttpServer.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/HttpServerSupport.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/HttpServletsImpl.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/interfaces/ILogger.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/MainProgram.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/ModuleManagerImpl.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/SocketStream.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/StringUtils.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/Utilities.cpp</itemPath>
+      </logicalFolder>
+      <itemPath>BlockingQueue_Linux.cpp</itemPath>
+      <itemPath>FileSystem_Linux.cpp</itemPath>
+      <itemPath>Locks_Linux.cpp</itemPath>
+      <itemPath>MainProgram_Linux.cpp</itemPath>
+      <itemPath>ModuleManagerImpl_Linux.cpp</itemPath>
+      <itemPath>Sockets_Linux.cpp</itemPath>
+      <itemPath>Threads_Linux.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+          <commandLine>-pthread</commandLine>
+          <preprocessorList>
+            <Elem>MAIN_PROGRAM</Elem>
+          </preprocessorList>
+          <warningLevel>3</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <output>../../TestTarget/MainProgram/MainProgram_Linux_x64</output>
+          <linkerLibItems>
+            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/BlockingQueue.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ClientManagerImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/FileSystem.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServerSupport.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServerSupport.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServletsImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServletsImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Locks.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Logger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainProgram.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainProgram.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ModuleManagerImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ModuleManagerImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/SocketStream.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/SocketStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Sockets.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/StringUtils.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/StringUtils.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Threads.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Utilities.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Utilities.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IClientManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServlet.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServletMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IMainObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IServletFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/easylogging++.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="BlockingQueue_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="BlockingQueue_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FileSystem_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileSystem_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Locks_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Locks_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MainProgram_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ModuleManagerImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Sockets_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Sockets_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Threads_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Threads_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/BlockingQueue.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ClientManagerImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/FileSystem.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServerSupport.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServerSupport.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServletsImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/HttpServletsImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Locks.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Logger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainProgram.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/MainProgram.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ModuleManagerImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/ModuleManagerImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/SocketStream.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/SocketStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Sockets.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/StringUtils.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/StringUtils.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Threads.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Utilities.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/Utilities.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IClientManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServlet.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServletMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IMainObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IServletFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/easylogging++.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="BlockingQueue_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="BlockingQueue_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="FileSystem_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileSystem_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Locks_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Locks_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MainProgram_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ModuleManagerImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Sockets_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Sockets_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Threads_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Threads_Linux.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
