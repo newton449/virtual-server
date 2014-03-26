@@ -8,6 +8,7 @@
 //  Author:        Sheng Wang                                      //
 /////////////////////////////////////////////////////////////////////
 
+#include <string.h>
 #include <iostream>
 #include "SocketStream.h"
 

@@ -73,13 +73,14 @@ ver 1.0 : 4/15/2013
 
 /////////////////////////////////////////////////////////////////////////
 // A thread to handle each coming socket and execute servlets.
-class RequestHandlerThread : public ThreadBase<DefaultTerminate>{
+class RequestHandlerThread : public ThreadBase<DefaultTerminate> {
 public:
     typedef std::string String;
     typedef std::vector<String> Vector;
 
     // Constructor with the socket queue, the url-socket mapping and the id of the thread.
     RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping, int id=0);
+    virtual ~RequestHandlerThread(){}
     // Returns the socket handled by the thread.
     Socket* getSocket();
 private:

@@ -225,7 +225,7 @@ public:
         : std::logic_error(what_arg){
     }
     // Destructor.
-    virtual ~IllegalOperationException() {}
+    virtual ~IllegalOperationException() noexcept(true) {}
 };
 
 #endif

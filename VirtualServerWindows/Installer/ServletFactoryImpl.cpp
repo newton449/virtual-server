@@ -1,5 +1,3 @@
-#pragma once
-
 #include "ServletFactoryImpl.h"
 #include "HttpServletsImpl.h"
 

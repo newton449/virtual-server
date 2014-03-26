@@ -8,21 +8,17 @@
 
 // Program entry.
 int main(){
-	LOG(INFO) << "Starting Virtual Server.";
 
 	MainObjectFactoryImpl* factory = MainObjectFactoryImpl::getInstance();
 
 	// Load configuration from file
-#ifdef WIN32
-	el::Configurations conf("./_config/easylogging_Windows.conf");
-#else
-	el::Configurations conf("./_config/easylogging_Linux.conf");
-#endif
+	el::Configurations conf(getLoggingConfigFilePath());
 	// Reconfigure single logger
 	el::Loggers::reconfigureLogger("default", conf);
 	// Set logging storage
-	factory->setObject("LoggingStorage", &el::Helpers::storage());
+	factory->setObject("LoggingStorage", new el::base::type::StoragePointer(el::Helpers::storage()));
 
+	LOG(INFO) << "Starting Virtual Server.";
 
 	// Load all modules
 	ModuleManagerImpl* moduleManager = (ModuleManagerImpl*)factory->getModuleManager();
