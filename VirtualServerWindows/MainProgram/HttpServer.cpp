@@ -12,7 +12,6 @@
 - now it uses return value instead of exceptions for empty client stream.
 */
 
-#include <regex>
 #include "HttpServer.h"
 #include "Logger.h"
 #include "StringUtils.h"
@@ -253,17 +252,22 @@ bool RequestHandlerThread::analyzeFirstLine(String line) {
 
 bool RequestHandlerThread::analyzeHeaderNamesAndValues(Vector& headerContents) {
     // Parse headers
-    std::regex expression("^([\\w\\-]+):\\s*(.*?)\\s*$");
-    std::smatch match;
     Vector::iterator itr = headerContents.begin() + 1;
     for (; itr != headerContents.end(); itr++) {
-        // Try to match the header format.
-        if (!std::regex_search(*itr, match, expression)) {
+        // Try to find ":"
+        int length = itr->length();
+        int pos = itr->find_first_of(':');
+        if (pos >= length - 1){
             pResponse->sendError(400); // 400 Bad Request
             return false;
         }
+        String name = itr->substr(0, pos);
+        String value = (*itr)[pos + 1] == ' ' ? itr->substr(pos + 2, length - pos - 2) : itr->substr(pos + 1, length - pos - 1);
+        if ((!value.empty()) && value[value.length() - 1] == '\r'){
+            value = value.substr(0, value.length() - 1);
+        }
         // Add the header
-        pRequest->addHeader(match[1], match[2]);
+        pRequest->addHeader(name, value);
     }
     // If the header "Connection" contains "keep-alive", tell response.
     if (pRequest->getHeader("Connection").find("keep-alive") != String::npos) {
@@ -271,6 +275,27 @@ bool RequestHandlerThread::analyzeHeaderNamesAndValues(Vector& headerContents) {
     }
     return true;
 }
+
+//bool RequestHandlerThread::analyzeHeaderNamesAndValues(Vector& headerContents) {
+//    // Parse headers
+//    std::regex expression("^([\\w\\-]+):\\s*(.*?)\\s*$");
+//    std::smatch match;
+//    Vector::iterator itr = headerContents.begin() + 1;
+//    for (; itr != headerContents.end(); itr++) {
+//        // Try to match the header format.
+//        if (!std::regex_search(*itr, match, expression)) {
+//            pResponse->sendError(400); // 400 Bad Request
+//            return false;
+//        }
+//        // Add the header
+//        pRequest->addHeader(match[1], match[2]);
+//    }
+//    // If the header "Connection" contains "keep-alive", tell response.
+//    if (pRequest->getHeader("Connection").find("keep-alive") != String::npos) {
+//        pResponse->setKeepAliveSupported(true);
+//    }
+//    return true;
+//}
 
 // Gets an servlet and executes it.
 
@@ -316,20 +341,20 @@ void RequestHandlerThread::executeServlet() {
 
 // Splits the string according to the regular expression.
 
-RequestHandlerThread::Vector RequestHandlerThread::regexSplit(String str, String regex) {
-    std::smatch match;
-    std::regex expr(regex);
-    Vector ret;
-    while (std::regex_search(str, match, expr)) {
-        // Get the position of the token to split
-        size_t pos = match.position();
-        // Do splitting
-        ret.push_back(str.substr(0, pos));
-        str = str.substr(pos + 1, str.length() - pos - 1);
-    }
-    ret.push_back(str);
-    return ret;
-}
+//RequestHandlerThread::Vector RequestHandlerThread::regexSplit(String str, String regex) {
+//    std::smatch match;
+//    std::regex expr(regex);
+//    Vector ret;
+//    while (std::regex_search(str, match, expr)) {
+//        // Get the position of the token to split
+//        size_t pos = match.position();
+//        // Do splitting
+//        ret.push_back(str.substr(0, pos));
+//        str = str.substr(pos + 1, str.length() - pos - 1);
+//    }
+//    ret.push_back(str);
+//    return ret;
+//}
 
 ////////////////////////////////////////////////////////////////////////
 // Function implementations of HttpServer

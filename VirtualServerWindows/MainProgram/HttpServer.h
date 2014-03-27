@@ -112,7 +112,7 @@ private:
     // Gets an servlet and executes it.
     void executeServlet();
     // Splits the string according to the regular expression.
-    Vector regexSplit(String str, String regex);
+    //Vector regexSplit(String str, String regex);
 };
 
 /////////////////////////////////////////////////////////////////////////
