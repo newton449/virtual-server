@@ -16,6 +16,9 @@
     <Filter Include="Header Files\interfaces">
       <UniqueIdentifier>{8f85caed-f838-41cd-b90a-d0f854a7d35b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\_config">
+      <UniqueIdentifier>{c4167be7-8671-48b5-bdac-4088fa24747e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -173,5 +176,21 @@
     <ClCompile Include="ModuleManagerImpl_Windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="run.bat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="_config\easylogging_Linux.conf">
+      <Filter>Resource Files\_config</Filter>
+    </None>
+    <None Include="_config\easylogging_Windows.conf">
+      <Filter>Resource Files\_config</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="_config\config.xml">
+      <Filter>Resource Files\_config</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
