@@ -15,5 +15,5 @@ public class VersionState extends JavaScriptObject {
 
     public native final boolean isSelected() /*-{ return this.selected; }-*/;
 
-    public native final void setSelected(boolean b) /*-{ this.selected=b; }-*/;
+    public native final void setSelected(boolean b) /*-{ this.selected = b; }-*/;
 }

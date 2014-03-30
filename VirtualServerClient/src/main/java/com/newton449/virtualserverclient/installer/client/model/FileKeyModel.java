@@ -18,3 +18,8 @@ public class FileKeyModel extends JavaScriptObject {
      */
     public native final String getFileKey() /*-{ return this.fileKey; }-*/;
 }
+/*
+{
+    "fileKey": "..."
+}
+*/

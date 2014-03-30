@@ -5,9 +5,29 @@ Uncomment this for XHTML entities
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
     <ui:style>
-
+        .title{
+        font-size: 120%;
+        margin: 10px 5px;
+        }
+        .description{
+        margin: 10px 5px;
+        }
+ 
     </ui:style>
     <g:HTMLPanel>
-        About
+        <div class="{style.title}">About Virtual Server</div>
+        <div class="{style.description}">
+            Version: 0.3 build 20140330
+            <br/>
+            Course: CSE775 Distributed Objects
+            <br/>
+            Professor: Jim Fawcett
+            <br/>
+            Students: Bei Li, Qiuyong Yang, Sheng Wang
+            <br/>
+            Developing Platforms: Windows 7, Windows 8, Debian 7, Java 7
+            <br/>
+            Developing Tools: Visual Studio 2013, Visual Studio Online, Netbeans IDE 7
+        </div>
     </g:HTMLPanel>
 </ui:UiBinder>

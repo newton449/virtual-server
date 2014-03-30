@@ -1,6 +1,7 @@
 package com.newton449.virtualserverclient.testserver;
 
-import com.newton449.virtualserverclient.installer.client.model.ModulesModel;
+import com.newton449.virtualserverclient.installer.client.model.CheckingDependenciesModel;
+import com.newton449.virtualserverclient.installer.client.model.ModulesSelectingModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -9,9 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * It accepts a {@link ModulesModel} which contains selected modules, and
- * replies a {@link ModulesModel} which contains full modules with solved
- * dependencies. Depended modules will be selected in response model.
+ * It accepts a {@link ModulesSelectingModel} which contains selected modules,
+ * and replies a {@link CheckingDependenciesModel} which contains full modules
+ * with solved dependencies and compressed type list. Depended modules will be
+ * selected in response model.
  *
  * @author Steven
  */
@@ -32,71 +34,77 @@ public class InstallerCheckDependenciesServlet extends HttpServlet {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
         }
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            out.println("       {\n"
-                    + "         \"versions\": [\n"
-                    + "         \"Windows\",\n"
-                    + "         \"Linux x86\",\n"
-                    + "         \"Linux x64\"\n"
-                    + "         ],\n"
-                    + "         \"modules\": [\n"
-                    + "         {\n"
-                    + "         \"name\": \"Main Program\",\n"
-                    + "         \"description\": \"The main server program.\",\n"
-                    + "         \"versionStates\": [\n"
-                    + "         {\n"
-                    + "         \"enabled\": false,\n"
-                    + "         \"selected\": true\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"enabled\": false,\n"
-                    + "         \"selected\": true\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"enabled\": false,\n"
-                    + "         \"selected\": true\n"
-                    + "         }\n"
-                    + "         ]\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"name\": \"Installer\",\n"
-                    + "         \"description\": \"Allows others to clone your server.\",\n"
-                    + "         \"versionStates\": [\n"
-                    + "         {\n"
-                    + "         \"enabled\": true,\n"
-                    + "         \"selected\": true\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"enabled\": true,\n"
-                    + "         \"selected\": false\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"enabled\": true,\n"
-                    + "         \"selected\": false\n"
-                    + "         }\n"
-                    + "         ]\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"name\": \"File Manager\",\n"
-                    + "         \"description\": \"Supports uploading and downloading files.\",\n"
-                    + "         \"versionStates\": [\n"
-                    + "         {\n"
-                    + "         \"enabled\": true,\n"
-                    + "         \"selected\": true\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"enabled\": false,\n"
-                    + "         \"selected\": false\n"
-                    + "         },\n"
-                    + "         {\n"
-                    + "         \"enabled\": false,\n"
-                    + "         \"selected\": false\n"
-                    + "         }\n"
-                    + "         ]\n"
-                    + "         }\n"
-                    + "         ]\n"
-                    + "         }");
+            out.println("{\n"
+                    + "    \"packTypes\": [\n"
+                    + "        \"zip\",\n"
+                    + "        \"tar\"\n"
+                    + "    ],\n"
+                    + "    \"modules\": {\n"
+                    + "        \"versions\": [\n"
+                    + "            \"Windows\",\n"
+                    + "            \"Linux x86\",\n"
+                    + "            \"Linux x64\"\n"
+                    + "        ],\n"
+                    + "        \"items\": [\n"
+                    + "            {\n"
+                    + "                \"name\": \"Main Program\",\n"
+                    + "                \"description\": \"The main server program.\",\n"
+                    + "                \"versionStates\": [\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": false,\n"
+                    + "                        \"selected\": true\n"
+                    + "                    },\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": false,\n"
+                    + "                        \"selected\": false\n"
+                    + "                    },\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": false,\n"
+                    + "                        \"selected\": false\n"
+                    + "                    }\n"
+                    + "                ]\n"
+                    + "            },\n"
+                    + "            {\n"
+                    + "                \"name\": \"Installer\",\n"
+                    + "                \"description\": \"Allows others to clone your server.\",\n"
+                    + "                \"versionStates\": [\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": true,\n"
+                    + "                        \"selected\": true\n"
+                    + "                    },\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": true,\n"
+                    + "                        \"selected\": false\n"
+                    + "                    },\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": true,\n"
+                    + "                        \"selected\": false\n"
+                    + "                    }\n"
+                    + "                ]\n"
+                    + "            },\n"
+                    + "            {\n"
+                    + "                \"name\": \"File Manager\",\n"
+                    + "                \"description\": \"Supports uploading and downloading files.\",\n"
+                    + "                \"versionStates\": [\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": true,\n"
+                    + "                        \"selected\": true\n"
+                    + "                    },\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": false,\n"
+                    + "                        \"selected\": false\n"
+                    + "                    },\n"
+                    + "                    {\n"
+                    + "                        \"enabled\": false,\n"
+                    + "                        \"selected\": false\n"
+                    + "                    }\n"
+                    + "                ]\n"
+                    + "            }\n"
+                    + "        ]\n"
+                    + "    }\n"
+                    + "}");
         }
     }
 

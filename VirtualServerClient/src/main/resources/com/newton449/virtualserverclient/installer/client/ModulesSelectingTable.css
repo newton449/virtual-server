@@ -1,0 +1,67 @@
+.table{
+    border: 1px solid #909090;
+    border-spacing: 0;
+    margin: 10px 5px;
+    width: 98%;
+}
+
+.header{
+    background-color: #1A86AE;
+    border: 1px solid #E2E2E2;
+    color: #FFFFFF;
+    font-size: 110%;
+    text-align: center;
+    text-shadow: 1px 1px #000000;
+}
+
+.firstRow{
+    border-top: 2px solid black; 
+    border-left:  2px solid black;
+    border-right:  2px solid black;
+
+}
+
+.secondRow{
+    border-bottom:  2px solid black; 
+    border-left:  2px solid black;
+    border-right:  2px solid black;
+}
+
+.name{
+    width: 100px;
+}
+
+.description{
+    width: 400px;
+}
+
+.platforms{
+    text-align: center;
+}
+
+.specificVersion{
+    color: #FFFFFF;
+    text-shadow: none;
+}
+
+.body{
+    color: #101010;
+}
+
+.body td{
+    border: 1px solid #E2E2E2;
+    padding: 2px 8px;
+    height: 20px;
+}
+
+.box input{
+}
+
+.correctImage{
+    width: 24px;
+    height: 24px;
+}
+
+.correctCell{
+    text-align: center;
+}

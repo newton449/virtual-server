@@ -1,6 +1,8 @@
 package com.newton449.virtualserverclient.installer.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -8,8 +10,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.newton449.virtualserverclient.installer.client.model.ModulesModel;
+import com.newton449.virtualserverclient.installer.client.model.CheckingDependenciesModel;
+import com.newton449.virtualserverclient.installer.client.model.CreatingServerModel;
+import com.newton449.virtualserverclient.installer.client.model.ModulesSelectingModel;
 import com.newton449.virtualserverclient.user.client.ErrorView;
 
 /**
@@ -25,9 +30,9 @@ public class CloneServerCheckDependenciesPage extends Composite implements Error
 
     public interface Presenter {
 
-        void onPrevious(ModulesModel model);
+        void onPrevious(ModulesSelectingModel model);
 
-        void onNext(ModulesModel model);
+        void onNext(CreatingServerModel model);
     }
     private Presenter presenter;
 
@@ -36,13 +41,16 @@ public class CloneServerCheckDependenciesPage extends Composite implements Error
     }
 
     @UiField
-    ModulesTable table;
+    ModulesSelectingTable table;
     @UiField
     Button previousButton;
     @UiField
     Button nextButton;
     @UiField
     HTML error;
+    @UiField
+    ListBox compBox;
+    CheckingDependenciesModel model;
 
     public CloneServerCheckDependenciesPage() {
         initWidget(uiBinder.createAndBindUi(this));
@@ -57,14 +65,24 @@ public class CloneServerCheckDependenciesPage extends Composite implements Error
 
             @Override
             public void onClick(ClickEvent event) {
-                presenter.onNext(table.getModel());
+                CreatingServerModel nextModel = (CreatingServerModel) JavaScriptObject.createObject().cast();
+                nextModel.setModules(model.getModules());
+                nextModel.setPackType(compBox.getValue(compBox.getSelectedIndex()));
+                presenter.onNext(nextModel);
             }
         });
     }
 
-    public void setModel(ModulesModel model) {
+    public void setModel(CheckingDependenciesModel model) {
+        this.model = model;
         table.setSelectable(false);
-        table.setModel(model);
+        table.setModel(model.getModules());
+        // list box
+        compBox.clear();
+        JsArrayString compressedTypeList = model.getPackTypes();
+        for (int i = 0; i < compressedTypeList.length(); i++) {
+            compBox.addItem(compressedTypeList.get(i));
+        }
     }
 
     @Override

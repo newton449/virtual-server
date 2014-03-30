@@ -47,7 +47,7 @@ Uncomment this for XHTML entities
             <g:Button addStyleNames="{style.checkboxButton}" ui:field="checkAllButton">Check All</g:Button>
         </div>
         <div class="{style.clear}"></div>
-        <s:ModulesTable ui:field="table"></s:ModulesTable>
+        <s:ModulesSelectingTable ui:field="table"></s:ModulesSelectingTable>
         <g:HTML addStyleNames="{style.error}" ui:field="error">Error Message</g:HTML>
         <div class="{style.actions}">
             <g:Button addStyleNames="{style.actionButton}" ui:field="nextButton">Next</g:Button>

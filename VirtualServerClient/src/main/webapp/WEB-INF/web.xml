@@ -20,6 +20,10 @@
         <servlet-name>InstallerGetUrlServlet</servlet-name>
         <servlet-class>com.newton449.virtualserverclient.testserver.InstallerGetUrlServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HomeServerInfoServlet</servlet-name>
+        <servlet-class>com.newton449.virtualserverclient.testserver.HomeServerInfoServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeMenuListServlet</servlet-name>
         <url-pattern>/home/menu_list</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>InstallerGetUrlServlet</servlet-name>
         <url-pattern>/installer/get_url</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeServerInfoServlet</servlet-name>
+        <url-pattern>/home/server_info</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

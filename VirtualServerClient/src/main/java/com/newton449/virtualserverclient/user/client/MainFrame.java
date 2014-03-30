@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class MainFrame extends Composite implements AcceptsOneWidget {
 
-    private static MainFrameUiBinder uiBinder = GWT.create(MainFrameUiBinder.class);
+    private static final MainFrameUiBinder uiBinder = GWT.create(MainFrameUiBinder.class);
 
     interface MainFrameResources extends ClientBundle {
 
@@ -38,7 +38,7 @@ public class MainFrame extends Composite implements AcceptsOneWidget {
     private static final MainFrameResources RESOURCES = GWT
             .create(MainFrameResources.class);
 
-    {
+    static {
         RESOURCES.css().ensureInjected();
     }
 

@@ -9,9 +9,11 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.newton449.virtualserverclient.installer.client.model.CheckingDependenciesModel;
+import com.newton449.virtualserverclient.installer.client.model.CreatingServerModel;
 import com.newton449.virtualserverclient.installer.client.model.FileKeyModel;
-import com.newton449.virtualserverclient.installer.client.model.FileUrlModel;
-import com.newton449.virtualserverclient.installer.client.model.ModulesModel;
+import com.newton449.virtualserverclient.installer.client.model.FileStatusModel;
+import com.newton449.virtualserverclient.installer.client.model.ModulesSelectingModel;
 import com.newton449.virtualserverclient.user.client.AbstractRequestCallback;
 import com.newton449.virtualserverclient.user.client.GlobalMessagePanel;
 import com.newton449.virtualserverclient.user.client.RequestSender;
@@ -36,7 +38,7 @@ public class CloneServerActivity extends AbstractActivity {
         chooseModulesPage.setPresenter(new CloneServerChooseModulesPage.Presenter() {
 
             @Override
-            public void onNext(ModulesModel model) {
+            public void onNext(ModulesSelectingModel model) {
                 onSubmitChooseModules(model);
             }
         });
@@ -44,12 +46,12 @@ public class CloneServerActivity extends AbstractActivity {
         checkDependenciesPage.setPresenter(new CloneServerCheckDependenciesPage.Presenter() {
 
             @Override
-            public void onPrevious(ModulesModel model) {
+            public void onPrevious(ModulesSelectingModel model) {
                 onReturnChooseModules(model);
             }
 
             @Override
-            public void onNext(ModulesModel model) {
+            public void onNext(CreatingServerModel model) {
                 onSubmitCheckModules(model);
             }
         });
@@ -80,20 +82,6 @@ public class CloneServerActivity extends AbstractActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         container = panel;
         loadInitialModules();
-
-        // show loading page
-        // show choose modules page
-        // if "next" clicked
-        // check form
-        // send form, get final modules
-        // if "next" clicked
-        // send form
-        // get file name
-        // show a page for building
-        // ask the server for building state
-        // show download page
-        // if "next" clicked
-        // show configure & run server page
     }
 
     private void loadInitialModules() {
@@ -109,7 +97,7 @@ public class CloneServerActivity extends AbstractActivity {
                 // convert response text to model
                 String text = response.getText();
                 try {
-                    ModulesModel initialModel = JsonUtils.safeEval(text);
+                    ModulesSelectingModel initialModel = JsonUtils.safeEval(text);
                     showChooseModulesPage(initialModel);
                 } catch (IllegalArgumentException ex) {
                     // show error message with some part of text
@@ -120,145 +108,13 @@ public class CloneServerActivity extends AbstractActivity {
         sender.send();
     }
 
-    private void showChooseModulesPage(ModulesModel initialModel) {
+    private void showChooseModulesPage(ModulesSelectingModel initialModel) {
         chooseModulesPage.setModel(initialModel);
         chooseModulesPage.showError(null);
         container.setWidget(chooseModulesPage);
     }
 
-    private ModulesModel buildTestModules() {
-        String data = "{\n"
-                + "    \"versions\": [\n"
-                + "        \"Windows\",\n"
-                + "        \"Linux x86\",\n"
-                + "        \"Linux x64\"\n"
-                + "    ],\n"
-                + "    \"modules\": [\n"
-                + "        {\n"
-                + "            \"name\": \"Main Program\",\n"
-                + "            \"description\": \"The main server program.\",\n"
-                + "            \"versionStates\": [\n"
-                + "                {\n"
-                + "                    \"enabled\": false,\n"
-                + "                    \"selected\": true\n"
-                + "                },\n"
-                + "                {\n"
-                + "                    \"enabled\": false,\n"
-                + "                    \"selected\": false\n"
-                + "                },\n"
-                + "                {\n"
-                + "                    \"enabled\": false,\n"
-                + "                    \"selected\": false\n"
-                + "                }\n"
-                + "            ]\n"
-                + "        },\n"
-                + "        {\n"
-                + "            \"name\": \"Installer\",\n"
-                + "            \"description\": \"Allows others to clone your server.\",\n"
-                + "            \"versionStates\": [\n"
-                + "                {\n"
-                + "                    \"enabled\": true,\n"
-                + "                    \"selected\": true\n"
-                + "                },\n"
-                + "                {\n"
-                + "                    \"enabled\": true,\n"
-                + "                    \"selected\": false\n"
-                + "                },\n"
-                + "                {\n"
-                + "                    \"enabled\": true,\n"
-                + "                    \"selected\": false\n"
-                + "                }\n"
-                + "            ]\n"
-                + "        },\n"
-                + "        {\n"
-                + "            \"name\": \"File Manager\",\n"
-                + "            \"description\": \"Supports uploading and downloading files.\",\n"
-                + "            \"versionStates\": [\n"
-                + "                {\n"
-                + "                    \"enabled\": true,\n"
-                + "                    \"selected\": true\n"
-                + "                },\n"
-                + "                {\n"
-                + "                    \"enabled\": false,\n"
-                + "                    \"selected\": false\n"
-                + "                },\n"
-                + "                {\n"
-                + "                    \"enabled\": false,\n"
-                + "                    \"selected\": false\n"
-                + "                }\n"
-                + "            ]\n"
-                + "        }\n"
-                + "    ]\n"
-                + "}";
-        /*
-         {
-         "versions": [
-         "Windows",
-         "Linux x86",
-         "Linux x64"
-         ],
-         "modules": [
-         {
-         "name": "Main Program",
-         "description": "The main server program.",
-         "versionStates": [
-         {
-         "enabled": false,
-         "selected": true
-         },
-         {
-         "enabled": false,
-         "selected": false
-         },
-         {
-         "enabled": false,
-         "selected": false
-         }
-         ]
-         },
-         {
-         "name": "Installer",
-         "description": "Allows others to clone your server.",
-         "versionStates": [
-         {
-         "enabled": true,
-         "selected": true
-         },
-         {
-         "enabled": true,
-         "selected": false
-         },
-         {
-         "enabled": true,
-         "selected": false
-         }
-         ]
-         },
-         {
-         "name": "File Manager",
-         "description": "Supports uploading and downloading files.",
-         "versionStates": [
-         {
-         "enabled": true,
-         "selected": true
-         },
-         {
-         "enabled": false,
-         "selected": false
-         },
-         {
-         "enabled": false,
-         "selected": false
-         }
-         ]
-         }
-         ]
-         }
-         */
-        return JsonUtils.safeEval(data);
-    }
-
-    private void onSubmitChooseModules(ModulesModel model) {
+    private void onSubmitChooseModules(ModulesSelectingModel model) {
         chooseModulesPage.lockUI();
 
         // build a string of the json model
@@ -276,7 +132,7 @@ public class CloneServerActivity extends AbstractActivity {
                 // parse response text to get model with dependencies
                 String text = response.getText();
                 try {
-                    ModulesModel newModel = JsonUtils.safeEval(text);
+                    CheckingDependenciesModel newModel = JsonUtils.safeEval(text);
                     // show CheckDependenciesPage
                     checkDependenciesPage.setModel(newModel);
                     checkDependenciesPage.showError(null);
@@ -296,12 +152,12 @@ public class CloneServerActivity extends AbstractActivity {
         sender.send();
     }
 
-    private void onReturnChooseModules(ModulesModel model) {
+    private void onReturnChooseModules(ModulesSelectingModel model) {
         container.setWidget(chooseModulesPage);
         chooseModulesPage.setModel(model);
     }
 
-    private void onSubmitCheckModules(ModulesModel model) {
+    private void onSubmitCheckModules(CreatingServerModel model) {
         checkDependenciesPage.lockUI();
         checkDependenciesPage.showError(null);
 
@@ -339,7 +195,7 @@ public class CloneServerActivity extends AbstractActivity {
     }
 
     private Timer timer;
-    RequestSender sender;
+    RequestSender checkingFileSender;
 
     private void showDownloadServerPage(FileKeyModel key) {
         // show DownloadServer page
@@ -347,17 +203,17 @@ public class CloneServerActivity extends AbstractActivity {
         container.setWidget(downloadServerPage);
 
         // send request to get file url or creating state
-        sender = new RequestSender(RequestBuilder.POST, "/installer/get_url");
-        sender.setErrorHandler(downloadServerPage);
+        checkingFileSender = new RequestSender(RequestBuilder.POST, "/installer/get_url");
+        checkingFileSender.setErrorHandler(downloadServerPage);
         String data = new JSONObject(key).toString();
-        sender.setRequestData(data);
-        sender.setCallback(new AbstractRequestCallback() {
+        checkingFileSender.setRequestData(data);
+        checkingFileSender.setCallback(new AbstractRequestCallback() {
 
             @Override
             public void onSuccess(Request request, Response response) {
                 String text = response.getText();
                 try {
-                    FileUrlModel url = JsonUtils.safeEval(text);
+                    FileStatusModel url = JsonUtils.safeEval(text);
                     if (url.getFileUrl() == null) {
                         // it is still in process
                         downloadServerPage.setProgress(url.getPercentage());
@@ -379,7 +235,7 @@ public class CloneServerActivity extends AbstractActivity {
             @Override
             public void run() {
                 downloadServerPage.showError(null);
-                sender.send();
+                checkingFileSender.send();
             }
         };
         timer.run();

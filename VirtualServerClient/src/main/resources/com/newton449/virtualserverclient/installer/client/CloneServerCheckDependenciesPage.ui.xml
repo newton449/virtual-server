@@ -38,16 +38,29 @@ Uncomment this for XHTML entities
         margin: 0 0 0 25px;
         width: 80px;
         }
+        .compress{
+        margin: 10px;
+        }
+        .compressIntro{
+        margin: 10px;
+        }
+        .compressBox{
+        margin: 10px;
+        }
     </ui:style>
     <g:HTMLPanel>
         <g:Image resource='{res.step2}'/>
         <div class="{style.top}">
             <div class="{style.intro}">After checking dependencies, these are selected:</div>
-<!--            <g:Button addStyleNames="{style.checkboxButton}" ui:field="uncheckAllButton">Uncheck All</g:Button>
+            <!--            <g:Button addStyleNames="{style.checkboxButton}" ui:field="uncheckAllButton">Uncheck All</g:Button>
             <g:Button addStyleNames="{style.checkboxButton}" ui:field="checkAllButton">Check All</g:Button>-->
         </div>
         <div class="{style.clear}"></div>
-        <s:ModulesTable ui:field="table"></s:ModulesTable>
+        <s:ModulesSelectingTable ui:field="table"></s:ModulesSelectingTable>
+        <div class="{style.compress}">
+            <span class="style.compressIntro">Please choose the type format of server file:</span>
+            <g:ListBox ui:field="compBox" addStyleNames="{style.compressBox}"></g:ListBox>
+        </div>
         <g:HTML addStyleNames="{style.error}" ui:field="error">Error Message</g:HTML>
         <div class="{style.actions}">
             <g:Button addStyleNames="{style.actionButton}" ui:field="nextButton">Next</g:Button>

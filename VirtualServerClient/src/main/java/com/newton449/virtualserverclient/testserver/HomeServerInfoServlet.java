@@ -1,7 +1,6 @@
 package com.newton449.virtualserverclient.testserver;
 
-import com.newton449.virtualserverclient.installer.client.model.FileKeyModel;
-import com.newton449.virtualserverclient.installer.client.model.FileStatusModel;
+import com.newton449.virtualserverclient.home.client.model.ServerInfoModel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -10,15 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * It accepts a {@link FileKeyModel} which presents the requested file, and
- * replies a {@link FileStatusModel} which contains the file URL (if it is created)
- * or the creating process (if it is creating).
+ * It sends a {@link ServerInfoModel}
  *
  * @author Steven
  */
-public class InstallerGetUrlServlet extends HttpServlet {
-
-    private static int COUNT = 0;
+public class HomeServerInfoServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,28 +28,27 @@ public class InstallerGetUrlServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/json;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            if (COUNT >= 9) {
-                // finished
-                out.print(buildResult("/_file/VirtualServer-all.zip", 500436, 100, 0));
-                if (COUNT == 10) {
-                    COUNT = 0;
-                }
-            } else {
-                // processing
-                out.print(buildResult(null, 0, COUNT * 10, 1000));
-            }
-            COUNT++;
+            out.println("{\n"
+                    + "    \"platformInfo\": \"Windows 8 v6.2 on amd64; en_US\",\n"
+                    + "    \"items\": [\n"
+                    + "        {\n"
+                    + "            \"name\": \"Main Program\",\n"
+                    + "            \"description\": \"The main server program.\",\n"
+                    + "            \"state\": \"Running\"\n"
+                    + "        },\n"
+                    + "        {\n"
+                    + "            \"name\": \"Home\",\n"
+                    + "            \"description\": \"Provids default HTML pages.\",\n"
+                    + "            \"state\": \"Running\"\n"
+                    + "        },\n"
+                    + "        {\n"
+                    + "            \"name\": \"Installer\",\n"
+                    + "            \"description\": \"Allows others to clone your server.\",\n"
+                    + "            \"state\": \"Running\"\n"
+                    + "        }\n"
+                    + "    ]\n"
+                    + "}");
         }
-    }
-
-    private String buildResult(String url, int size, float percentage, int waiting) {
-        String ret = "{\n"
-                + "    \"fileUrl\": " + (url == null ? "null" : '\"' + url + '\"') + ",\n"
-                + "    \"fileSize\": " + size + ",\n"
-                + "    \"percentage\": " + percentage + ",\n"
-                + "    \"waitingMillisecond\": " + waiting + "\n"
-                + "}";
-        return ret;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

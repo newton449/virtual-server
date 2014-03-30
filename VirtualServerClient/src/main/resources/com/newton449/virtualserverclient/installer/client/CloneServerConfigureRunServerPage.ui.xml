@@ -28,7 +28,23 @@ Uncomment this for XHTML entities
     <g:HTMLPanel>
         <g:Image resource='{res.step4}'/>
         <div>
-            Instructions to run your server.
+            How to run the server:
+            <ol>
+                <li>Uncompress the server file to a directory, where the server will run.</li>
+                <li>Change "config.xml" file in "_config" directory. It contains configurations such as server port.</li>
+                <li>Run script file. In Windows, run "run.bat". In Linux, run "run.sh".</li>
+                <li>Now you should see a running server window.</li>
+            </ol>
+            How to add a module:
+            <ol>
+                <li>Put your module directory next to "MainProgram" directory.</li>
+                <li>Run server.</li>
+            </ol>
+            How to delete a module:
+            <ol>
+                <li>Delete the module's directory.</li>
+                <li>Run server.</li>
+            </ol>
         </div>
         <div class="{style.actions}">
             <!--            <g:Button addStyleNames="{style.actionButton}" ui:field="nextButton">Next</g:Button>-->

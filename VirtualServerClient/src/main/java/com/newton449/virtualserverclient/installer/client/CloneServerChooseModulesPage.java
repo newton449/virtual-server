@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
-import com.newton449.virtualserverclient.installer.client.model.ModulesModel;
+import com.newton449.virtualserverclient.installer.client.model.ModulesSelectingModel;
 import com.newton449.virtualserverclient.user.client.ErrorView;
 
 /**
@@ -19,14 +19,14 @@ import com.newton449.virtualserverclient.user.client.ErrorView;
  */
 public class CloneServerChooseModulesPage extends Composite implements ErrorView {
 
-    private static CloneServerChooseModulesPageUiBinder uiBinder = GWT.create(CloneServerChooseModulesPageUiBinder.class);
+    private static final CloneServerChooseModulesPageUiBinder uiBinder = GWT.create(CloneServerChooseModulesPageUiBinder.class);
 
     interface CloneServerChooseModulesPageUiBinder extends UiBinder<Widget, CloneServerChooseModulesPage> {
     }
 
     public interface Presenter {
 
-        void onNext(ModulesModel model);
+        void onNext(ModulesSelectingModel model);
     }
     private Presenter presenter;
 
@@ -35,7 +35,7 @@ public class CloneServerChooseModulesPage extends Composite implements ErrorView
     }
 
     @UiField
-    ModulesTable table;
+    ModulesSelectingTable table;
     @UiField
     Button checkAllButton;
     @UiField
@@ -96,7 +96,7 @@ public class CloneServerChooseModulesPage extends Composite implements ErrorView
         });
     }
 
-    public void setModel(ModulesModel model) {
+    public void setModel(ModulesSelectingModel model) {
         table.setModel(model);
     }
 

@@ -7,7 +7,7 @@ Uncomment this for XHTML entities
     <ui:style>
         .background{
         text-align: center;
-        background: url("/style/blackground.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+        background: url("/style/background.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
         }
         .frame{
         width: 1000px;
@@ -84,7 +84,7 @@ Uncomment this for XHTML entities
             <div class="{style.east}">
                 <div class="{style.menu}">Menu</div>
                 <g:FlowPanel ui:field="menuPanel">
-<!--                    <a class="{style.item}">Home</a>
+                    <!--                    <a class="{style.item}">Home</a>
                     <a class="{style.item}">Clone</a>
                     <a class="{style.item}">About</a>-->
                 </g:FlowPanel>

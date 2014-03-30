@@ -97,7 +97,7 @@
                     <copyWebapp>true</copyWebapp>
                     <debugPort>9999</debugPort>
                     <debugSuspend>false</debugSuspend>
-                    <extraJvmArgs>-Xmx2048M</extraJvmArgs>
+                    <extraJvmArgs>-Xmx1024M</extraJvmArgs>
                     <!--                    <workDir>${project.build.directory}/${project.build.finalName}</workDir>-->
                     <!--                    <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>-->

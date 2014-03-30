@@ -11,7 +11,8 @@
                 <goal>gwt:debug</goal>
             </goals>
             <properties>
-                <netbeans.deploy.debugmode>true</netbeans.deploy.debugmode>
+                <netbeans.deploy.debugmode>false</netbeans.deploy.debugmode>
+                <netbeans.deploy>false</netbeans.deploy>
                 
                 
                 
