@@ -6,6 +6,8 @@
 #include "ModuleManagerImpl.h"
 #include "ClientManagerImpl.h"
 
+typedef std::map<std::string, std::string> PropertyMap;
+
 class MainObjectFactoryImpl : public IMainObjectFactory{
 public:
 	static MainObjectFactoryImpl* getInstance();
@@ -17,6 +19,8 @@ public:
 	IModuleManager* getModuleManager();
 	// Returns an instance of IClientManager.
 	IClientManager* getClientManager();
+    // Returns an property map of configurations.
+    PropertyMap* getPropertyMap();
 
 	AggregateHttpServletMapping* getAggregateHttpServletMapping();
 private:

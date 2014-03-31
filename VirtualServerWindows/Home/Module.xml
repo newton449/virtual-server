@@ -39,22 +39,26 @@
     </item>
     <item>
       <name>About</name>
-      <url>/home/#about<url>
+      <url>/home/#about</url>
       <orderNumber>100</orderNumber>
-        </item>
+    </item>
   </clientMenu>
 
   <!-- Map URLs and servlets. -->
   <servlets>
-    <serrvlet>
+    <servlet>
       <name>RedirectToHomeServlet</name>
       <!-- The name of servlet. Names are separated in each module. -->
       <url>/</url>
       <!-- the exact URL for the servlet -->
     </servlet>
-    <serrvlet>
+    <servlet>
       <name>MenuListServlet</name>
       <url>/home/menu_list</url>
+    </servlet>
+    <servlet>
+      <name>ServerInfoServlet</name>
+      <url>/home/server_info</url>
     </servlet>
   </servlets>
 

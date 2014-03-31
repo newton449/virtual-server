@@ -125,7 +125,9 @@ xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
     <ClInclude Include="StringUtils.h" />
     <ClInclude Include="Threads.h" />
     <ClInclude Include="Threads_Windows.h" />
+    <ClInclude Include="tinyxml2.h" />
     <ClInclude Include="Utilities.h" />
+    <ClInclude Include="XMLDocument.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\interfaces\ILogger.cpp" />
@@ -146,6 +148,7 @@ xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
     <ClCompile Include="SocketStream.cpp" />
     <ClCompile Include="StringUtils.cpp" />
     <ClCompile Include="Threads_Windows.cpp" />
+    <ClCompile Include="tinyxml2.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>

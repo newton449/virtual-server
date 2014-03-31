@@ -1,59 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
-    <displayName>Home</displayName>
-	<description>Shows the homepage of client.</description>
-	
-	<!-- Configure dynamic libraries. -->
-	<dynamicLibraries>
-	    <dynamicLibrary>
-		    <path>Home.dll</path> <!-- path to find the file in module's directory -->
-			<platform>Windows</platform> <!-- platform of the library, such as Windows, Linux x86, Linux x64 -->
-			<version>0.3</version> <!-- for future use -->
-		</dynamicLibrary>
-		<dynamicLibrary>
-		    <path>Home_x86.so</path>
-			<platform>Linux x86</platform>
-			<version>0.1</version>
-		</dynamicLibrary>
-		<dynamicLibrary>
-		    <path>Home_x64.so</path>
-			<platform>Linux x64</platform>
-			<version>0.1</version>
-		</dynamicLibrary>
-	</dynamicLibraries>
-	
-	<!-- Configure client menu which will be should in all client pages. -->
-	<clientMenu>
-        <item>
-		    <name>Home</name> <!-- The name will be used in the body of "a" tag. -->
-			<description>The home page of the whole website.</description> <!-- optional, showed in "title" attribute of "a" tag -->
-			<url>/home/#</url> <!-- The URL will be used in "href" attribute in "a" tag. -->
-			<orderNumber>0</orderNumber> <!-- a float number for the item's order -->
-		</item>
-		<item>
-		    <name>About</name>
-			<url>/home/#about<url>
-			<orderNumber>100</orderNumber>
-		</item>
-	</clientMenu>
-	
-	<!-- Map URLs and servlets. -->
-	<servlets>
-	    <serrvlet>
-		    <name>RedirectToHomeServlet</name> <!-- The name of servlet. Names are separated in each module. -->
-			<url>/</url> <!-- the exact URL for the servlet -->
-		</servlet>
-	    <serrvlet>
-		    <name>MenuListServlet</name>
-			<url>/home/menu_list</url>
-		</servlet>
-	</servlets>
-	
-	<!-- Map static resources. -->
-	<staticResources>
-        <staticResource>
-		    <directory>/web/</directory> <!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
-			<contextPath>/home</contextPath> <!-- the context path for the resources -->
-	    </staticResource>
-	</staticResources>
+  <displayName>Home</displayName>
+  <description>Shows the homepage of client.</description>
+
+  <!-- Configure dynamic libraries. -->
+  <dynamicLibraries>
+    <dynamicLibrary>
+      <path>Home.dll</path>
+      <!-- path to find the file in module's directory -->
+      <platform>Windows</platform>
+      <!-- platform of the library, such as Windows, Linux x86, Linux x64 -->
+      <version>0.3</version>
+      <!-- for future use -->
+    </dynamicLibrary>
+    <dynamicLibrary>
+      <path>Home_x86.so</path>
+      <platform>Linux x86</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+    <dynamicLibrary>
+      <path>Home_x64.so</path>
+      <platform>Linux x64</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+  </dynamicLibraries>
+
+  <!-- Configure client menu which will be should in all client pages. -->
+  <clientMenu>
+    <item>
+      <name>Home</name>
+      <!-- The name will be used in the body of "a" tag. -->
+      <description>The home page of the whole website.</description>
+      <!-- optional, showed in "title" attribute of "a" tag -->
+      <url>/home/#</url>
+      <!-- The URL will be used in "href" attribute in "a" tag. -->
+      <orderNumber>0</orderNumber>
+      <!-- a float number for the item's order -->
+    </item>
+    <item>
+      <name>About</name>
+      <url>/home/#about</url>
+      <orderNumber>100</orderNumber>
+    </item>
+  </clientMenu>
+
+  <!-- Map URLs and servlets. -->
+  <servlets>
+    <servlet>
+      <name>RedirectToHomeServlet</name>
+      <!-- The name of servlet. Names are separated in each module. -->
+      <url>/</url>
+      <!-- the exact URL for the servlet -->
+    </servlet>
+    <servlet>
+      <name>MenuListServlet</name>
+      <url>/home/menu_list</url>
+    </servlet>
+    <servlet>
+      <name>ServerInfoServlet</name>
+      <url>/home/server_info</url>
+    </servlet>
+  </servlets>
+
+  <!-- Map static resources. -->
+  <staticResources>
+    <staticResource>
+      <directory>/web/</directory>
+      <!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
+      <contextPath>/home</contextPath>
+      <!-- the context path for the resources -->
+    </staticResource>
+  </staticResources>
 </module>

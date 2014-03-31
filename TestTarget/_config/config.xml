@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+  <properties>
+    <main.httpServerPort>8080</main.httpServerPort>
+    <main.httpThreadMinCount>5</main.httpThreadMinCount>
+    <main.httpThreadMaxCount>5</main.httpThreadMaxCount>
+  </properties>
 	<!-- Map static resources. -->
 	<staticResources>
         <staticResource>
-		    <directory>/_web/</directory> <!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
+		    <directory>_web/</directory> <!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
 			<contextPath></contextPath> <!-- the context path for the resources -->
 	    </staticResource>
 	</staticResources>

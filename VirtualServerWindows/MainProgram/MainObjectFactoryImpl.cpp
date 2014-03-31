@@ -13,6 +13,7 @@ MainObjectFactoryImpl* MainObjectFactoryImpl::getInstance() {
         INSTANCE = new MainObjectFactoryImpl();
         INSTANCE->setObject("IModuleManager", new ModuleManagerImpl());
         INSTANCE->setObject("IClientManager", new ClientManagerImpl());
+        INSTANCE->setObject("PropertyMap", new PropertyMap());
         INSTANCE->mapping = new AggregateHttpServletMapping();
     }
     return INSTANCE;
@@ -30,7 +31,8 @@ void MainObjectFactoryImpl::setObject(const string& key, void* object) {
     unordered_map<string, void*>::iterator it = objectMap.find(key);
     if (it == objectMap.end()) {
         objectMap[key] = object;
-    } else {
+    }
+    else {
         // delete old object
         // TODO not allow
         throw std::exception();
@@ -40,13 +42,17 @@ void MainObjectFactoryImpl::setObject(const string& key, void* object) {
 }
 
 IModuleManager* MainObjectFactoryImpl::getModuleManager() {
-    return (IModuleManager*) getObject("IModuleManager");
+    return (IModuleManager*)getObject("IModuleManager");
 }
 
 IClientManager* MainObjectFactoryImpl::getClientManager() {
-    return (IClientManager*) getObject("IClientManager");
+    return (IClientManager*)getObject("IClientManager");
 }
 
 AggregateHttpServletMapping* MainObjectFactoryImpl::getAggregateHttpServletMapping() {
     return mapping;
+}
+
+PropertyMap* MainObjectFactoryImpl::getPropertyMap(){
+    return (PropertyMap*)getObject("PropertyMap");
 }

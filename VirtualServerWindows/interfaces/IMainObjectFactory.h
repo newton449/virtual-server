@@ -24,5 +24,7 @@ extern "C" {
         virtual IModuleManager* getModuleManager() = 0;
         // Returns an instance of IClientManager. It can also be get by getObject("IClientManager").
         virtual IClientManager* getClientManager() = 0;
+        // Returns an property map of configurations.
+        virtual std::map<std::string, std::string>* getPropertyMap() = 0;
     };
 }
