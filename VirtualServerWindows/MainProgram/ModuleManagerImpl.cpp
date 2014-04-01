@@ -199,17 +199,23 @@ bool ModuleManagerImpl::loadLibrariesInfo(const std::string& moduleName, tinyxml
             return false;
         }
 
+        if (!FileSystem::File::exists(currentLibraryPath)){
+            LOG(INFO) << "The library file \"" << currentLibraryPath << "\" does not exist, so this platform is not supported.";
+            this->setModuleState(moduleName, "Unsupport Platform");
+            return false;
+        }
+
         // Load the dynamic of the current platform except for MainProgram.
         if (moduleName != "MainProgram"){
             try{
                 moduleFactory = loadDllAndGetModuleFactory(currentLibraryPath); // load from dll
             }
             catch (std::exception& ex){
-                LOG(WARNING) << "Got exception when load library file: " << ex.what();
+                LOG(ERROR) << "Got exception when load library file: " << ex.what();
                 return false;
             }
             if (moduleFactory == NULL) {
-                LOG(WARNING) << "Falied to load library: " << currentLibraryPath;
+                LOG(ERROR) << "Falied to load library: " << currentLibraryPath;
                 this->setModuleState(moduleName, "Loading Error");
                 return false;
             }
