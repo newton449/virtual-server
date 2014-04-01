@@ -2,6 +2,8 @@
 /VirtualServerClient/target/
 /TestTarget/logs/
 /TestTarget/_log/
+/FinalTarget/logs/
+/FinalTarget/_log/
 *.dll
 *.exp
 *.lib
