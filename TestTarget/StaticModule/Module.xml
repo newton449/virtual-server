@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
-  <displayName>NoDllsModule</displayName>
+  <displayName>StaticModule</displayName>
   <description>A module which does not have DLLs. For test only.</description>
 
   <!-- Configure client menu which will be should in all client pages. -->
   <clientMenu>
     <item>
-      <name>NoDllsModule</name>
-      <url>/no_dlls_module/</url>
+      <name>StaticModule</name>
+      <url>/static_module/</url>
       <orderNumber>95</orderNumber>
     </item>
   </clientMenu>
@@ -16,7 +16,7 @@
   <staticResources>
     <staticResource>
       <directory>web/</directory>
-      <contextPath>/no_dlls_module</contextPath>
+      <contextPath>/static_module</contextPath>
     </staticResource>
   </staticResources>
 </module>

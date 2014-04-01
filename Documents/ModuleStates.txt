@@ -1,0 +1,8 @@
+A module can be one of the following states after being loaded:
+
+ - Running:            It runs well.
+ - Unsupport Platform: Either its platform list in Module.xml does not have the current platform,
+                       or it has the current platform, but the library file does not exist.
+ - Loading Error:      Failed to load the module.
+ - Running Error:      Errors occurred when running.
+ - Stopped:            It has been stopped by user after running.

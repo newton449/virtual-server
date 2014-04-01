@@ -40,8 +40,8 @@ public:
     virtual void loadAll() = 0;
     // Returns true if the module has been loaded.
     virtual bool isModuleLoaded(string moduleName) = 0;
-    // Returns the state such as "Loading", "Running", "Loading Error", "Unsupport Platform", "Running Error", "Stopped"
+    // Returns the state such as "Running", "Loading Error", "Unsupport Platform", "Running Error", "Stopped"
     virtual string getModuleState(string moduleName) = 0;
-    // Sets the state such as "Loading", "Running", "Loading Error", "Unsupport Platform", "Running Error", "Stopped"
+    // Sets the state such as "Running", "Loading Error", "Unsupport Platform", "Running Error", "Stopped"
     virtual void setModuleState(string moduleName, string state) = 0;
 };

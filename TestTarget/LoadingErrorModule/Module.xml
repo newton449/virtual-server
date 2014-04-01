@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
   <displayName>LoadingErrorModule</displayName>
-  <description>A module whose DLL file does not exist. For test only.</description>
+  <description>A module whose DLL file is invalid. For test only.</description>
   
   <dynamicLibraries>
     <dynamicLibrary>
