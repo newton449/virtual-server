@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <properties>
-    <main.httpServerPort>8080</main.httpServerPort>
-    <main.httpThreadMinCount>5</main.httpThreadMinCount>
-    <main.httpThreadMaxCount>5</main.httpThreadMaxCount>
+    <!-- HTTP server's port. Default value is 8080. -->
+    <!--<MainProgram.httpServerPort>8080</MainProgram.httpServerPort>-->
+    <MainProgram.httpThreadMinCount>5</MainProgram.httpThreadMinCount>
+    <MainProgram.httpThreadMaxCount>5</MainProgram.httpThreadMaxCount>
   </properties>
-  <!-- Map static resources. -->
-  <staticResources>
-    <staticResource>
-      <!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
-      <directory>_web</directory>
-      <!-- the context path for the resources -->
-      <contextPath></contextPath>
-    </staticResource>
-  </staticResources>
 </config>

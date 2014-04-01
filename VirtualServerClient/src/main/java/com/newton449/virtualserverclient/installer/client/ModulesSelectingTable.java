@@ -64,19 +64,20 @@ public class ModulesSelectingTable extends FlexTable {
             for (int j = 0; j < versionCount; j++) {
                 VersionState versionState = module.getVersionStates().get(j);
                 if (selectable) {
-                    // put check boxes
-                    CheckBox box = new CheckBox();
-                    box.addStyleName(css.box());
-                    box.setEnabled(versionState.isEnabled());
-                    box.setValue(versionState.isSelected());
-                    this.setWidget(i + 2, j + 2, box);
                     this.getCellFormatter().addStyleName(i + 2, j + 2, css.correctCell());
+                    // put check boxes, when it is selectable or selected
+                    if (versionState.isEnabled() || versionState.isSelected()) {
+                        CheckBox box = new CheckBox();
+                        box.addStyleName(css.box());
+                        box.setEnabled(versionState.isEnabled());
+                        box.setValue(versionState.isSelected());
+                        this.setWidget(i + 2, j + 2, box);
+                    }
                 } else {
                     // put hooks
                     if (versionState.isSelected()) {
                         Image image = new Image(Resources.Utils.INSTANCE.correct());
                         image.addStyleName(css.correctImage());
-                        this.getCellFormatter().addStyleName(i + 2, j + 2, css.correctCell());
                         this.setWidget(i + 2, j + 2, image);
                     } else {
                         this.setText(i + 2, j + 2, "");

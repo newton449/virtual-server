@@ -8,6 +8,7 @@
 #include "MainProgram.h"
 #include "XMLDocument.h"
 #include "StringUtils.h"
+#include <unordered_set>
 
 MainProgram::MainProgram(){
 
@@ -55,6 +56,10 @@ void MainProgram::setupConfigs(){
     // Set system property.
     (*map)["system.currentPlatform"] = getCurrentPlatform();
 
+    // properties in config.xml cannot be overrided by Module.xml
+    // so we use primaryKeys to keep those keys
+    std::unordered_set<std::string>* primaryKeys = new std::unordered_set<std::string>();
+
     // Load config.xml
     LOG(DEBUG) << "Loading config.xml.";
     tinyxml2::XMLDocument config;
@@ -72,39 +77,12 @@ void MainProgram::setupConfigs(){
         tinyxml2::XMLElement* prop = properties->FirstChildElement();
         while (prop != NULL){
             (*map)[prop->Name()] = StringUtils::NullToEmpty(prop->GetText());
+            primaryKeys->insert(prop->Name());
             prop = prop->NextSiblingElement();
         }
     }
+    factory->setObject("primaryKeys", primaryKeys);
 
-    // Mapping static resources in config.xml
-    AggregateHttpServletMapping* mapping = factory->getAggregateHttpServletMapping();
-    // parse <staticResources>
-    tinyxml2::XMLElement* resources = root->FirstChildElement("staticResources");
-    if (resources != NULL){
-        tinyxml2::XMLElement* res = resources->FirstChildElement();
-        while (res != NULL){
-            EXPECT_NODE(res, "staticResource");
-            // parse <directory>_web/</directory>
-            tinyxml2::XMLElement* dirElem = res->FirstChildElement("directory");
-            CHECK_NODE(dirElem, "directory");
-            std::string dir = StringUtils::NullToEmpty(dirElem->GetText());
-            CHECK_EMPTY(dir, "directory");
-            dir = StringUtils::fixDirectoryPath(dir);
-            // parse <contextPath></contextPath>
-            tinyxml2::XMLElement* contextElem = res->FirstChildElement("contextPath");
-            CHECK_NODE(contextElem, "contextPath");
-            std::string context = StringUtils::NullToEmpty(contextElem->GetText());
-            if ((!context.empty()) && context[0] != '/'){
-                throw InvalidFormatException("A context path should start with '/' or be empty.");
-            }
-            // context path cannot be a single "/"
-            if (context == "/"){
-                context = "";
-            }
-            mapping->addResourcesMapping(context, dir);
-            res = res->NextSiblingElement();
-        }
-    }
     LOG(DEBUG) << "Finished loading config.xml.";
 }
 
@@ -118,8 +96,8 @@ void MainProgram::runHttpServer(){
     PropertyMap* map = factory->getPropertyMap();
     AggregateHttpServletMapping* mapping = factory->getAggregateHttpServletMapping();
     // Create a HttpServer.
-    int port = StringUtils::parseInt((*map)["main.httpServerPort"]);
-    int threadCount = StringUtils::parseInt((*map)["main.httpThreadMinCount"]);
+    int port = StringUtils::parseInt((*map)["MainProgram.httpServerPort"]);
+    int threadCount = StringUtils::parseInt((*map)["MainProgram.httpThreadMinCount"]);
     HttpServer* server = new HttpServer(*mapping, port, threadCount);
 
     // put the server to factory

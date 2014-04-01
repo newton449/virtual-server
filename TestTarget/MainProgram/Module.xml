@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <displayName>Main Program</displayName>
+  <description>The main server program.</description>
+  
+  <!-- properties -->
+  <properties>
+    <MainProgram.httpServerPort>8080</MainProgram.httpServerPort>
+    <MainProgram.httpThreadMinCount>5</MainProgram.httpThreadMinCount>
+    <MainProgram.httpThreadMaxCount>5</MainProgram.httpThreadMaxCount>
+  </properties>
+
+  <!-- Configure dynamic libraries. (they are runnable programs actually) -->
+  <dynamicLibraries>
+    <dynamicLibrary>
+      <path>MainProgram.exe</path>
+      <platform>Windows</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+    <dynamicLibrary>
+      <path>MainProgram_Linux_x64</path>
+      <platform>Linux x64</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+  </dynamicLibraries>
+
+  <!-- Map static resources. -->
+  <staticResources>
+    <staticResource>
+      <directory>../_web</directory>
+      <contextPath></contextPath>
+    </staticResource>
+  </staticResources>
+</module>

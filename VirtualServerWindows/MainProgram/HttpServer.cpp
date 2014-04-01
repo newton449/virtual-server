@@ -422,7 +422,7 @@ void HttpServer::run() {
         threads.push_back(new RequestHandlerThread(queue, mapping, i));
         threads.back()->start();
     }
-    LOG(INFO) << "Server has started.";
+    LOG(INFO) << "Server has started on port " << port;
     try {
         while (true) {
             // Get sockets and push them into the queue. The
