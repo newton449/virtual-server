@@ -46,6 +46,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/832715153/SocketStream.o \
 	${OBJECTDIR}/_ext/832715153/StringUtils.o \
 	${OBJECTDIR}/_ext/832715153/Utilities.o \
+	${OBJECTDIR}/_ext/832715153/tinyxml2.o \
 	${OBJECTDIR}/_ext/768354932/ILogger.o \
 	${OBJECTDIR}/BlockingQueue_Linux.o \
 	${OBJECTDIR}/FileSystem_Linux.o \
@@ -60,8 +61,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-pthread
-CXXFLAGS=-pthread
+CCFLAGS=
+CXXFLAGS=
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -134,6 +135,11 @@ ${OBJECTDIR}/_ext/832715153/Utilities.o: ../../VirtualServerWindows/MainProgram/
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/Utilities.o ../../VirtualServerWindows/MainProgram/Utilities.cpp
+
+${OBJECTDIR}/_ext/832715153/tinyxml2.o: ../../VirtualServerWindows/MainProgram/tinyxml2.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/tinyxml2.o ../../VirtualServerWindows/MainProgram/tinyxml2.cpp
 
 ${OBJECTDIR}/_ext/768354932/ILogger.o: ../../VirtualServerWindows/interfaces/ILogger.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/768354932

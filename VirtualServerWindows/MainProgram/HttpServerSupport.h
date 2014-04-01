@@ -213,10 +213,12 @@ private:
 
 // In the ISO C++11 Standard, the noexcept operator is introduced, but support
 // for this feature is not yet present in Visual C++.
+#ifndef NOEXCEPT
 #ifdef WIN32
 #define NOEXCEPT throw()
 #else
 #define NOEXCEPT noexcept(true)
+#endif
 #endif
 
 /////////////////////////////////////////////////////////////////////////

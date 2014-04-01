@@ -13,8 +13,8 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=../../TestTarget/Installer/Installer_x64.so
-OUTPUT_BASENAME=Installer_x64.so
+OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libInstaller.${CND_DLIB_EXT}
+OUTPUT_BASENAME=libInstaller.${CND_DLIB_EXT}
 PACKAGE_TOP_DIR=libInstaller.so/
 
 # Functions

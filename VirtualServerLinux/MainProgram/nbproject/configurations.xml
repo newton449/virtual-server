@@ -43,6 +43,7 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>../../VirtualServerWindows/Installer/Module.xml</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -60,6 +61,7 @@
         <itemPath>../../VirtualServerWindows/MainProgram/SocketStream.cpp</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/StringUtils.cpp</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/Utilities.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/tinyxml2.cpp</itemPath>
       </logicalFolder>
       <itemPath>BlockingQueue_Linux.cpp</itemPath>
       <itemPath>FileSystem_Linux.cpp</itemPath>
@@ -92,7 +94,6 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>-pthread</commandLine>
           <preprocessorList>
             <Elem>MAIN_PROGRAM</Elem>
           </preprocessorList>
@@ -106,6 +107,11 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="../../VirtualServerWindows/Installer/Module.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp"
             ex="false"
             tool="1"
@@ -244,6 +250,11 @@
       <item path="../../VirtualServerWindows/MainProgram/Utilities.h"
             ex="false"
             tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/tinyxml2.cpp"
+            ex="false"
+            tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/interfaces/IClientManager.h"
@@ -333,6 +344,10 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <standard>8</standard>
+          <preprocessorList>
+            <Elem>MAIN_PROGRAM</Elem>
+          </preprocessorList>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -340,7 +355,18 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
+      <item path="../../VirtualServerWindows/Installer/Module.xml"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp"
             ex="false"
             tool="1"
@@ -479,6 +505,11 @@
       <item path="../../VirtualServerWindows/MainProgram/Utilities.h"
             ex="false"
             tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/tinyxml2.cpp"
+            ex="false"
+            tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/interfaces/IClientManager.h"

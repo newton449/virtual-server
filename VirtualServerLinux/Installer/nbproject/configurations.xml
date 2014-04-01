@@ -56,9 +56,6 @@
           <standard>8</standard>
           <warningLevel>3</warningLevel>
         </ccTool>
-        <linkerTool>
-          <output>../../TestTarget/Installer/Installer_x64.so</output>
-        </linkerTool>
       </compileType>
       <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
             ex="false"

@@ -168,3 +168,4 @@ $RECYCLE.BIN/
 .DS_Store
 /VirtualServerLinux/MainProgram/dist/
 /VirtualServerLinux/Home/dist/
+/VirtualServerLinux/Installer/dist/

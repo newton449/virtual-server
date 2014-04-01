@@ -15,6 +15,11 @@
       <platform>Linux x86</platform>
       <version>0.1</version>
     </dynamicLibrary>
+    <dynamicLibrary>
+      <path>Installer_x64.so</path>
+      <platform>Linux x64</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
   </dynamicLibraries>
 
   <!-- Configure client menu which will be should in all client pages. -->

@@ -59,11 +59,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ../../TestTarget/Installer/Installer_x64.so
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libInstaller.${CND_DLIB_EXT}
 
-../../TestTarget/Installer/Installer_x64.so: ${OBJECTFILES}
-	${MKDIR} -p ../../TestTarget/Installer
-	${LINK.cc} -o ../../TestTarget/Installer/Installer_x64.so ${OBJECTFILES} ${LDLIBSOPTIONS} -shared -fPIC
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libInstaller.${CND_DLIB_EXT}: ${OBJECTFILES}
+	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libInstaller.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -shared -fPIC
 
 ${OBJECTDIR}/_ext/1278082062/HttpServletsImpl.o: ../../VirtualServerWindows/Installer/HttpServletsImpl.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1278082062
@@ -91,7 +91,7 @@ ${OBJECTDIR}/_ext/768354932/ILogger.o: ../../VirtualServerWindows/interfaces/ILo
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ../../TestTarget/Installer/Installer_x64.so
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libInstaller.${CND_DLIB_EXT}
 
 # Subprojects
 .clean-subprojects:

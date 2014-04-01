@@ -6,13 +6,8 @@
   <!-- Configure dynamic libraries. -->
   <dynamicLibraries>
     <dynamicLibrary>
-      <path>UnsupportPlatformModule_x86.so</path>
-      <platform>Linux x86</platform>
-      <version>0.1</version>
-    </dynamicLibrary>
-    <dynamicLibrary>
-      <path>UnsupportPlatformModule_x64.so</path>
-      <platform>Linux x64</platform>
+      <path>UnsupportPlatformModule</path>
+      <platform>Unknown Platform</platform>
       <version>0.1</version>
     </dynamicLibrary>
   </dynamicLibraries>

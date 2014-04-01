@@ -11,6 +11,15 @@
 // check whether a XMLElement "NODE" has a expected name. If it is not, throw an InvalidFormatException.
 #define EXPECT_NODE(NODE, NAME) if(NODE->Name()!=std::string(NAME)) throw InvalidFormatException(std::string("Expected tag \"")+NAME+"\" but got \""+NODE->Name()+"\"");
 
+// In the ISO C++11 Standard, the noexcept operator is introduced, but support
+// for this feature is not yet present in Visual C++.
+#ifndef NOEXCEPT
+#ifdef WIN32
+#define NOEXCEPT throw()
+#else
+#define NOEXCEPT noexcept(true)
+#endif
+#endif
 
 // An exception, thrown when XML format is invalid or does not contain expected contents.
 class InvalidFormatException : public std::logic_error{
@@ -19,5 +28,5 @@ public:
         : std::logic_error(what_arg)
     {}
 
-    virtual ~InvalidFormatException(){}
+    virtual ~InvalidFormatException() NOEXCEPT{}
 };

@@ -58,6 +58,8 @@ build: .build-post
 
 .build-post: .build-impl
 # Add your post 'build' code here...
+# copy Module.xml to TestTarget
+	cp ../../VirtualServerWindows/Installer/Module.xml ../../TestTarget/Installer/
 
 
 # clean
