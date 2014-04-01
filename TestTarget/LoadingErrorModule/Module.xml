@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <displayName>LoadingErrorModule</displayName>
+  <description>A module whose DLL file does not exist. For test only.</description>
+  
+  <dynamicLibraries>
+    <dynamicLibrary>
+      <path>LoadingErrorModule.dll</path>
+      <platform>Windows</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+    <dynamicLibrary>
+      <path>LoadingErrorModule_x86.so</path>
+      <platform>Linux x86</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+    <dynamicLibrary>
+      <path>LoadingErrorModule_x64.so</path>
+      <platform>Linux x64</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+  </dynamicLibraries>
+
+  <!-- Configure client menu which will be should in all client pages. -->
+  <clientMenu>
+    <item>
+      <name>LoadingErrorModule</name>
+      <url>/loading_error_module/</url>
+      <orderNumber>96</orderNumber>
+    </item>
+  </clientMenu>
+
+  <!-- Map static resources. -->
+  <staticResources>
+    <staticResource>
+      <directory>web/</directory>
+      <contextPath>/loading_error_module</contextPath>
+    </staticResource>
+  </staticResources>
+</module>

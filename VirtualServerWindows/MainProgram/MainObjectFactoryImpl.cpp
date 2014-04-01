@@ -4,6 +4,7 @@
 #include "AggregateHttpServletMapping.h"
 #include "Logger.h"
 #include <exception>
+#include <stdexcept>
 
 MainObjectFactoryImpl* MainObjectFactoryImpl::INSTANCE = NULL;
 
@@ -33,11 +34,9 @@ void MainObjectFactoryImpl::setObject(const string& key, void* object) {
         objectMap[key] = object;
     }
     else {
-        // delete old object
-        // TODO not allow
-        throw std::exception();
-        //delete it->second;
-        //it->second = object;
+        // not allow, because we don't know how to delete old object
+        // If we delete it directly, its destructor will not be called.
+        throw std::logic_error("A object of the key \"" + key + "\" has been set.");
     }
 }
 

@@ -121,7 +121,7 @@ SocketBuffer::int_type SocketBuffer::underflow()
 // batch input
 std::streamsize SocketBuffer::xsgetn(char* s, std::streamsize n){
 	if (n > 0){
-		// TODO to be tested more and more
+		// PENDING to be tested more and more
 		if (expectedBytesLength >= 0 && expectedBytesLength < n){
 			n = expectedBytesLength;
 		}

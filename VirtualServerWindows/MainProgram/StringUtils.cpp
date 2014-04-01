@@ -15,11 +15,11 @@
 
 typedef std::string String; 
 
-// Test fixFileName() for the str.
+// Test fixFilePath() for the str.
 void testFixName(String str)
 {
 	std::cout<<str<<std::endl;
-	std::cout<<"    BECOME: "<<StringUtils::fixFileName(str)<<std::endl;;
+	std::cout<<"    BECOME: "<<StringUtils::fixFilePath(str)<<std::endl;;
 }
 
 void main()
@@ -39,7 +39,7 @@ void main()
 	// Test StringUtils::removeFileNameExtension()
 	std::cout<<StringUtils::removeFileNameExtension("aaa.txt")<<std::endl;
 	std::cout<<StringUtils::removeFileNameExtension("aaa")<<std::endl;
-	// Test fixFileName()
+	// Test fixFilePath()
 	std::cout<<"/**** Should be the same or add a '\\' ****/"<<std::endl;
 	testFixName("");
 	testFixName("\\");

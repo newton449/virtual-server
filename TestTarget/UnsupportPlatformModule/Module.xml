@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
-  <displayName>Installer</displayName>
-  <description>Allows the server to be cloned.</description>
+  <displayName>UnsupportPlatformModule</displayName>
+  <description>The module does not have DLL for Windows. For test only.</description>
 
   <!-- Configure dynamic libraries. -->
   <dynamicLibraries>
     <dynamicLibrary>
-      <path>Installer.dll</path>
-      <platform>Windows</platform>
+      <path>UnsupportPlatformModule_x86.so</path>
+      <platform>Linux x86</platform>
       <version>0.1</version>
     </dynamicLibrary>
     <dynamicLibrary>
-      <path>Installer_x86.so</path>
-      <platform>Linux x86</platform>
+      <path>UnsupportPlatformModule_x64.so</path>
+      <platform>Linux x64</platform>
       <version>0.1</version>
     </dynamicLibrary>
   </dynamicLibraries>
@@ -20,10 +20,10 @@
   <!-- Configure client menu which will be should in all client pages. -->
   <clientMenu>
     <item>
-      <name>Clone Server</name>
+      <name>UnsupportPlatformModule</name>
       <description>Create a local server in your machine.</description>
-      <url>/installer/</url>
-      <orderNumber>80</orderNumber>
+      <url>/unsupport_platform_module/</url>
+      <orderNumber>96</orderNumber>
     </item>
   </clientMenu>
 
@@ -50,8 +50,8 @@
   <!-- Map static resources. -->
   <staticResources>
     <staticResource>
-      <directory>web</directory>
-      <contextPath>/installer</contextPath>
+      <directory>web/</directory>
+      <contextPath>/unsupport_platform_module</contextPath>
     </staticResource>
   </staticResources>
 </module>

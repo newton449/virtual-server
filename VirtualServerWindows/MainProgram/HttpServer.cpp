@@ -152,7 +152,7 @@ bool RequestHandlerThread::buildRequest(Vector& headerContents) {
     }
     // TODO Check request url
     //String url=pRequest->getRequestUrl();
-    //url=StringUtils::fixFileName(url);
+    //url=StringUtils::fixFilePath(url);
     //StringUtils::replaceAll(url, "\\", "/"); 
     //if(url.length()==0 || url[0]!='/'){
     //	// The url must begin with "/"

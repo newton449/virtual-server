@@ -42,7 +42,7 @@ void StaticResourcesServlet::doMethod(IHttpServletRequest& request, IHttpServlet
 	}
 
 	// build file path
-	string filePath = directoryPath + url;
+    string filePath = StringUtils::fixFilePath(directoryPath + url);
 
 	// check whether it exists
 	if (!FileSystem::File::exists(filePath)){

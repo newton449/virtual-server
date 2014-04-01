@@ -23,6 +23,9 @@
 // It will show errors of easylogging.
 #define _ELPP_ENABLE_ERRORS
 
+// Disable Crash Handling
+#define _ELPP_DISABLE_DEFAULT_CRASH_HANDLING
+
 #endif
 
 #include "easylogging++.h"

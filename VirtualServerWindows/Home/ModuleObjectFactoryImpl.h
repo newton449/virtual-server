@@ -2,11 +2,18 @@
 
 #include "../interfaces/IModuleObjectFactory.h"
 #include "ServletFactoryImpl.h"
+#include "../interfaces/IMainObjectFactory.h"
 
 class ModuleObjectFactoryImpl : public IModuleObjectFactory{
 public:
-	ModuleObjectFactoryImpl();
 	IServletFactory* getServletFactory();
+    static ModuleObjectFactoryImpl* getInstance();
+    IMainObjectFactory* getMainObjectFactory();
+    void setMainObjectFactory(IMainObjectFactory* factory);
 private:
-	ServletFactoryImpl* factory;
+    static ModuleObjectFactoryImpl* INSTANCE;
+    ServletFactoryImpl* servletFactory;
+    IMainObjectFactory* mainObjectFactory;
+
+    ModuleObjectFactoryImpl();
 };

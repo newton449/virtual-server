@@ -32,7 +32,7 @@ String lower=StringUtils::toLowerCase(token);
 // Split the string.
 std::vector<String> results=StringUtils::split(token, seperator);
 // Fix file name
-String fixedFileName=StringUtils::fixFileName(token);
+String fixedFileName=StringUtils::fixFilePath(token);
 
 Build Process:
 ==============
@@ -242,11 +242,13 @@ public:
             return false;
         }
     }
-
-    // It converts '/' to '\', converts "\\" to "\", remvoes ".\" and
-    // merges "..\" and its parentdir.
-    static String fixFileName(const String& fileName)
+    
+    // In Windows, it converts '/' to '\', converts "\\" to "\", remvoes ".\" and
+    // merges "..\" and its parentdir. In Linux, it did nothing.
+    static String fixFilePath(const String& fileName)
     {
+        // TODO do something in Linux
+#ifdef WIN32
         String ret = fileName;
         if (handleSpecialName(ret))
         {
@@ -265,7 +267,7 @@ public:
         {
             ret = ret.substr(0, ret.length() - 1);
         }
-        // Add "\" at beginning it it begins with it
+        // Add "\" at beginning if it begins with it
         if (fileName[0] == '\\')
         {
             ret = "\\" + ret;
@@ -279,6 +281,27 @@ public:
         {
             ret = ret + '\\';
         }
+        return ret;
+#else
+        return fileName;
+#endif
+    }
+
+    // Similar to fixFilePath(), but it will append a '\\' to the directory path.
+    static String fixDirectoryPath(const String& fileName){
+        String ret = fixFilePath(fileName);
+        if (ret.empty()){
+            return ret;
+        }
+#ifdef WIN32
+        if (ret[ret.length() - 1] != '\\'){
+            ret += '\\';
+        }
+#else
+        if (ret[ret.length() - 1] != '/'){
+            ret += '/';
+        }
+#endif
         return ret;
     }
 
@@ -308,6 +331,16 @@ public:
         float x;
         ss >> x;
         return x;
+    }
+
+    // If the argument is null, return an empty string.
+    static inline String NullToEmpty(const char* str){
+        if (str == NULL){
+            return "";
+        }
+        else{
+            return str;
+        }
     }
 };
 

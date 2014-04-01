@@ -20,9 +20,9 @@
   <!-- Configure client menu which will be should in all client pages. -->
   <clientMenu>
     <item>
-      <name>Clone</name>
+      <name>Clone Server</name>
       <description>Create a local server in your machine.</description>
-      <url>/clone/</url>
+      <url>/installer/</url>
       <orderNumber>80</orderNumber>
     </item>
   </clientMenu>
@@ -50,7 +50,7 @@
   <!-- Map static resources. -->
   <staticResources>
     <staticResource>
-      <directory>/web/</directory>
+      <directory>web</directory>
       <contextPath>/installer</contextPath>
     </staticResource>
   </staticResources>

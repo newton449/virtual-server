@@ -65,10 +65,10 @@
   <!-- Map static resources. -->
   <staticResources>
     <staticResource>
-      <directory>/web/</directory>
       <!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
-      <contextPath>/home</contextPath>
+      <directory>web/</directory>
       <!-- the context path for the resources -->
+      <contextPath>/home</contextPath>
     </staticResource>
   </staticResources>
 </module>

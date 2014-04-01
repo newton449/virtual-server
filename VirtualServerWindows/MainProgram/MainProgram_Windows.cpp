@@ -52,7 +52,7 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
 	}
 }
 
-bool setupInterruptHandler(){
+bool MainProgram::setupInterruptHandler(){
 	if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, TRUE)){
 		LOG(ERROR) << "Could not set control handler";
 		return false;
@@ -60,6 +60,10 @@ bool setupInterruptHandler(){
 	return true;
 }
 
-std::string getLoggingConfigFilePath(){
+std::string MainProgram::getLoggingConfigFilePath(){
     return "./_config/easylogging_Windows.conf";
+}
+
+std::string MainProgram::getCurrentPlatform(){
+    return "Windows";
 }
