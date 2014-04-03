@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
-  <displayName>StaticModule</displayName>
-  <description>A module which does not have DLLs. For test only.</description>
+  <displayName>Json Tester</displayName>
+  <description>A module which can send texts to a server URL. For test only.</description>
 
   <!-- Configure client menu which will be should in all client pages. -->
   <clientMenu>
     <item>
-      <name>Static Module</name>
-      <url>/static_module/</url>
-      <orderNumber>95</orderNumber>
+      <name>Json Tester</name>
+      <url>/json_tester/</url>
+      <orderNumber>94</orderNumber>
     </item>
   </clientMenu>
 
@@ -16,7 +16,7 @@
   <staticResources>
     <staticResource>
       <directory>web/</directory>
-      <contextPath>/static_module</contextPath>
+      <contextPath>/json_tester</contextPath>
     </staticResource>
   </staticResources>
 </module>

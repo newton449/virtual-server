@@ -48,7 +48,7 @@ public class Initializer {
         historyHandler.handleCurrentHistory();
     }
 
-    private void prepare(final MainFrame mainFrame) {
+    public void prepare(final MainFrame mainFrame) {
         RequestSender sender = new RequestSender(RequestBuilder.GET, "/home/menu_list");
         sender.setErrorHandler(new GlobalMessagePanel());
         sender.setCallback(new AbstractRequestCallback() {

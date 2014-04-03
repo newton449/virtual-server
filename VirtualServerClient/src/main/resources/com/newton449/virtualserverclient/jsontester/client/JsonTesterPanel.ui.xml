@@ -1,0 +1,57 @@
+<!--
+Uncomment this for XHTML entities
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+-->
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style>
+        .label{
+        background: none repeat scroll 0 0 #008080;
+        border: 2px solid #006666;
+        color: #FFFFFF;
+        margin: 5px 2px;
+        padding: 1px 5px;
+        text-shadow: 1px 1px #000000;
+        }
+        .content{
+        margin: 5px 2px 10px 2px;
+        }
+        .url{
+        width: 98%;
+        }
+        .request{
+        width: 98%;
+        height: 300px;
+        }
+        .submit{
+        float: right;
+        margin: 0 10px 0 0;
+        }
+        .response{
+        width: 98%;
+        height: 300px;
+        }
+        .clear{
+        clear: both;
+        }
+    </ui:style>
+    <g:HTMLPanel>
+        <div class="{style.label}">URL</div>
+        <div class="{style.content}">
+            <g:TextBox addStyleNames="{style.url}" ui:field="urlBox"></g:TextBox>
+        </div>
+        <div class="{style.label}">Request Body</div>
+        <div class="{style.content}">
+            <g:TextArea addStyleNames="{style.request}" ui:field="requestArea"></g:TextArea>
+        </div>
+        <div class="{style.label}">Submit</div>
+        <div class="{style.content}"> 
+            <g:Button addStyleNames="{style.submit}" ui:field="submitButton">Submit</g:Button>
+            <div class="{style.clear}"></div>
+        </div>
+        <div class="{style.label}">Response Body</div>
+        <div class="{style.content}"> 
+            <g:TextArea addStyleNames="{style.response}" ui:field="responseArea"></g:TextArea>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

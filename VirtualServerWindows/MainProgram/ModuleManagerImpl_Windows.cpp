@@ -15,7 +15,7 @@ IModuleObjectFactory* ModuleManagerImpl::loadDllAndGetModuleFactory(string path)
     HINSTANCE hGetProcIDDLL = LoadLibrary(wpath.c_str());
 
     if (!hGetProcIDDLL) {
-        LOG(WARNING) << "Could not load the dynamic library \"" << path << "\"";
+        LOG(ERROR) << "Could not load the dynamic library \"" << path << "\"";
         return NULL;
     }
 
@@ -24,7 +24,7 @@ IModuleObjectFactory* ModuleManagerImpl::loadDllAndGetModuleFactory(string path)
 
     loadModuleAndReturnFactory func = (loadModuleAndReturnFactory)GetProcAddress(hGetProcIDDLL, "loadModuleAndReturnFactory");
     if (!func) {
-        LOG(WARNING) << "Could not locate the function in the dynamic library \"" << path << "\"";
+        LOG(ERROR) << "Could not locate the function in the dynamic library \"" << path << "\"";
         return NULL;
     }
 

@@ -116,6 +116,9 @@
                                 <copy todir="../TestTarget/Installer/web">
                                     <fileset dir="${project.build.directory}/${project.build.finalName}/installer"/>
                                 </copy>
+                                <copy todir="../TestTarget/JsonTester/web">
+                                    <fileset dir="${project.build.directory}/${project.build.finalName}/json_tester"/>
+                                </copy>
                             </tasks>
                         </configuration>
                         <goals>
