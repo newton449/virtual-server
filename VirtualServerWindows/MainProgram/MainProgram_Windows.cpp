@@ -61,7 +61,7 @@ bool MainProgram::setupInterruptHandler(){
 }
 
 std::string MainProgram::getLoggingConfigFilePath(){
-    return "./_config/easylogging_Windows.conf";
+    return ".\\_config\\easylogging_Windows.conf";
 }
 
 std::string MainProgram::getCurrentPlatform(){

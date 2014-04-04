@@ -12,6 +12,8 @@ public:
     void launch();
 private:
     MainObjectFactoryImpl* factory;
+    // Make sure that ./_config/config.xml and logging configuration file exists.
+    void checkConfigs();
     // Sets up loggers.
     void setupLoggers();
     // Sets up configs by "config.xml" file. If failed to parse the file, throw InvalidFormatException.

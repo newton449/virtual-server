@@ -601,7 +601,7 @@ std::vector<std::string> Directory::getDirectories(const std::string& path, cons
 
 bool Directory::create(const std::string& path)
 {
-  return ::CreateDirectoryA(path.c_str(), NULL) == 0;
+  return ::CreateDirectoryA(path.c_str(), NULL) != 0;
 }
 //----< does directory exist? >--------------------------------------------
 
@@ -616,7 +616,7 @@ bool Directory::exists(const std::string& path)
 
 bool Directory::remove(const std::string& path)
 {
-  return ::RemoveDirectoryA(path.c_str()) == 0;
+  return ::RemoveDirectoryA(path.c_str()) != 0;
 }
 //----< find first file >--------------------------------------------------
 

@@ -9,6 +9,7 @@
 #include "XMLDocument.h"
 #include "StringUtils.h"
 #include <unordered_set>
+#include "FileSystem.h"
 
 MainProgram::MainProgram(){
 
@@ -18,7 +19,9 @@ MainProgram::MainProgram(){
 void MainProgram::launch(){
 
     factory = MainObjectFactoryImpl::getInstance();
-    
+
+    checkConfigs();
+
     setupLoggers();
 
     LOG(INFO) << "Starting Virtual Server.";
@@ -38,6 +41,33 @@ void MainProgram::launch(){
     }
     catch (std::exception& ex){
         LOG(ERROR) << "Failed to start the server: " << ex.what();
+    }
+}
+
+void MainProgram::checkConfigs(){
+    std::string configPath = StringUtils::fixFilePath("_config/config.xml");
+    std::string logfilePath = getLoggingConfigFilePath();
+
+    // Check the directory
+    if (!FileSystem::Directory::exists("_config")){
+        if (!FileSystem::Directory::create("_config")){
+            throw runtime_error("Failed to create dicretory .\\_config\\");
+        }
+        if (!FileSystem::File::copy(StringUtils::fixFilePath("MainProgram/_config/config.xml"), configPath)){
+            throw runtime_error("Failed to create file " + configPath);
+        }
+        if (!FileSystem::File::copy(StringUtils::fixFilePath(std::string("MainProgram") + FILE_SEPARATOR + logfilePath), logfilePath)){
+            throw runtime_error("Failed to create file " + logfilePath);
+        }
+    }
+    else{
+        // check individual files
+        if (!FileSystem::File::copy(StringUtils::fixFilePath("MainProgram/_config/config.xml"), configPath)){
+            throw runtime_error("Failed to create file " + configPath);
+        }
+        if (!FileSystem::File::copy(StringUtils::fixFilePath(std::string("MainProgram") + FILE_SEPARATOR + logfilePath), logfilePath)){
+            throw runtime_error("Failed to create file " + logfilePath);
+        }
     }
 }
 

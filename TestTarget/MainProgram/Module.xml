@@ -30,5 +30,9 @@
       <directory>../_web</directory>
       <contextPath></contextPath>
     </staticResource>
+    <staticResource>
+      <directory>style</directory>
+      <contextPath>/style</contextPath>
+    </staticResource>
   </staticResources>
 </module>

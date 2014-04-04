@@ -67,7 +67,8 @@
     <PostBuildEvent>
       <Command>xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
 xcopy Module.xml "$(OutDir)" /I /H /Y /F
-xcopy _config "$(LocalDebuggerWorkingDirectory)\_config\" /E /I /H /Y /F</Command>
+xcopy _config "$(OutDir)\_config\" /E /I /H /Y /F
+xcopy style "$(OutDir)\style\" /E /I /H /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -163,6 +164,10 @@ xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
     <Xml Include="_config\config.xml">
       <SubType>Designer</SubType>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="style\background.png" />
+    <Image Include="style\menu.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

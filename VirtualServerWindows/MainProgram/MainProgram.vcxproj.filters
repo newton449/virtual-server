@@ -19,6 +19,9 @@
     <Filter Include="Resource Files\_config">
       <UniqueIdentifier>{c4167be7-8671-48b5-bdac-4088fa24747e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\style">
+      <UniqueIdentifier>{95d00673-ec8f-416f-98ad-adca57ef8a76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logger.h">
@@ -204,5 +207,13 @@
     <Xml Include="Module.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="style\background.png">
+      <Filter>Resource Files\style</Filter>
+    </Image>
+    <Image Include="style\menu.png">
+      <Filter>Resource Files\style</Filter>
+    </Image>
   </ItemGroup>
 </Project>
