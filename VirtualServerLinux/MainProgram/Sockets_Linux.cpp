@@ -266,7 +266,6 @@ SOCKET SocketListener::waitForConnect() {
         toClient = accept(s_, (sockaddr*) & tcpAddr, &size);
         ++InvalidSocketCount;
         if (InvalidSocketCount >= 20) {
-            std::cout << "invalid socket connection" << std::endl;
             throw std::exception();
         }
     } while (toClient == INVALID_SOCKET);
