@@ -185,7 +185,7 @@ void HttpServletResponseImpl::notifyOutputFinished(){
 			// Just flush buffer
 		}
 		else{
-			int len = (int)bufOutput.tellp();
+			long len = (long)bufOutput.tellp();
 			if (expectedBytesLength < 0){
 				// Content-Length hasn't been set.
 				if (getHeader("Transfer-Encoding") != "chunked"){
@@ -248,7 +248,7 @@ void HttpServletResponseImpl::flushBuffer(){
 		writeHeaders();
 	}
 	// Copy contents from bufOutput to socketOutput
-	int ctnLen = (int)bufOutput.tellp();
+	long ctnLen = (long) bufOutput.tellp();
 	if (ctnLen != 0){
 		if (outputFinished){
 			throw IllegalOperationException("Cannot write after output finished.");
@@ -421,7 +421,7 @@ void HttpServletResponseImpl::setCharacterEncoding(String charset){
 }
 
 // Sets the Content-Length header.
-void HttpServletResponseImpl::setContentLength(int len){
+void HttpServletResponseImpl::setContentLength(long len){
 	if (committed){
 		throw IllegalOperationException("The response has been committed.");
 	}

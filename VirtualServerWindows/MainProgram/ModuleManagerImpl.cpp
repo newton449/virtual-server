@@ -53,7 +53,7 @@ void ModuleManagerImpl::load(string moduleName) {
     this->addModule(module);
 
     try{
-        AggregateHttpServletMapping* mapping = factory->getAggregateHttpServletMapping();
+        DefaultHttpServletMapping* mapping = factory->getHttpServletMapping();
 
         // Register servlets. Only when it has a module factory.
         if (moduleFactory != NULL){
@@ -228,7 +228,7 @@ bool ModuleManagerImpl::loadLibrariesInfo(const std::string& moduleName, tinyxml
     }
 }
 
-void ModuleManagerImpl::loadServletsInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, AggregateHttpServletMapping*& mapping){
+void ModuleManagerImpl::loadServletsInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, DefaultHttpServletMapping*& mapping){
     tinyxml2::XMLElement* elem = NULL;
     IServletFactory* servletFactory = moduleFactory->getServletFactory();
     tinyxml2::XMLElement* servlets = root->FirstChildElement("servlets");
@@ -252,7 +252,7 @@ void ModuleManagerImpl::loadServletsInfo(const std::string& moduleName, tinyxml2
         }
     }
 }
-void ModuleManagerImpl::loadStaticResourcesInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, AggregateHttpServletMapping*& mapping){
+void ModuleManagerImpl::loadStaticResourcesInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, DefaultHttpServletMapping*& mapping){
     tinyxml2::XMLElement* elem = NULL;
     elem = root->FirstChildElement("staticResources");
     if (elem != NULL){

@@ -109,7 +109,7 @@ ThreadBase<TerminatePolicy>::ThreadBase()
               &_threadID        // OS thread identifier
               );
   if(hThread == 0)
-    throw std::exception("\n  failed to create thread");
+    throw std::exception("  failed to create thread");
 }
 //----< start thread running >---------------------------------
 
@@ -117,7 +117,9 @@ template <typename TerminatePolicy>
 void ThreadBase<TerminatePolicy>::start()
 {
   doLog("starting child thread");
-  ResumeThread(hThread);
+  if (-1 == ResumeThread(hThread)){
+      throw std::runtime_error("Failed to start a thread.");
+  }
 }
 //----< this is where the derived processing gets to run >-----
 

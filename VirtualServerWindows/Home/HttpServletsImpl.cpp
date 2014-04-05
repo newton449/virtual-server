@@ -44,6 +44,10 @@ void MenuListServlet::doMethod(IHttpServletRequest& request, IHttpServletRespons
 
 void ServerInfoServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse& response){
     LOG(TRACE) << "Sending menu list.";
+    char buf[100];
+    std::istream& in = request.getInputStream();
+    in.getline(buf, 100);
+    LOG(DEBUG) << "Got: " << buf;
     std::ostream& out = response.getOutputStream();
     // TODO platform
     out << "{\n"

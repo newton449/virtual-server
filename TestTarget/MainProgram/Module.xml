@@ -6,8 +6,8 @@
   <!-- properties -->
   <properties>
     <MainProgram.httpServerPort>8080</MainProgram.httpServerPort>
-    <MainProgram.httpThreadMinCount>5</MainProgram.httpThreadMinCount>
-    <MainProgram.httpThreadMaxCount>5</MainProgram.httpThreadMaxCount>
+    <MainProgram.httpThreadMinCount>10</MainProgram.httpThreadMinCount>
+    <MainProgram.httpThreadMaxCount>25</MainProgram.httpThreadMaxCount>
   </properties>
 
   <!-- Configure dynamic libraries. (they are runnable programs actually) -->

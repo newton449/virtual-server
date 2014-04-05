@@ -23,7 +23,7 @@ StaticResourcesServlet::StaticResourcesServlet(string contextPath, string direct
 void StaticResourcesServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse& response){
 	// Only get method is allowed
 	if (request.getMethod() != "GET"){
-		response.sendError(405);
+		response.sendError(404);
 		return;
 	}
 
@@ -86,15 +86,35 @@ void StaticResourcesServlet::doMethod(IHttpServletRequest& request, IHttpServlet
 		response.sendError(404);
 	}
 
+    response.flushBuffer();
+
 	// send the file to response
 	ostream& out = response.getOutputStream();
 	ifstream fin(filePath, ifstream::in | ifstream::binary);
-	int c = fin.get();
-	while (c != EOF){
-		out.put(c);
-		c = fin.get();
-	}
-	fin.close();
+    int sentCount = 0;
+    if (fin.good()){
+        char buf[1024];
+        while (true){
+            fin.read(buf, 1024);
+            if (fin){
+                out.write(buf, fin.gcount());
+            }
+            else{
+                out.write(buf, fin.gcount());
+                break;
+            }
+        }
+        fin.close();
+    }
+    else{
+        response.sendError(404);
+    }
+	//int c = fin.get();
+	//while (c != EOF){
+	//	out.put(c);
+	//	c = fin.get();
+	//}
+	//fin.close();
 }
 
 ////////////////////////////////////////////////////////////////////////

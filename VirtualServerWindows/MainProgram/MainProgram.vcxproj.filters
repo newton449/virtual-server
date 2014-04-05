@@ -42,9 +42,6 @@
     <ClInclude Include="HttpServerSupport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AggregateHttpServletMapping.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\interfaces\IHttpServlet.h">
       <Filter>Header Files\interfaces</Filter>
     </ClInclude>
@@ -126,6 +123,9 @@
     <ClInclude Include="tinyxml2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DefaultHttpServletMapping.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HttpServer.cpp">
@@ -144,9 +144,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AggregateHttpServletMapping.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ModuleManagerImpl.cpp">
@@ -186,6 +183,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tinyxml2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultHttpServletMapping.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -52,12 +52,10 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
 	}
 }
 
-bool MainProgram::setupInterruptHandler(){
-	if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, TRUE)){
-		LOG(ERROR) << "Could not set control handler";
-		return false;
-	}
-	return true;
+void MainProgram::setupSingalHandler(){
+    if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, TRUE)){
+        throw std::runtime_error("Could not set control handler");
+    }
 }
 
 std::string MainProgram::getLoggingConfigFilePath(){

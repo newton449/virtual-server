@@ -20,9 +20,8 @@ private:
     void setupConfigs();
     // Sets up all modules.
     void setupModules();
-    // Allows the user to press Ctrl+C to shutdown the program. Return true if
-    // setup succees.
-    bool setupInterruptHandler();
+    // Allows the user to press Ctrl+C to shutdown the program.
+    void setupSingalHandler();
     // Create and run a HTTP server.
     void runHttpServer();
 

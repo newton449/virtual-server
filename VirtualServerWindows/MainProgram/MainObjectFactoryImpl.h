@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include "../interfaces/IMainObjectFactory.h"
-#include "AggregateHttpServletMapping.h"
+#include "DefaultHttpServletMapping.h"
 #include "ModuleManagerImpl.h"
 #include "ClientManagerImpl.h"
 
@@ -22,10 +22,10 @@ public:
     // Returns an property map of configurations.
     PropertyMap* getPropertyMap();
 
-	AggregateHttpServletMapping* getAggregateHttpServletMapping();
+	DefaultHttpServletMapping* getHttpServletMapping();
 private:
 	static MainObjectFactoryImpl* INSTANCE;
-	AggregateHttpServletMapping* mapping;
+	DefaultHttpServletMapping* mapping;
 
 	unordered_map<string, void*> objectMap;
 };

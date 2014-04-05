@@ -185,7 +185,7 @@ public:
     // Sets the character encoding in the "Content-Type" header.
     void setCharacterEncoding(String charset);
     // Sets the Content-Length header.
-    void setContentLength(int len);
+    void setContentLength(long len);
     // Sets the ContentType header.
     void setContentType(String type);
     // Sets the header with the name and its value.
@@ -199,7 +199,7 @@ private:
     std::ostream& socketOutput;
     std::ostringstream bufOutput;
     // The expected length of bytes to be sent.
-    int expectedBytesLength;
+    long expectedBytesLength;
     int bufferSize;
     int status; // defaut 200
     bool committed; // true if headers has been written

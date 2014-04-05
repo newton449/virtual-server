@@ -1,7 +1,7 @@
 #include "MainObjectFactoryImpl.h"
 #include "ModuleManagerImpl.h"
 #include "ClientManagerImpl.h"
-#include "AggregateHttpServletMapping.h"
+#include "DefaultHttpServletMapping.h"
 #include "Logger.h"
 #include <exception>
 #include <stdexcept>
@@ -15,7 +15,7 @@ MainObjectFactoryImpl* MainObjectFactoryImpl::getInstance() {
         INSTANCE->setObject("IModuleManager", new ModuleManagerImpl());
         INSTANCE->setObject("IClientManager", new ClientManagerImpl());
         INSTANCE->setObject("PropertyMap", new PropertyMap());
-        INSTANCE->mapping = new AggregateHttpServletMapping();
+        INSTANCE->mapping = new DefaultHttpServletMapping();
     }
     return INSTANCE;
 }
@@ -48,7 +48,7 @@ IClientManager* MainObjectFactoryImpl::getClientManager() {
     return (IClientManager*)getObject("IClientManager");
 }
 
-AggregateHttpServletMapping* MainObjectFactoryImpl::getAggregateHttpServletMapping() {
+DefaultHttpServletMapping* MainObjectFactoryImpl::getHttpServletMapping() {
     return mapping;
 }
 

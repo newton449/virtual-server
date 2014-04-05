@@ -53,6 +53,27 @@ ver 1.0 : 3/14/2013
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <stdexcept>
+
+// In the ISO C++11 Standard, the noexcept operator is introduced, but support
+// for this feature is not yet present in Visual C++.
+#ifndef NOEXCEPT
+#ifdef WIN32
+#define NOEXCEPT throw()
+#else
+#define NOEXCEPT noexcept(true)
+#endif
+#endif
+
+// An exception, thrown when failed to parse a string as int or float.
+class ParseException : public std::runtime_error{
+public:
+    explicit ParseException(const std::string& what_arg)
+        : std::runtime_error(what_arg)
+    {}
+
+    virtual ~ParseException() NOEXCEPT{}
+};
 
 typedef std::string String;
 
@@ -242,7 +263,7 @@ public:
             return false;
         }
     }
-    
+
     // In Windows, it converts '/' to '\', converts "\\" to "\", remvoes ".\" and
     // merges "..\" and its parentdir. In Linux, it did nothing.
     static String fixFilePath(const String& fileName)
@@ -319,17 +340,27 @@ public:
         return true;
     }
 
+    // Parses a string to an integer. Throws ParseException if failed.
     static int parseInt(const String& str){
         std::stringstream ss(str);
         int x;
         ss >> x;
+        if (!ss.eof()){
+            // It did not use all chars. In other words, it cannot be parsed to an int.
+            throw ParseException("Failed to parse the string to int: " + str);
+        }
         return x;
     }
 
+    // Parses a string to an float number. Throws ParseException if failed.
     static float parseFloat(const String& str){
         std::stringstream ss(str);
         float x;
         ss >> x;
+        if (!ss.eof()){
+            // It did not use all chars. In other words, it cannot be parsed to a float.
+            throw ParseException("Failed to parse the string to float: " + str);
+        }
         return x;
     }
 

@@ -74,13 +74,24 @@ void RequestHandlerThread::handleOneRequest() {
             }
             else {
                 if (buildRequest(*headerContents)) {
-                    // Set the length of readable bytes
-                    if (!pRequest->getHeader("Content-Length").empty()) {
-                        pInput->setExpectedBytesLength(std::atoi(pRequest->getHeader("Content-Length").c_str()));
+                    if (pRequest->getMethod() == "GET"){
+                        pInput->setExpectedBytesLength(0);
+                        // Call services to handle the request
+                        executeServlet();
                     }
-                    // Call services to handle the request
-                    LOG(DEBUG) << "Handling a request of url: " + pRequest->getRequestUrl();
-                    executeServlet();
+                    else if (pRequest->getMethod() == "POST"){
+                        // Set the length of readable bytes
+                        if (!pRequest->getHeader("Content-Length").empty()) {
+                            pInput->setExpectedBytesLength(std::atoi(pRequest->getHeader("Content-Length").c_str()));
+                        }
+                        // Call services to handle the request
+                        executeServlet();
+                    }
+                    else{
+                        LOG(WARNING) << "Unsupported HTTP method \"" << pRequest->getMethod() << "\".";
+                        // 405 Method Not Allowed
+                        pResponse->sendError(405);
+                    }
                     // clear request body if the servlet did not use all of them
                     if (pInput->getExpectedBytesLength() > 0) {
                         LOG(TRACE) << "Clearing unused request body.";
@@ -89,6 +100,7 @@ void RequestHandlerThread::handleOneRequest() {
                 }
                 else {
                     LOG(DEBUG) << "Skipped handling a request because of bad request.";
+                    needCloseConnection = true;
                     pResponse->notifyOutputFinished();
                 }
             }
@@ -300,6 +312,7 @@ bool RequestHandlerThread::analyzeHeaderNamesAndValues(Vector& headerContents) {
 // Gets an servlet and executes it.
 
 void RequestHandlerThread::executeServlet() {
+    LOG(DEBUG) << "Handling a request of url: " + pRequest->getRequestUrl();
     IHttpServlet* pServlet = mapping.createServlet(pRequest->getRequestUrl());
     if (pServlet != NULL) {
         String method = pRequest->getMethod();
@@ -379,10 +392,10 @@ HttpServer::~HttpServer() {
 
 void HttpServer::start() {
     if (pListener != NULL) {
-        throw std::logic_error("Server has been started");
+        throw std::logic_error("HTTP server has been started");
     }
     if (port <= 0) {
-        throw std::logic_error("Invalid server port");
+        throw std::logic_error("Invalid HTTP server port");
     }
     try {
         pListener = new SocketListener(port);
@@ -422,7 +435,7 @@ void HttpServer::run() {
         threads.push_back(new RequestHandlerThread(queue, mapping, i));
         threads.back()->start();
     }
-    LOG(INFO) << "Server has started on port " << port;
+    LOG(INFO) << "HTTP server has started on port " << port;
     try {
         while (true) {
             // Get sockets and push them into the queue. The
@@ -432,7 +445,7 @@ void HttpServer::run() {
         }
     }
     catch (std::exception&) {
-        LOG(INFO) << "Closing server";
+        LOG(INFO) << "Closing HTTP server";
         // The connection is closed or something.
         // Close current sockets
         for (int i = 0; i < threadCount; i++) {

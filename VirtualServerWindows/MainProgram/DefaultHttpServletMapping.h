@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class AggregateHttpServletMapping : public IHttpServletMapping{
+class DefaultHttpServletMapping : public IHttpServletMapping{
 public:
 	// Returns an IHttpServlet according to the url. The caller should
 	// delete the instance.

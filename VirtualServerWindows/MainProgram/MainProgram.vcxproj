@@ -107,7 +107,7 @@ xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
     <ClInclude Include="..\interfaces\IModuleManager.h" />
     <ClInclude Include="..\interfaces\IModuleObjectFactory.h" />
     <ClInclude Include="..\interfaces\IServletFactory.h" />
-    <ClInclude Include="AggregateHttpServletMapping.h" />
+    <ClInclude Include="DefaultHttpServletMapping.h" />
     <ClInclude Include="BlockingQueue.h" />
     <ClInclude Include="BlockingQueue_Windows.h" />
     <ClInclude Include="ClientManagerImpl.h" />
@@ -134,7 +134,7 @@ xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\interfaces\ILogger.cpp" />
-    <ClCompile Include="AggregateHttpServletMapping.cpp" />
+    <ClCompile Include="DefaultHttpServletMapping.cpp" />
     <ClCompile Include="BlockingQueue_Windows.cpp" />
     <ClCompile Include="ClientManagerImpl.cpp" />
     <ClCompile Include="HttpServletsImpl.cpp" />

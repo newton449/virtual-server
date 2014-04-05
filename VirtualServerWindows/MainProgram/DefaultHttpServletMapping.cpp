@@ -1,8 +1,8 @@
-#include "AggregateHttpServletMapping.h"
+#include "DefaultHttpServletMapping.h"
 #include "HttpServletsImpl.h"
 #include "Logger.h"
 
-IHttpServlet* AggregateHttpServletMapping::createServlet(const string& url){
+IHttpServlet* DefaultHttpServletMapping::createServlet(const string& url){
     LOG(TRACE) << "Creating a servlet for url :" << url;
 
     // try to find a specific servlet
@@ -39,7 +39,7 @@ IHttpServlet* AggregateHttpServletMapping::createServlet(const string& url){
     return NULL;
 }
 
-void AggregateHttpServletMapping::addServletMapping(const string& url, IServletFactory* servletFactory,
+void DefaultHttpServletMapping::addServletMapping(const string& url, IServletFactory* servletFactory,
     const string& servletName){
     pair<IServletFactory*, string> pair;
     pair.first = servletFactory;
@@ -48,7 +48,7 @@ void AggregateHttpServletMapping::addServletMapping(const string& url, IServletF
     LOG(TRACE) << "Added servlet mapping: " << url << " -> " << servletName;
 }
 
-void AggregateHttpServletMapping::addResourcesMapping(const string& contextPath, const string& directory){
+void DefaultHttpServletMapping::addResourcesMapping(const string& contextPath, const string& directory){
     resourceMap[contextPath] = directory;
     LOG(TRACE) << "Added static resources mapping: " << (contextPath.empty() ? "[]" : contextPath) << " -> " << directory;
 }

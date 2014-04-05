@@ -17,30 +17,45 @@ MainProgram::MainProgram(){
 
 
 void MainProgram::launch(){
+    // Get an instance of main factory.
+    try{
+        factory = MainObjectFactoryImpl::getInstance();
 
-    factory = MainObjectFactoryImpl::getInstance();
+        // Create configuration files if they do not exist. 
+        checkConfigs();
 
-    checkConfigs();
+        // Set up loggers. Then we can use LOG(XXX).
+        setupLoggers();
 
-    setupLoggers();
-
-    LOG(INFO) << "Starting Virtual Server.";
+        LOG(INFO) << "Starting Virtual Server.";
+    }
+    catch (std::exception& ex){
+        std::cerr << "Failed to start the server: " << ex.what();
+        return;
+    }
 
     try{
-
+        // Load config.xml.
         setupConfigs();
 
+        // Load all modules. It will scan directories in the working directory to find Module.xml.
         setupModules();
 
-        // for shutdown server
-        if (!setupInterruptHandler()){
-            LOG(WARNING) << "Failed to set up interrupt hander. Ignored it.";
-        }
-
-        runHttpServer();
+        // for shutdown server and abort.
+        setupSingalHandler();
     }
     catch (std::exception& ex){
         LOG(ERROR) << "Failed to start the server: " << ex.what();
+        return;
+    }
+
+    try{
+        // Running HTTP server. It will join the HTTP server thread.
+        runHttpServer();
+    }
+    catch (std::exception& ex){
+        LOG(ERROR) << "Got exception when running HTTP server: " << ex.what();
+        return;
     }
 }
 
@@ -62,11 +77,15 @@ void MainProgram::checkConfigs(){
     }
     else{
         // check individual files
-        if (!FileSystem::File::copy(StringUtils::fixFilePath("MainProgram/_config/config.xml"), configPath)){
-            throw runtime_error("Failed to create file " + configPath);
+        if (!FileSystem::File::exists(configPath)){
+            if (!FileSystem::File::copy(StringUtils::fixFilePath("MainProgram/_config/config.xml"), configPath)){
+                throw runtime_error("Failed to create file " + configPath);
+            }
         }
-        if (!FileSystem::File::copy(StringUtils::fixFilePath(std::string("MainProgram") + FILE_SEPARATOR + logfilePath), logfilePath)){
-            throw runtime_error("Failed to create file " + logfilePath);
+        if (!FileSystem::File::exists(logfilePath)){
+            if (!FileSystem::File::copy(StringUtils::fixFilePath(std::string("MainProgram") + FILE_SEPARATOR + logfilePath), logfilePath)){
+                throw runtime_error("Failed to create file " + logfilePath);
+            }
         }
     }
 }
@@ -124,10 +143,11 @@ void MainProgram::setupModules(){
 
 void MainProgram::runHttpServer(){
     PropertyMap* map = factory->getPropertyMap();
-    AggregateHttpServletMapping* mapping = factory->getAggregateHttpServletMapping();
+    DefaultHttpServletMapping* mapping = factory->getHttpServletMapping();
     // Create a HttpServer.
     int port = StringUtils::parseInt((*map)["MainProgram.httpServerPort"]);
     int threadCount = StringUtils::parseInt((*map)["MainProgram.httpThreadMinCount"]);
+
     HttpServer* server = new HttpServer(*mapping, port, threadCount);
 
     // put the server to factory
@@ -136,6 +156,9 @@ void MainProgram::runHttpServer(){
     // Start server.
     server->start();
     server->join();
+
+    // clear
+    delete server;
 }
 
 

@@ -118,7 +118,7 @@ public:
 	virtual void setCharacterEncoding(String charset) = 0;
 	// Sets the Content-Length header. It must be called before committed, otherwise
 	// IllegalOperationException will be thrown.
-	virtual void setContentLength(int len) = 0;
+	virtual void setContentLength(long len) = 0;
 	// Sets the ContentType header. It must be called before committed, otherwise
 	// IllegalOperationException will be thrown.
 	virtual void setContentType(String type) = 0;

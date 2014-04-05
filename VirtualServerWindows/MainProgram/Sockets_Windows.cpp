@@ -280,9 +280,10 @@ bool Socket::sendAll(const char* block, size_t len, bool throwError)
     bytesSent = ::send(s_,&block[blockIndx],static_cast<int>(bytesLeft),0);
     if(bytesSent == SOCKET_ERROR)
     {
+        int err = WSAGetLastError();
       ++count;
       //sout << "\n  sending retry";
-      if(bytesSent == WSAECONNRESET)
+      if (err == WSAECONNRESET)
       {
         if(throwError)
           throw std::exception("connection closed");
@@ -303,6 +304,7 @@ bool Socket::sendAll(const char* block, size_t len, bool throwError)
     bytesLeft -= bytesSent;
     blockIndx += bytesSent;
   }
+  Sleep(50);
   return true;
 }
 //----< blocks until len characters have been sent >-----------------

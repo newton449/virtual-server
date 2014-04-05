@@ -7,7 +7,7 @@
 #include "../interfaces/IModuleManager.h"
 #include "../interfaces/IModuleObjectFactory.h"
 #include "XMLDocument.h"
-#include "AggregateHttpServletMapping.h"
+#include "DefaultHttpServletMapping.h"
 #include "MainObjectFactoryImpl.h"
 
 using namespace std;
@@ -40,9 +40,9 @@ private:
 
     bool loadLibrariesInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, ModuleStruct& module, IModuleObjectFactory*& moduleFactory);
 
-    void loadServletsInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, AggregateHttpServletMapping*& mapping);
+    void loadServletsInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, DefaultHttpServletMapping*& mapping);
 
-    void loadStaticResourcesInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, AggregateHttpServletMapping*& mapping);
+    void loadStaticResourcesInfo(const std::string& moduleName, tinyxml2::XMLElement*& root, IModuleObjectFactory*& moduleFactory, DefaultHttpServletMapping*& mapping);
 
     void loadMenuInfo(const std::string& moduleName, tinyxml2::XMLElement*& root);
 
