@@ -36,6 +36,7 @@ public class HomeMenuListServlet extends HttpServlet {
             out.println("      { \"name\": \"Home\", \"url\": \"/home/?gwt.codesvr=127.0.0.1:9997#\" }, ");
             out.println("      { \"name\": \"Clone\", \"url\": \"/installer/?gwt.codesvr=127.0.0.1:9997#\", \"title\": \"Create a local server in your machine.\" }, ");
             out.println("      { \"name\": \"Json Tester\", \"url\": \"/json_tester/?gwt.codesvr=127.0.0.1:9997#\" }, ");
+            out.println("      { \"name\": \"Upload File\", \"url\": \"/upload/?gwt.codesvr=127.0.0.1:9997\" }, ");
             out.println("      { \"name\": \"About\", \"url\": \"/home/?gwt.codesvr=127.0.0.1:9997#about\" } ");
             out.println("    ]");
             out.println("}");
