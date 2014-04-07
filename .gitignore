@@ -9,7 +9,7 @@
 *.lib
 *.exe
 *.dep.inc
-*.so
+## *.so
 !LoadingErrorModule.dll
 
 ## Ignore Visual Studio temporary files, build results, and

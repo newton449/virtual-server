@@ -51,7 +51,11 @@ void ServerInfoServlet::doMethod(IHttpServletRequest& request, IHttpServletRespo
     std::ostream& out = response.getOutputStream();
     // TODO platform
     out << "{\n"
+#ifdef WIN32
         << "    \"platformInfo\": \"Windows 8 v6.2 on amd64; en_US\",\n"
+#else
+        << "    \"platformInfo\": \"Linux debian 3.2.0 on amd64; en_US\",\n"
+#endif
         << "    \"items\": [\n";
     // get module list
     IModuleManager* manager = ModuleObjectFactoryImpl::getInstance()->getMainObjectFactory()->getModuleManager();
