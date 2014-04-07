@@ -42,7 +42,7 @@ void MainProgram::launch(){
         setupModules();
 
         // for shutdown server and abort.
-        setupSingalHandler();
+        setupSignalHandler();
     }
     catch (std::exception& ex){
         LOG(ERROR) << "Failed to start the server: " << ex.what();

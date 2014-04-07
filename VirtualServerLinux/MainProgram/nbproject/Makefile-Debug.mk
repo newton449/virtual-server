@@ -35,8 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/832715153/AggregateHttpServletMapping.o \
 	${OBJECTDIR}/_ext/832715153/ClientManagerImpl.o \
+	${OBJECTDIR}/_ext/832715153/DefaultHttpServletMapping.o \
 	${OBJECTDIR}/_ext/832715153/HttpServer.o \
 	${OBJECTDIR}/_ext/832715153/HttpServerSupport.o \
 	${OBJECTDIR}/_ext/832715153/HttpServletsImpl.o \
@@ -81,15 +81,15 @@ LDLIBSOPTIONS=-ldl -lpthread
 	${MKDIR} -p ../../TestTarget/MainProgram
 	${LINK.cc} -o ../../TestTarget/MainProgram/MainProgram_Linux_x64 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/_ext/832715153/AggregateHttpServletMapping.o: ../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/AggregateHttpServletMapping.o ../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp
-
 ${OBJECTDIR}/_ext/832715153/ClientManagerImpl.o: ../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/ClientManagerImpl.o ../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp
+
+${OBJECTDIR}/_ext/832715153/DefaultHttpServletMapping.o: ../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/DefaultHttpServletMapping.o ../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp
 
 ${OBJECTDIR}/_ext/832715153/HttpServer.o: ../../VirtualServerWindows/MainProgram/HttpServer.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153

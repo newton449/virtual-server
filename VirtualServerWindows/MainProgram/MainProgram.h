@@ -21,7 +21,7 @@ private:
     // Sets up all modules.
     void setupModules();
     // Allows the user to press Ctrl+C to shutdown the program.
-    void setupSingalHandler();
+    void setupSignalHandler();
     // Create and run a HTTP server.
     void runHttpServer();
 

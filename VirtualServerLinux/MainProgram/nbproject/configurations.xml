@@ -49,8 +49,8 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="shared" projectFiles="true">
-        <itemPath>../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/HttpServer.cpp</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/HttpServerSupport.cpp</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/HttpServletsImpl.cpp</itemPath>
@@ -112,11 +112,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
       <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h"
             ex="false"
             tool="3"
@@ -135,6 +130,11 @@
       <item path="../../VirtualServerWindows/MainProgram/ClientManagerImpl.h"
             ex="false"
             tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp"
+            ex="false"
+            tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/MainProgram/FileSystem.h"
@@ -367,11 +367,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
       <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h"
             ex="false"
             tool="3"
@@ -390,6 +385,11 @@
       <item path="../../VirtualServerWindows/MainProgram/ClientManagerImpl.h"
             ex="false"
             tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp"
+            ex="false"
+            tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/MainProgram/FileSystem.h"

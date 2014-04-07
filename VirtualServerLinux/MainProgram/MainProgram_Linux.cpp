@@ -13,13 +13,14 @@ void sigintHandler(int sig) { // can be called asynchronously
     }
 }
 
-bool MainProgram::setupInterruptHandler() {
+void MainProgram::setupSignalHandler() {
     struct sigaction old_action;
     struct sigaction action;
     memset(&action, 0, sizeof (action));
     action.sa_handler = &sigintHandler;
-    sigaction(SIGINT, &action, &old_action);
-    return true;
+    if (0 != sigaction(SIGINT, &action, &old_action)) {
+        throw std::runtime_error("Failed to set up singal handler.");
+    }
 }
 
 std::string MainProgram::getLoggingConfigFilePath() {
