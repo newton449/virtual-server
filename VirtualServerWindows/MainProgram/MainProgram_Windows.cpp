@@ -52,7 +52,7 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
 	}
 }
 
-void MainProgram::setupSingalHandler(){
+void MainProgram::setupSignalHandler(){
     if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CtrlHandler, TRUE)){
         throw std::runtime_error("Could not set control handler");
     }
