@@ -45,7 +45,11 @@ public class HomeActivity extends AbstractActivity {
                     errorPanel.showError("Failed to get initial modules. Got :" + (text.length() > 20 ? text.substring(0, 20) + "..." : text));
                     return;
                 }
-                view.setModel(model);
+                try {
+                    view.setModel(model);
+                } catch (RuntimeException ex) {
+                    errorPanel.showError("System Bug: " + ex.getMessage());
+                }
             }
         });
         sender.send();

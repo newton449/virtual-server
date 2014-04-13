@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.newton449.virtualserverclient.home.client.model.ModulesStateModel;
 import com.newton449.virtualserverclient.home.client.model.ModuleStateItem;
+import com.newton449.virtualserverclient.user.client.JsonAssertion;
 
 /**
  * A table to show {@link ModulesStateModel}. It has three columns: Name,
@@ -44,6 +45,7 @@ public class ModulesStateTable extends FlexTable {
 
         this.getRowFormatter().addStyleName(0, css.firstRow());
         JsArray<ModuleStateItem> items = model.getItems();
+        JsonAssertion.propertyNotNull(items, "items");
 
         // set data
         for (int i = 0; i < items.length(); i++) {

@@ -96,12 +96,18 @@ public class CloneServerActivity extends AbstractActivity {
             public void onSuccess(Request request, Response response) {
                 // convert response text to model
                 String text = response.getText();
+                ModulesSelectingModel initialModel;
                 try {
-                    ModulesSelectingModel initialModel = JsonUtils.safeEval(text);
-                    showChooseModulesPage(initialModel);
+                    initialModel = JsonUtils.safeEval(text);
                 } catch (IllegalArgumentException ex) {
                     // show error message with some part of text
                     errorPanel.showError("Failed to get initial modules. Got :" + (text.length() > 20 ? text.substring(0, 20) + "..." : text));
+                    return;
+                }
+                try {
+                    showChooseModulesPage(initialModel);
+                } catch (Exception ex) {
+                    errorPanel.showError("System Bug: " + ex.getMessage());
                 }
             }
         });
@@ -131,14 +137,20 @@ public class CloneServerActivity extends AbstractActivity {
                 chooseModulesPage.unlockUI();
                 // parse response text to get model with dependencies
                 String text = response.getText();
+                CheckingDependenciesModel newModel;
                 try {
-                    CheckingDependenciesModel newModel = JsonUtils.safeEval(text);
-                    // show CheckDependenciesPage
+                    newModel = JsonUtils.safeEval(text);
+                } catch (IllegalArgumentException ex) {
+                    chooseModulesPage.showError("Failed to get final modules. Got :" + (text.length() > 40 ? text.substring(0, 40) + "..." : text));
+                    return;
+                }
+                // show CheckDependenciesPage
+                try {
                     checkDependenciesPage.setModel(newModel);
                     checkDependenciesPage.showError(null);
                     container.setWidget(checkDependenciesPage);
-                } catch (IllegalArgumentException ex) {
-                    chooseModulesPage.showError("Failed to get final modules. Got :" + (text.length() > 40 ? text.substring(0, 40) + "..." : text));
+                } catch (Exception ex) {
+                    chooseModulesPage.showError("System Bug: " + ex.getMessage());
                 }
             }
 
@@ -175,12 +187,18 @@ public class CloneServerActivity extends AbstractActivity {
                 checkDependenciesPage.unlockUI();
                 // parse response to model
                 String text = response.getText();
+                FileKeyModel key;
                 try {
-                    FileKeyModel key = JsonUtils.safeEval(text);
-                    // show DownloadServer page
-                    showDownloadServerPage(key);
+                    key = JsonUtils.safeEval(text);
                 } catch (IllegalArgumentException ex) {
                     checkDependenciesPage.showError("Failed to get final modules. Got :" + (text.length() > 40 ? text.substring(0, 40) + "..." : text));
+                    return;
+                }
+                // show DownloadServer page
+                try {
+                    showDownloadServerPage(key);
+                } catch (Exception ex) {
+                    checkDependenciesPage.showError("System Bug: " + ex.getMessage());
                 }
             }
 
@@ -212,8 +230,14 @@ public class CloneServerActivity extends AbstractActivity {
             @Override
             public void onSuccess(Request request, Response response) {
                 String text = response.getText();
+                FileStatusModel url;
                 try {
-                    FileStatusModel url = JsonUtils.safeEval(text);
+                    url = JsonUtils.safeEval(text);
+                } catch (IllegalArgumentException ex) {
+                    downloadServerPage.showError("Failed to get final modules. Got :" + (text.length() > 40 ? text.substring(0, 40) + "..." : text));
+                    return;
+                }
+                try {
                     if (url.getFileUrl() == null) {
                         // it is still in process
                         downloadServerPage.setProgress(url.getPercentage());
@@ -225,9 +249,10 @@ public class CloneServerActivity extends AbstractActivity {
                         downloadServerPage.setDownloadSize(url.getFileSize());
                         downloadServerPage.setDownloadable(true);
                     }
-                } catch (IllegalArgumentException ex) {
-                    downloadServerPage.showError("Failed to get final modules. Got :" + (text.length() > 40 ? text.substring(0, 40) + "..." : text));
+                } catch (Exception ex) {
+                    downloadServerPage.showError("System Bug: " + ex.getMessage());
                 }
+
             }
         });
         timer = new Timer() {

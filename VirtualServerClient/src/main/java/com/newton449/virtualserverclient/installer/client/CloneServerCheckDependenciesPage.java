@@ -16,6 +16,7 @@ import com.newton449.virtualserverclient.installer.client.model.CheckingDependen
 import com.newton449.virtualserverclient.installer.client.model.CreatingServerModel;
 import com.newton449.virtualserverclient.installer.client.model.ModulesSelectingModel;
 import com.newton449.virtualserverclient.user.client.ErrorView;
+import com.newton449.virtualserverclient.user.client.JsonAssertion;
 
 /**
  *
@@ -76,12 +77,14 @@ public class CloneServerCheckDependenciesPage extends Composite implements Error
     public void setModel(CheckingDependenciesModel model) {
         this.model = model;
         table.setSelectable(false);
+        JsonAssertion.propertyNotNull(model.getModules(), "modules");
         table.setModel(model.getModules());
         // list box
         compBox.clear();
-        JsArrayString compressedTypeList = model.getPackTypes();
-        for (int i = 0; i < compressedTypeList.length(); i++) {
-            compBox.addItem(compressedTypeList.get(i));
+        JsonAssertion.propertyNotNull(model.getPackTypes(), "packTypes");
+        JsArrayString packTypes = model.getPackTypes();
+        for (int i = 0; i < packTypes.length(); i++) {
+            compBox.addItem(packTypes.get(i));
         }
     }
 

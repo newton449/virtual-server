@@ -7,6 +7,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.newton449.virtualserverclient.home.client.model.ServerInfoModel;
+import com.newton449.virtualserverclient.user.client.JsonAssertion;
 
 /**
  * A page which is the index of the whole web site. It contains an introduction
@@ -32,6 +33,7 @@ public class HomePage extends Composite {
 
     public void setModel(ServerInfoModel model) {
         table.setModel(model);
+        JsonAssertion.propertyNotNull(model.getPlatformInfo(), "platformInfo");
         platformInfo.setInnerText(model.getPlatformInfo());
     }
 }
