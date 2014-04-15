@@ -36,11 +36,10 @@ Socket* RequestHandlerThread::getSocket() {
 // Run the thread.
 
 void RequestHandlerThread::run() {
-    LOG(DEBUG) << "Starting a handler thread.";
+    LOG(DEBUG) << "Starting a request handler thread.";
     pSocket = queue.deQ();
     while (pSocket != NULL) {
-        SocketSystem socketSystem;
-        LOG(DEBUG) << "Got a socket from " << socketSystem.getRemoteIP(pSocket);
+        LOG(DEBUG) << "Got a socket from " << pSocket->getRemoteIP();
 
         // Get a socket from the queue
         pInput = new SocketInputStream(pSocket);
@@ -53,7 +52,7 @@ void RequestHandlerThread::run() {
         delete pTmp;
         pSocket = queue.deQ();
     }
-    LOG(DEBUG) << "Closing a handler thread.";
+    LOG(DEBUG) << "Closing a request handler thread.";
 }
 
 // Handles one request.
@@ -61,7 +60,7 @@ void RequestHandlerThread::run() {
 void RequestHandlerThread::handleOneRequest() {
     Vector* headerContents = NULL;
     try {
-        while (!pSocket->error()) {
+        while (pSocket->isValid()) {
             pInput->setExpectedBytesLength(-1);
             pRequest = new HttpServletRequestImpl(*pInput);
             pResponse = new HttpServletResponseImpl(*pOutput);
@@ -107,7 +106,8 @@ void RequestHandlerThread::handleOneRequest() {
             // Close the socket if needed
             if (needCloseConnection || !pResponse->isKeepAliveAllowed()) {
                 LOG(DEBUG) << "Closing socket.";
-                pSocket->disconnect();
+                pSocket->shutdownBoth();
+                pSocket->close();
             }
             else {
                 LOG(TRACE) << "Will keep socket alive for next request.";
@@ -436,22 +436,27 @@ void HttpServer::run() {
         threads.back()->start();
     }
     LOG(INFO) << "HTTP server has started on port " << port;
+    Socket* pSocket = NULL;
     try {
         while (true) {
             // Get sockets and push them into the queue. The
             // RequestHandlerThread should delete the socket.
-            Socket* pSocket = new Socket(pListener->waitForConnect());
+            pSocket = new Socket(pListener->waitForConnection());
             queue.enQ(pSocket);
+            pSocket = NULL;
         }
     }
     catch (std::exception&) {
         LOG(INFO) << "Closing HTTP server";
+        if (pSocket != NULL){
+            delete pSocket;
+        }
         // The connection is closed or something.
         // Close current sockets
         for (int i = 0; i < threadCount; i++) {
             Socket* pS = threads[i]->getSocket();
-            if (pS != NULL && !pS->error()) {
-                pS->disconnect();
+            if (pS != NULL && pS->isValid()) {
+                pS->close();
             }
         }
         // Send empty pointers to the queue to stop theads.
@@ -466,6 +471,7 @@ void HttpServer::run() {
         pListener = NULL;
     }
 }
+
 
 #ifdef TEXT_HTTPSERVER
 

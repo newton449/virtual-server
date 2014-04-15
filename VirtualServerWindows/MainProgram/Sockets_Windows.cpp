@@ -13,11 +13,13 @@
 #include <sstream>
 
 #ifdef TRACING
-  #include "Locks.h"
-  #define TRACE(msg) sout << "\n  " << msg;
+#include "Locks.h"
+#define TRACE(msg) sout << "\n  " << msg;
 #else
-  #define TRACE(msg) ;
+#define TRACE(msg) ;
 #endif
+
+#define FATAL_SOCKET_ERROR(err) (err == WSAECONNRESET || err == WSAENETDOWN || err == WSAEFAULT || err == WSAENOTCONN || err == WSAENOTSOCK)
 
 long SocketSystem::count = 0;
 
@@ -25,135 +27,147 @@ long SocketSystem::count = 0;
 
 std::string IntToString(const int num)
 {
-  std::ostringstream out;
-  out << num;
-  return out.str();
+    std::ostringstream out;
+    out << num;
+    return out.str();
 }
 //----< get socket error message string >----------------------------
 
-std::string SocketSystem::GetLastMsg(bool WantSocketMsg) {
+std::string SocketSystem::getLastErrorMessage(bool WantSocketMsg) {
 
-// ask system what type of error occurred
+    // ask system what type of error occurred
 
-  DWORD errorCode;
-  if(WantSocketMsg)
-    errorCode = WSAGetLastError();
-  else
-    errorCode = GetLastError();
-  if(errorCode == 0)
-    return "no error";
+    DWORD errorCode;
+    if (WantSocketMsg)
+        errorCode = WSAGetLastError();
+    else
+        errorCode = GetLastError();
+    if (errorCode == 0)
+        return "no error";
 
-// map errorCode into a system defined error string
-    
-  DWORD dwFlags = 
-    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER;
-  LPCVOID lpSource = NULL;
-  DWORD dwMessageID = errorCode;
-  DWORD dwLanguageId = MAKELANGID(LANG_ENGLISH,SUBLANG_ENGLISH_US);
-  LPSTR lpBuffer;
-  DWORD nSize = 0;
-  va_list *Arguments = NULL;
+    // map errorCode into a system defined error string
 
-  FormatMessage(
-    dwFlags,lpSource,dwMessageID,dwLanguageId, 
-    (LPTSTR)&lpBuffer,nSize,Arguments
-  );
+    DWORD dwFlags =
+        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER;
+    LPCVOID lpSource = NULL;
+    DWORD dwMessageID = errorCode;
+    DWORD dwLanguageId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
+    LPSTR lpBuffer;
+    DWORD nSize = 0;
+    va_list *Arguments = NULL;
 
-  std::string _msg(lpBuffer);
-  LocalFree(lpBuffer);
-  return _msg;
+    FormatMessage(
+        dwFlags, lpSource, dwMessageID, dwLanguageId,
+        (LPTSTR)&lpBuffer, nSize, Arguments
+        );
+
+    std::string _msg(lpBuffer);
+    LocalFree(lpBuffer);
+    return _msg;
 }
-//
-//----< load WinSock Library >---------------------------------------
 
+// load WinSock Library
 SocketSystem::SocketSystem()
 {
-  if(count == 0)
-  {
-    TRACE("loading wsock32 library");
-    WORD wVersionRequested = MAKEWORD(1,1); // requesting version 1.1
-    WSAData wData;                          // startup data filled by WSAStartup
-    int err = WSAStartup(wVersionRequested, &wData);
-    if(err == SOCKET_ERROR)
-      throw std::exception("initialization error: ");
-  }
-  InterlockedIncrement(&count);
-}
-//----< destructor unloads socket library >--------------------------
-
-SocketSystem::~SocketSystem()
-{ 
-  try {
-    if(InterlockedDecrement(&count) == 0)
+    if (count == 0)
     {
-      TRACE("unloading wsock32 library");
-      WSACleanup();
+        TRACE("loading wsock32 library");
+        WORD wVersionRequested = MAKEWORD(1, 1); // requesting version 1.1
+        WSAData wData;                          // startup data filled by WSAStartup
+        int err = WSAStartup(wVersionRequested, &wData);
+        // The WSAStartup function directly returns the extended error code in the return 
+        // value for this function. A call to the WSAGetLastError function is not needed 
+        // and should not be used.
+        if (err != 0){
+            throw SocketException("Failed to initialize socket system.");
+        }
     }
-  }
-  catch(...) { /* don't allow exception to propagate on shutdown */}
+    InterlockedIncrement(&count);
 }
-//----< get host name >----------------------------------------------
 
+// destructor unloads socket library
+SocketSystem::~SocketSystem()
+{
+    try {
+        if (InterlockedDecrement(&count) == 0)
+        {
+            TRACE("unloading wsock32 library");
+            WSACleanup();
+        }
+    }
+    catch (...) { /* don't allow exception to propagate on shutdown */ }
+}
+
+// get host name
 std::string SocketSystem::getHostName()
 {
-  char buffer[256];
-  gethostname(buffer,256);
-  return buffer;
+    char buffer[256];
+    if (gethostname(buffer, 256) != 0){
+        throw SocketException(getLastErrorMessage(true));
+    }
+    return buffer;
 }
-//
-//----< get ip address of network machine >--------------------------
 
+// get ip address of network machine
 std::string SocketSystem::getIpFromName(const std::string& name)
 {
-  hostent* remoteHost = 0;
-  SOCKADDR_IN tcpAddr;
-  tcpAddr.sin_family = AF_INET;
-  tcpAddr.sin_addr.s_addr = inet_addr(name.c_str());
-  if(tcpAddr.sin_addr.s_addr == INADDR_NONE)
-  {
-    // name is not an ip address, so try to map name to address
-    // via DNS
+    hostent* remoteHost = 0;
+    SOCKADDR_IN tcpAddr;
+    tcpAddr.sin_family = AF_INET;
+    tcpAddr.sin_addr.s_addr = inet_addr(name.c_str());
+    if (tcpAddr.sin_addr.s_addr == INADDR_NONE)
+    {
+        // name is not an ip address, so try to map name to address
+        // via DNS
 
-    hostent* remoteHost = gethostbyname(name.c_str());
-    if(remoteHost == NULL)
-      throw std::exception("invalid name");
-    CopyMemory(
-      &tcpAddr.sin_addr, 
-      remoteHost->h_addr_list[0], 
-      remoteHost->h_length
-    );
-  }
-  return inet_ntoa(tcpAddr.sin_addr);
+        hostent* remoteHost = gethostbyname(name.c_str());
+        if (remoteHost == NULL){
+            throw SocketException("Failed to find IP for the name: " + name);
+        }
+        CopyMemory(
+            &tcpAddr.sin_addr,
+            remoteHost->h_addr_list[0],
+            remoteHost->h_length
+            );
+    }
+    char* ret = inet_ntoa(tcpAddr.sin_addr);
+    if (ret == NULL){
+        throw SocketException("Failed to convert IP number to IP string.");
+    }
+    else{
+        return ret;
+    }
 }
-//----< get network name of machine from ip address >----------------
 
+// get network name of machine from ip address
 std::string SocketSystem::getNameFromIp(const std::string& ip)
 {
-  struct hostent* host = (hostent*)malloc(sizeof(struct hostent));
-  struct in_addr *ipaddr = (in_addr*)malloc(sizeof(struct in_addr));
-  ipaddr->s_addr = inet_addr(ip.c_str());
-  host = gethostbyaddr((char*)ipaddr, sizeof(ipaddr), AF_INET);
-  if(!host)
-    throw std::exception("name resolution error: ");    
-  return host->h_name;
+    struct in_addr ipaddr;
+    ipaddr.s_addr = inet_addr(ip.c_str());
+    struct hostent* host = gethostbyaddr((char*)&ipaddr, sizeof(in_addr), AF_INET);
+    if (!host){
+        throw SocketException("Failed to find host name by the IP :" + ip);
+    }
+    return host->h_name;
 }
-//----< constructor creates TCP Stream socket >----------------------
 
+// constructor creates TCP Stream socket
 Socket::Socket()
 {
-  s_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  if(s_ == INVALID_SOCKET)
-    throw std::exception("invalid socket in constructor");
+    s_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (s_ == INVALID_SOCKET){
+        throw SocketException("Failed to create socket: " + ss_.getLastErrorMessage(true));
+    }
 }
 //----< copy constructor >-------------------------------------------
 
-Socket::Socket(const Socket& sock)
-{
-  TRACE("copying socket");
-  DuplicateHandle(GetCurrentProcess(),(HANDLE)sock.s_,GetCurrentProcess(),(HANDLE*)&s_,0,false,DUPLICATE_SAME_ACCESS);
-  //std::cout << "\n  source handle = " << sock.s_;
-  //std::cout << "\n  destin handle = " << s_;
-}
+//Socket::Socket(const Socket& sock)
+//{
+//    TRACE("copying socket");
+//    DuplicateHandle(GetCurrentProcess(), (HANDLE)sock.s_, GetCurrentProcess(), (HANDLE*)&s_, 0, false, DUPLICATE_SAME_ACCESS);
+//    //std::cout << "\n  source handle = " << sock.s_;
+//    //std::cout << "\n  destin handle = " << s_;
+//}
 //----< promotes WinSock SOCKET handle to Socket object >------------
 
 Socket::Socket(SOCKET s) : s_(s) {}
@@ -161,353 +175,355 @@ Socket::Socket(SOCKET s) : s_(s) {}
 //----< destructor closes socket handle >----------------------------
 
 Socket::~Socket()
-{ 
-  TRACE("destroying socket");
-  closesocket(s_);
-  //disconnect();
+{
+    TRACE("destroying socket");
+    closesocket(s_);
 }
 //----< assignment >-------------------------------------------------
 
 Socket& Socket::operator=(const Socket& sock)
 {
-  if(this == &sock) return *this;
-  TRACE("copying socket");
-  DuplicateHandle(GetCurrentProcess(),(HANDLE)sock.s_,GetCurrentProcess(),(HANDLE*)&s_,0,false,DUPLICATE_SAME_ACCESS);
-  return *this;
+    if (this == &sock) return *this;
+    TRACE("copying socket");
+    DuplicateHandle(GetCurrentProcess(), (HANDLE)sock.s_, GetCurrentProcess(), (HANDLE*)&s_, 0, false, DUPLICATE_SAME_ACCESS);
+    return *this;
 }
 //----< assignment >-------------------------------------------------
 
 Socket& Socket::operator =(SOCKET sock)
 {
-  TRACE("assigning from SOCKET");
-  s_ = sock;
-  return *this;
+    TRACE("assigning from SOCKET");
+    s_ = sock;
+    return *this;
 }
-//----< connects to IP address or network host >---------------------
 
-bool Socket::connect(std::string url, int port, bool throwError, size_t MaxTries)
+// connect 
+void Socket::connect(std::string url, int port, size_t maxTries)
 {
-  try {
-    if(isalpha(url[0]))
-      url = SocketSystem().getIpFromName(url);
-  }
-  catch(...)
-  {
-    if(throwError)
-      throw std::exception(ss_.GetLastMsg(true).c_str());
-    return false;
-  }
-  SOCKADDR_IN tcpAddr;
-  tcpAddr.sin_family = AF_INET;
-  tcpAddr.sin_addr.s_addr = inet_addr(url.c_str());
-  tcpAddr.sin_port = htons(port);
-  if(s_ == INVALID_SOCKET)
-  {
-    s_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  }
-  size_t tryCount = 0;
-  std::string countStr;
-  while(true)
-  {
-    ++tryCount;
-    TRACE("attempt to connect #" + IntToString(tryCount));
-    int err = ::connect(s_, (sockaddr*)&tcpAddr, sizeof(tcpAddr));
-     //std::string rip = System().getRemoteIP(this);
-    int rport = System().getRemotePort(this);
-
-    // error return from connect does not appear to be reliable
-  
-    if(err != SOCKET_ERROR && rport != -1)
-      break;
-    if(tryCount >= MaxTries)
-    {
-      if(throwError)
-        throw std::exception(ss_.GetLastMsg(true).c_str());
-      return false;
+    // get its ip if it is not an ip
+    if (isalpha(url[0])){
+        url = SocketSystem().getIpFromName(url);
     }
-    ::Sleep(100);
-  }
-  
-  return true;
-}
-//
-//----< disconnect socket >------------------------------------------
 
-void Socket::disconnect()
+    // create socket if it invalid
+    if (s_ == INVALID_SOCKET)
+    {
+        s_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (s_ == INVALID_SOCKET){
+            throw SocketException("Failed to create a socket: " + ss_.getLastErrorMessage(true));
+        }
+    }
+
+    // create remote address in native API
+    SOCKADDR_IN tcpAddr;
+    tcpAddr.sin_family = AF_INET;
+    tcpAddr.sin_addr.s_addr = inet_addr(url.c_str());
+    tcpAddr.sin_port = htons(port);
+    size_t tryCount = 0;
+    std::string countStr;
+
+    // try to connect
+    while (tryCount < maxTries)
+    {
+        ++tryCount;
+        TRACE("attempt to connect #" + IntToString(tryCount));
+        int err = ::connect(s_, (sockaddr*)&tcpAddr, sizeof(tcpAddr));
+
+        // PENDING why it need check port?
+        // int rport = getRemotePort();
+
+        // error return from connect does not appear to be reliable
+        if (err != SOCKET_ERROR /* && rport != -1 */){
+            return;
+        }
+
+        // wait for a while before retrying
+        ::Sleep(100);
+    }
+
+    // failed to connect. throw an exception.
+    throw SocketException(ss_.getLastErrorMessage(true));
+}
+
+// disconnect socket 
+void Socket::close()
 {
-  shutdown(s_, SD_BOTH); 
-  closesocket(s_);
-  s_ = INVALID_SOCKET;
+    // do not report error
+    closesocket(s_);
+    s_ = INVALID_SOCKET;
 }
-//----< casts Socket to WinSock SOCKET handle >----------------------
 
-Socket::operator SOCKET ()
-{ 
-  return s_; 
+void Socket::shutdownReceive(){
+    if (SOCKET_ERROR == shutdown(s_, SD_RECEIVE)){
+        throw SocketException(ss_.getLastErrorMessage(true));
+    }
 }
-//----< send byte block >--------------------------------------------
 
+
+void Socket::shutdownSend(){
+    if (SOCKET_ERROR == shutdown(s_, SD_RECEIVE)){
+        throw SocketException(ss_.getLastErrorMessage(true));
+    }
+}
+
+void Socket::shutdownBoth(){
+    if (SOCKET_ERROR == shutdown(s_, SD_RECEIVE)){
+        throw SocketException(ss_.getLastErrorMessage(true));
+    }
+}
+
+// send byte block 
 int Socket::send(const char* block, size_t len)
 {
-  return ::send(s_,block,len,0);
+    int ret = ::send(s_, block, len, 0);
+    if (SOCKET_ERROR != ret){
+        throw SocketException(ss_.getLastErrorMessage(true));
+    }
+    return ret;
 }
-//----< recieve byte block >-----------------------------------------
 
-int Socket::recv(char* block, size_t len)
+// recieve byte block
+int Socket::receive(char* block, size_t len)
 {
-  return ::recv(s_,block,len,0);
+    int ret = ::recv(s_, block, len, 0);
+    if (SOCKET_ERROR != ret){
+        throw SocketException(ss_.getLastErrorMessage(true));
+    }
+    return ret;
 }
 //----< return number of bytes waiting >-----------------------------
 
-int Socket::bytesLeft()
+int Socket::getLeftBytesSize()
 {
-  unsigned long bytes;
-  ::ioctlsocket(s_,FIONREAD,&bytes);
-  return bytes;
+    unsigned long bytes;
+    if (SOCKET_ERROR != ::ioctlsocket(s_, FIONREAD, &bytes)){
+        throw SocketException(ss_.getLastErrorMessage(true));
+    }
+    return bytes;
 }
 //----< send blocks until all characters are sent >------------------
 
-bool Socket::sendAll(const char* block, size_t len, bool throwError)
+void Socket::sendAll(const char* block, size_t len, size_t maxTries)
 {
-  size_t bytesSent;       // current number of bytes sent
-  size_t blockIndx = 0;   // place in buffer to send next
-  size_t count = 0;       // number of send failures
+    size_t bytesSent;       // current number of bytes sent
+    size_t blockIndx = 0;   // place in buffer to send next
+    size_t count = 0;       // number of send failures
 
-  const int sendRetries = 100;
-  size_t blockLen = len;
-  size_t bytesLeft = blockLen;
-  while(bytesLeft > 0) {
-    bytesSent = ::send(s_,&block[blockIndx],static_cast<int>(bytesLeft),0);
-    if(bytesSent == SOCKET_ERROR)
+    size_t blockLen = len;
+    size_t bytesLeft = blockLen;
+    while (bytesLeft > 0) {
+        bytesSent = ::send(s_, &block[blockIndx], static_cast<int>(bytesLeft), 0);
+        if (bytesSent == SOCKET_ERROR)
+        {
+            ++count;
+            int err = WSAGetLastError();
+            if (FATAL_SOCKET_ERROR(err) || count == maxTries)
+            {
+                // stop trying if it is a fatal error or it reach max tries
+                throw SocketException("Failed to send data: " + ss_.getLastErrorMessage(true));
+            }
+            Sleep(50);
+        }
+        else{
+            bytesLeft -= bytesSent;
+            blockIndx += bytesSent;
+        }
+    }
+}
+
+// blocks until len characters have been sent
+void Socket::receiveAll(char* block, size_t len, size_t maxTries)
+{
+    size_t bytesRecvd, bytesLeft = len;
+    size_t blockIndx = 0, count = 0;
+    while (bytesLeft > 0) {
+        bytesRecvd = ::recv(s_, &block[blockIndx], static_cast<int>(bytesLeft), 0);
+        if (bytesRecvd == 0)
+        {
+            throw SocketException("The connection has been gracefully closed. Use receive() instead of receiveAll().");
+        }
+        if (bytesRecvd == SOCKET_ERROR) {
+            ++count;
+            int err = WSAGetLastError();
+            if (FATAL_SOCKET_ERROR(err) || count == maxTries)
+            {
+                // stop trying if it is a fatal error or it reach max tries
+                throw SocketException("Failed to receive data: " + ss_.getLastErrorMessage(true));
+            }
+            Sleep(50);
+        }
+        else{
+            bytesLeft -= bytesRecvd;
+            blockIndx += bytesRecvd;
+        }
+    }
+}
+// write a line of text
+void Socket::writeLine(const std::string& str)
+{
+    // appends newline if none at end of string
+    if (str.empty()){
+        sendAll("\n", 1);
+        return;
+    }
+    char end = str[str.size() - 1];
+    if (end != '\n' && end != '\r')
     {
-        int err = WSAGetLastError();
-      ++count;
-      //sout << "\n  sending retry";
-      if (err == WSAECONNRESET)
-      {
-        if(throwError)
-          throw std::exception("connection closed");
-        else 
-          return false;
-      }
-      if(count==sendRetries)
-      {
-        if(throwError)
-          throw std::exception("send failed after 100 retries");
-        else
-          return false;
-      }
-      Sleep(50);
-      bytesSent = 0;
+        std::string temp = str;
+        temp.append("\n");
+        sendAll(temp.c_str(), temp.size(), true);
     }
-    //sout << "\n  sending succeeded";
-    bytesLeft -= bytesSent;
-    blockIndx += bytesSent;
-  }
-  Sleep(50);
-  return true;
+    else{
+        sendAll(str.c_str(), str.size(), true);
+    }
 }
-//----< blocks until len characters have been sent >-----------------
-
-bool Socket::recvAll(char* block, size_t len, bool throwError)
+// read a line of text
+std::string Socket::readLine()
 {
-  const size_t recvRetries = 100;
-  size_t bytesRecvd, bytesLeft = len;
-  size_t blockIndx = 0, count = 0;
-  while(bytesLeft > 0) {
-    bytesRecvd = ::recv(s_,&block[blockIndx],static_cast<int>(bytesLeft),0);
-    if(bytesRecvd == 0)
+    // removes ending newline if present, else reads to end of buffer
+    std::string temp;
+    char block[1];
+    while (true)
     {
-      if(throwError)
-        throw(std::exception("remote connection closed"));
-      return false;
-    }
-    if(bytesRecvd == SOCKET_ERROR) {
-      ++count;
-      if(bytesRecvd == WSAECONNRESET)
-      {
-        if(throwError)
-          throw(std::exception("connection closed"));
+        int size = receive(block, 1);
+        if (size == 0){
+            // the socket has been shutdown correctly.
+            return temp;
+        }
+        // save all chars that are not newlines or carriage returns
+        if (block[0] != '\n' && block[0] != '\r')
+            temp += block[0];
         else
-          return false;
-      }
-      if(count==recvRetries)
-      {
-        if(throwError)
-          throw(std::exception("recv failed after 100 retries"));
-        else
-          return false;
-      }
-      Sleep(50);
+        {
+            return temp;
+        }
     }
-    bytesLeft -= bytesRecvd;
-    blockIndx += bytesRecvd;
-  }
-  return true;
 }
-//----< write a line of text >---------------------------------------
-/*
- * appends newline if none at end of string
- *
- */
-void Socket::WriteLine(const std::string& str)
-{
-  char end = str[str.size()-1];
-  if(end != '\n' && end != '\r')
-  {
-    std::string temp = str;
-    temp.append("\n");
-    if(!sendAll(temp.c_str(), temp.size(), true))
-      throw std::exception("could not write entire line");
-  }
-  else
-  {
-    if(!sendAll(str.c_str(), str.size(), true))
-      throw std::exception("could not write entire line");
-  }
+
+// set receive timeout in milliseconds
+void Socket::setReceiveTimeout(int milliseconds){
+    int iResult;
+    iResult = setsockopt(s_, SOL_SOCKET, SO_RCVTIMEO, (char *)&milliseconds, sizeof(milliseconds));
+    if (iResult == SOCKET_ERROR) {
+        throw SocketException(ss_.getLastErrorMessage());
+    }
 }
-//----< read a line of text >----------------------------------------
-/*
- * removes ending newline if present, else reads to end of buffer
- *
- */
-std::string Socket::ReadLine()
+
+// get local ip address
+std::string Socket::getLocalIP()
 {
-  std::string temp;
-  char block[1];
-  while(bytesLeft() > 0)  // don't block
-  {
-    recv(block,1);
-    // save all chars that are not newlines or carriage returns
-    if(block[0] != '\n' && block[0] != '\r')
-      temp += block[0];
-    else
+    struct sockaddr name;
+    int len = sizeof(name);
+    int status = getsockname(s_, &name, &len);
+    if (status != 0)
     {
-      if(bytesLeft() > 0)
-      {
-        // remove remaining newline or carriage return if next in buffer
-        ::recv(s_,block,1,MSG_PEEK);
-        if(block[0] == '\n' || block[0] == '\r')
-          recv(block,1);
-      }
-      return temp;
+        throw SocketException(ss_.getLastErrorMessage());
     }
-  }
-  return temp;
+    struct sockaddr_in* pLocal = reinterpret_cast<sockaddr_in*>(&name);
+    return inet_ntoa(pLocal->sin_addr);
 }
-//----< get local ip address >---------------------------------------
 
-std::string SocketSystem::getLocalIP()
+// get local port
+int Socket::getLocalPort()
 {
-  //struct sockaddr name;
-  //int len = sizeof(name);
-  hostent* local = gethostbyname("");
-  return inet_ntoa(*(struct in_addr*)*local->h_addr_list);
-}
-//----< get local port >---------------------------------------------
-
-int SocketSystem::getLocalPort(Socket* pSock)
-{
-  struct sockaddr name;
-  int len = sizeof(name);
-  int status = getsockname(*pSock,&name,&len);
-  if(status == 0)
-  {
+    struct sockaddr name;
+    int len = sizeof(name);
+    int status = getsockname(s_, &name, &len);
+    if (status != 0)
+    {
+        throw SocketException(ss_.getLastErrorMessage());
+    }
     struct sockaddr_in* pLocal = reinterpret_cast<sockaddr_in*>(&name);
     return htons(pLocal->sin_port);
-  }
-  return -1;
+    return -1;
 }
-//----< get remote ip address >--------------------------------------
 
-std::string SocketSystem::getRemoteIP(Socket* pSock)
+// get remote ip address
+std::string Socket::getRemoteIP()
 {
-  struct sockaddr name;
-  int len = sizeof(name);
-  int status = getpeername(*pSock,&name,&len);
-  if(status == 0)
-  {
+    struct sockaddr name;
+    int len = sizeof(name);
+    int status = getpeername(s_, &name, &len);
+    if (status != 0)
+    {
+        throw SocketException(ss_.getLastErrorMessage());
+    }
     struct sockaddr_in* pRemote = reinterpret_cast<sockaddr_in*>(&name);
     return inet_ntoa(pRemote->sin_addr);
-  }
-  return "";
 }
-//----< get remote port >--------------------------------------------
 
-int SocketSystem::getRemotePort(Socket* pSock)
+// get remote port
+int Socket::getRemotePort()
 {
-  struct sockaddr name;
-  int len = sizeof(name);
-  int status = getpeername(*pSock,&name,&len);
-  if(status == 0)
-  {
+    struct sockaddr name;
+    int len = sizeof(name);
+    int status = getpeername(s_, &name, &len);
+    if (status != 0)
+    {
+        throw SocketException(ss_.getLastErrorMessage());
+    }
     struct sockaddr_in* pRemote = reinterpret_cast<sockaddr_in*>(&name);
     return htons(pRemote->sin_port);
-  }
-  return -1;
 }
-//
-//----< starts listener socket listening for connections >-----------
 
-SocketListener::SocketListener(int port) : InvalidSocketCount(0)
+
+// starts listener socket listening for connections
+SocketListener::SocketListener(int port) : invalidSocketCount(0)
 {
-  tcpAddr.sin_family = AF_INET;   // TCP/IP
-  tcpAddr.sin_port = htons(port); // listening port
-  tcpAddr.sin_addr.s_addr = INADDR_ANY;
-                                  // listen over every network interface
-  int err = bind(s_, (SOCKADDR*)&tcpAddr, sizeof(tcpAddr));
+    tcpAddr.sin_family = AF_INET;   // TCP/IP
+    tcpAddr.sin_port = htons(port); // listening port
+    tcpAddr.sin_addr.s_addr = INADDR_ANY;
+    // listen over every network interface
+    int err = bind(s_, (SOCKADDR*)&tcpAddr, sizeof(tcpAddr));
+    if (err == SOCKET_ERROR)
+    {
+        throw SocketException("Failed to bind listener port: " + ss_.getLastErrorMessage());
+    }
 
-  if(err == SOCKET_ERROR)
-  {
-    throw std::exception("binding error type:");
-  }
+    /////////////////////////////////////////////////////////////////
+    // listen for incoming connection requests
 
-  /////////////////////////////////////////////////////////////////
-  // listen for incoming connection requests
+    int backLog = 10;
+    err = listen(s_, backLog);
 
-  int backLog = 10;
-  err = listen(s_, backLog);
-
-  if(err == SOCKET_ERROR)
-    throw std::exception("listen mode error");
+    if (err == SOCKET_ERROR){
+        throw SocketException("Failed to lisnter on port: " + ss_.getLastErrorMessage());
+    }
 }
-//----< destructor closes socket >-----------------------------------
 
+// destructor closes socket
 SocketListener::~SocketListener()
 {
-  try {
-    TRACE("destroying SocketListener");
-    shutdown(s_, SD_BOTH);
-    closesocket(s_);
-  }
-  catch(...) { /* don't let exception propagate on shutdown */}
+    try {
+        TRACE("destroying SocketListener");
+        closesocket(s_);
+    }
+    catch (...) { /* don't let exception propagate on shutdown */ }
 }
-//----< blocks until a connection request has been received >--------
 
-SOCKET SocketListener::waitForConnect()
+// blocks until a connection request has been received
+Socket SocketListener::waitForConnection()
 {
-  const long MaxCount = 20;
-  InvalidSocketCount = 0;
-  TRACE("listener waiting for connection request");
-  int size = sizeof(tcpAddr);
-  SOCKET toClient;
-  do {
-    toClient = accept(s_, (SOCKADDR*)&tcpAddr, &size); 
-    ++InvalidSocketCount;
-    if(InvalidSocketCount >= 20)
-      throw std::exception("invalid socket connection");
-  } while (toClient == INVALID_SOCKET);
-  TRACE("connection establishted");
-  return toClient;
+    const long MaxCount = 20;
+    invalidSocketCount = 0;
+    TRACE("listener waiting for connection request");
+    int size = sizeof(tcpAddr);
+    SOCKET toClient;
+    while (INVALID_SOCKET == (toClient = accept(s_, (SOCKADDR*)&tcpAddr, &size))){
+        ++invalidSocketCount;
+        if (invalidSocketCount >= 20)
+            throw SocketException("Failed to accept a connection: " + ss_.getLastErrorMessage());
+    }
+    TRACE("connection establishted");
+    return Socket(toClient);
 }
 //
 //----< shuts down listerner >---------------------------------------
 
 void SocketListener::stop()
 {
-  TRACE("shutting down listener in SocketListerer");
-  shutdown(s_,SD_BOTH);
-  closesocket(s_);
+    TRACE("shutting down listener in SocketListerer");
+    closesocket(s_);
 }
 //----< test stub >--------------------------------------------------
 
@@ -516,143 +532,143 @@ void SocketListener::stop()
 
 void main()
 {
-  /*
-   * Note: 
-   * - No threads are used in this test stub, so it doesn't represent typical usage.
-   * - Neither do we do any message framing.  So correct operation depends on lightly
-   *   loaded receiver.
-   * - We will provide a simple demo using threads and queues with message framing
-   *   to show how that is done in another demo.  
-   */
-  std::cout << "\n  Testing Socket, SocketListener, and SocketSystem classes";
-  std::cout << "\n ==========================================================\n";
-  try
-  {
-    SocketSystem su;
-    std::string host = su.getHostName();
-    std::cout << "\n  host machine name:           " << host.c_str();
-    std::string ip = su.getIpFromName(host);
-    std::cout << "\n  IP Address of machine:       " << ip.c_str();
-    std::string name = su.getNameFromIp(ip);
-    std::cout << "\n  DNS name of machine from ip: " << name.c_str() << '\n';
-  
-    std::cout << "\n  Client connecting to Server";
-    std::cout << "\n -----------------------------";
-    SocketListener listener(2048);
-    Socket sendr;
-    if(!sendr.connect("127.0.0.1",2048))  // this works too
-    //if(!sendr.connect("Apocalypse",2048))  // can use ip addr, e.g., 127.0.0.1
+    /*
+     * Note:
+     * - No threads are used in this test stub, so it doesn't represent typical usage.
+     * - Neither do we do any message framing.  So correct operation depends on lightly
+     *   loaded receiver.
+     * - We will provide a simple demo using threads and queues with message framing
+     *   to show how that is done in another demo.  
+     */
+    std::cout << "\n  Testing Socket, SocketListener, and SocketSystem classes";
+    std::cout << "\n ==========================================================\n";
+    try
     {
-      std::cout << "\n connection failed\n\n";
-      return;
+        SocketSystem su;
+        std::string host = su.getHostName();
+        std::cout << "\n  host machine name:           " << host.c_str();
+        std::string ip = su.getIpFromName(host);
+        std::cout << "\n  IP Address of machine:       " << ip.c_str();
+        std::string name = su.getNameFromIp(ip);
+        std::cout << "\n  DNS name of machine from ip: " << name.c_str() << '\n';
+
+        std::cout << "\n  Client connecting to Server";
+        std::cout << "\n -----------------------------";
+        SocketListener listener(2048);
+        Socket sendr;
+        if(!sendr.connect("127.0.0.1",2048))  // this works too
+            //if(!sendr.connect("Apocalypse",2048))  // can use ip addr, e.g., 127.0.0.1
+        {
+            std::cout << "\n connection failed\n\n";
+            return;
+        }
+        Socket recvr = listener.waitForConnect();
+        std::cout << "\n  remote ip is: " << recvr.System().getRemoteIP(&recvr);
+        std::cout << ", remote port is: " << recvr.System().getRemotePort(&recvr);
+        std::cout << "\n  local ip is:  " << recvr.System().getLocalIP();
+        std::cout << ", local port is: " << recvr.System().getLocalPort(&recvr) << '\n';
+
+        std::cout << "\n  sending from Client to Server";
+        std::cout << "\n -------------------------------";
+
+        // sending
+        const char* msg1 = "this is a message";
+        sendr.sendAll(msg1,strlen(msg1)+1);
+
+        const char* msg2 = "and a final message";
+        sendr.sendAll(msg2,strlen(msg2)+1);
+
+        sendr.sendAll("quit",strlen("quit")+1);
+
+        // receiving
+        std::cout.flush();
+        const int BufLen = 256;
+        char buffer[BufLen];
+
+        std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
+        recvr.recvAll(buffer,strlen(msg1)+1);
+        std::cout << "\n  Server received: " << buffer;
+        std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
+
+        recvr.recvAll(buffer,strlen(msg2)+1);
+        std::cout << "\n  Server received: " << buffer;
+        std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
+
+        recvr.recvAll(buffer,strlen("quit")+1);
+        std::cout << "\n  Server received: " << buffer;
+        std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
+        std::cout << "\n";
+
+        std::cout << "\n  Breaking connection";
+        recvr.disconnect();
+        sendr.disconnect();
+
+        // new connection
+
+        std::cout << "\n  Establishing new connection\n";
+        if(!sendr.connect("127.0.0.1",2048))
+        {
+            throw std::exception("\n  reconnect failed");
+        }
+        recvr = listener.waitForConnect();
+        msg1 = "another message after reconnecting";
+        std::cout << "\n  Client sending: " << msg1;
+        sendr.WriteLine(msg1);
+        std::string temp = recvr.ReadLine();
+        std::cout << "\n  Server received: " << temp;
+        std::cout << "\n";
+
+        // demonstrating full duplex operation
+        std::cout << "\n  sending from Server back to Client";
+        std::cout << "\n ------------------------------------";
+
+        // sending
+        msg1 = "sending message back";
+        std::cout << "\n  Server sending message: " << msg1;
+        recvr.WriteLine(msg1);
+        std::cout << "\n  Server sending message: " << "quit";
+        recvr.WriteLine("quit");
+
+        // receiving
+        std::cout << "\n  Client received: " << sendr.ReadLine();
+        std::cout << "\n  Client received: " << sendr.ReadLine();
+        std::cout << "\n  Client received: " << sendr.ReadLine();
+        std::cout << std::endl;
+
+        // copy construction
+        Socket sendrCopy = sendr;
+        Socket recvrCopy = recvr;
+
+        // copy construction
+        std::cout << "\n  sending and recieving with socket copies";
+        std::cout << "\n ------------------------------------------";
+
+        sendrCopy.WriteLine("string from sendrCopy");
+        // recieving with copy
+        std::cout << "\n  recvrCopy received: " << recvrCopy.ReadLine();
+        std::cout << std::endl;
+
+        // socket assignment
+        sendr = sendrCopy;
+        recvr = recvrCopy;
+
+        // sending from assigned socket
+        std::cout << "\n  sending and recieving with assigned sockets";
+        std::cout << "\n ---------------------------------------------";
+
+        sendr.WriteLine("string from AssignedSendr");
+        // recieving with copy
+        std::cout << "\n  AssignedRecvr received: " << recvr.ReadLine();
+        std::cout << std::endl;
+
+        sendr.disconnect();
+        recvr.disconnect();
     }
-    Socket recvr = listener.waitForConnect();
-    std::cout << "\n  remote ip is: " << recvr.System().getRemoteIP(&recvr);
-    std::cout << ", remote port is: " << recvr.System().getRemotePort(&recvr);
-    std::cout << "\n  local ip is:  " << recvr.System().getLocalIP();
-    std::cout << ", local port is: " << recvr.System().getLocalPort(&recvr) << '\n';
-
-    std::cout << "\n  sending from Client to Server";
-    std::cout << "\n -------------------------------";
-
-    // sending
-    const char* msg1 = "this is a message";
-    sendr.sendAll(msg1,strlen(msg1)+1);
-
-    const char* msg2 = "and a final message";
-    sendr.sendAll(msg2,strlen(msg2)+1);
-
-    sendr.sendAll("quit",strlen("quit")+1);
-
-    // receiving
-    std::cout.flush();
-    const int BufLen = 256;
-    char buffer[BufLen];
-
-    std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
-    recvr.recvAll(buffer,strlen(msg1)+1);
-    std::cout << "\n  Server received: " << buffer;
-    std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
-
-    recvr.recvAll(buffer,strlen(msg2)+1);
-    std::cout << "\n  Server received: " << buffer;
-    std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
-
-    recvr.recvAll(buffer,strlen("quit")+1);
-    std::cout << "\n  Server received: " << buffer;
-    std::cout << "\n  " << recvr.bytesLeft() << " bytes ready for reading";
-    std::cout << "\n";
-
-    std::cout << "\n  Breaking connection";
-    recvr.disconnect();
-    sendr.disconnect();
-
-    // new connection
-
-    std::cout << "\n  Establishing new connection\n";
-    if(!sendr.connect("127.0.0.1",2048))
+    catch(std::exception& e)
     {
-      throw std::exception("\n  reconnect failed");
+        std::cout << "\n  " << e.what() << "\n\n";
     }
-    recvr = listener.waitForConnect();
-    msg1 = "another message after reconnecting";
-    std::cout << "\n  Client sending: " << msg1;
-    sendr.WriteLine(msg1);
-    std::string temp = recvr.ReadLine();
-    std::cout << "\n  Server received: " << temp;
-    std::cout << "\n";
-
-    // demonstrating full duplex operation
-    std::cout << "\n  sending from Server back to Client";
-    std::cout << "\n ------------------------------------";
-
-    // sending
-    msg1 = "sending message back";
-    std::cout << "\n  Server sending message: " << msg1;
-    recvr.WriteLine(msg1);
-    std::cout << "\n  Server sending message: " << "quit";
-    recvr.WriteLine("quit");
-
-    // receiving
-    std::cout << "\n  Client received: " << sendr.ReadLine();
-    std::cout << "\n  Client received: " << sendr.ReadLine();
-    std::cout << "\n  Client received: " << sendr.ReadLine();
-    std::cout << std::endl;
-
-    // copy construction
-    Socket sendrCopy = sendr;
-    Socket recvrCopy = recvr;
-
-    // copy construction
-    std::cout << "\n  sending and recieving with socket copies";
-    std::cout << "\n ------------------------------------------";
-
-    sendrCopy.WriteLine("string from sendrCopy");
-    // recieving with copy
-    std::cout << "\n  recvrCopy received: " << recvrCopy.ReadLine();
-    std::cout << std::endl;
-
-    // socket assignment
-    sendr = sendrCopy;
-    recvr = recvrCopy;
-
-    // sending from assigned socket
-    std::cout << "\n  sending and recieving with assigned sockets";
-    std::cout << "\n ---------------------------------------------";
-
-    sendr.WriteLine("string from AssignedSendr");
-    // recieving with copy
-    std::cout << "\n  AssignedRecvr received: " << recvr.ReadLine();
-    std::cout << std::endl;
-
-    sendr.disconnect();
-    recvr.disconnect();
-  }
-  catch(std::exception& e)
-  {
-    std::cout << "\n  " << e.what() << "\n\n";
-  }
-  std::cout << "\n\n";
+    std::cout << "\n\n";
 }
 
 #endif

@@ -11,5 +11,8 @@ IHttpServlet* ServletFactoryImpl::createInstance(const std::string name){
     if (name == "ServerInfoServlet"){
         return new ServerInfoServlet();
     }
+    if (name == "UploadingServlet"){
+        return new UploadingServlet();
+    }
 	return NULL;
 }

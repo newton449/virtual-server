@@ -60,6 +60,10 @@
       <name>ServerInfoServlet</name>
       <url>/home/server_info</url>
     </servlet>
+    <servlet>
+      <name>UploadingServlet</name>
+      <url>/home/uploading</url>
+    </servlet>
   </servlets>
 
   <!-- Map static resources. -->

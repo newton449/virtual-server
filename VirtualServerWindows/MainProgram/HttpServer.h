@@ -144,5 +144,4 @@ private:
     // Runs the thread.
     void run();
 };
-
 #endif
