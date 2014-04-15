@@ -98,6 +98,8 @@
                     <debugPort>9999</debugPort>
                     <debugSuspend>false</debugSuspend>
                     <extraJvmArgs>-Xmx1024M</extraJvmArgs>
+<!--                    <logLevel>DEBUG</logLevel>
+                    <logDir>D:\Temp\log\</logDir>-->
                     <!--                    <workDir>${project.build.directory}/${project.build.finalName}</workDir>-->
                     <!--                    <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>-->
@@ -115,6 +117,9 @@
                                 </copy>                             
                                 <copy todir="../TestTarget/Installer/web">
                                     <fileset dir="${project.build.directory}/${project.build.finalName}/installer"/>
+                                </copy>
+                                <copy todir="../TestTarget/Upload/web">
+                                    <fileset dir="${project.build.directory}/${project.build.finalName}/upload"/>
                                 </copy>
                                 <copy todir="../TestTarget/JsonTester/web">
                                     <fileset dir="${project.build.directory}/${project.build.finalName}/json_tester"/>

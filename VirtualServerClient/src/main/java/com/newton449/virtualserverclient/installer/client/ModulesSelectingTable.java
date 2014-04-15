@@ -70,8 +70,8 @@ public class ModulesSelectingTable extends FlexTable {
             JsonAssertion.propertyNotNull(versionStates, "versionStates");
             for (int j = 0; j < versionCount; j++) {
                 VersionState versionState = versionStates.get(j);
+                this.getCellFormatter().addStyleName(i + 2, j + 2, css.correctCell());
                 if (selectable) {
-                    this.getCellFormatter().addStyleName(i + 2, j + 2, css.correctCell());
                     // put check boxes, when it is selectable or selected
                     if (versionState.isEnabled() || versionState.isSelected()) {
                         CheckBox box = new CheckBox();

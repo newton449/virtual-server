@@ -28,6 +28,7 @@ Uncomment this for XHTML entities
         background-color: #FFFFFF;
         margin: 0 0 0 155px;
         padding: 10px;
+        overflow: auto;
         }
         .south{
         border-top: 2px solid #F0F0F0;

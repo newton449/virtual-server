@@ -24,6 +24,14 @@
         <servlet-name>HomeServerInfoServlet</servlet-name>
         <servlet-class>com.newton449.virtualserverclient.testserver.HomeServerInfoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UploadTreeViewServlet</servlet-name>
+        <servlet-class>com.newton449.virtualserverclient.testserver.UploadTreeViewServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadUploadServlet</servlet-name>
+        <servlet-class>com.newton449.virtualserverclient.testserver.UploadUploadServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeMenuListServlet</servlet-name>
         <url-pattern>/home/menu_list</url-pattern>
@@ -47,6 +55,14 @@
     <servlet-mapping>
         <servlet-name>HomeServerInfoServlet</servlet-name>
         <url-pattern>/home/server_info</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadTreeViewServlet</servlet-name>
+        <url-pattern>/upload/tree_view</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadUploadServlet</servlet-name>
+        <url-pattern>/upload/upload</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -15,6 +15,7 @@ Uncomment this for XHTML entities
         }
         .content{
         margin: 5px 2px 10px 2px;
+        overflow: auto;
         }
         .url{
         width: 98%;
@@ -31,9 +32,6 @@ Uncomment this for XHTML entities
         width: 98%;
         height: 300px;
         }
-        .clear{
-        clear: both;
-        }
     </ui:style>
     <g:HTMLPanel>
         <div class="{style.label}">URL</div>
@@ -47,7 +45,6 @@ Uncomment this for XHTML entities
         <div class="{style.label}">Submit</div>
         <div class="{style.content}"> 
             <g:Button addStyleNames="{style.submit}" ui:field="submitButton">Submit</g:Button>
-            <div class="{style.clear}"></div>
         </div>
         <div class="{style.label}">Response Body</div>
         <div class="{style.content}"> 

@@ -3,6 +3,7 @@ package com.newton449.virtualserverclient.upload.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.newton449.virtualserverclient.user.client.Initializer;
+import com.newton449.virtualserverclient.user.client.LoadingPage;
 import com.newton449.virtualserverclient.user.client.MainFrame;
 
 /**
@@ -16,8 +17,10 @@ public class UploadEntry implements EntryPoint {
         Initializer initializer = new Initializer();
         MainFrame frame = new MainFrame();
         initializer.prepare(frame);
-        frame.setWidget(new UploadPanel());
+        frame.setWidget(new LoadingPage());
         RootPanel.get().add(frame);
+        UploadPanel panel = new UploadPanel();
+        panel.start(frame);
     }
 
 }

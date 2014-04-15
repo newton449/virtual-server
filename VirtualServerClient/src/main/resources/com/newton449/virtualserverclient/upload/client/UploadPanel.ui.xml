@@ -3,9 +3,10 @@ Uncomment this for XHTML entities
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 -->
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:s="urn:import:com.newton449.virtualserverclient.upload.client">
     <ui:style>
-        .label{
+        <!--        .label{
         border-left: 1px solid #C2C2C2;
         border-right: 1px solid #C2C2C2;
         border-top: 1px solid #C2C2C2;
@@ -27,10 +28,89 @@ Uncomment this for XHTML entities
         }
         .submit{
         margin: 5px 0 0 350px;
+        }-->
+        .west{
+        float: left;
+        width: 200px;
+        overflow: auto;
+        border: 1px solid #C2C2C2;
+        }
+        .east{
+        margin: 0 0 0 210px;
+        }
+        .intro{
+        font-size: 115%;
+        margin: 10px 5px;
+        }
+        .filePanel{
+        border: 1px solid #C2C2C2;
+        margin: 10px 2px;
+        padding: 5px;
+        }
+        .buttonPanel{
+        margin: 3px;
+        padding: 4px 10px;
+        text-align: right;
+        }
+        .submit{
         }
     </ui:style>
     <g:HTMLPanel>
+        <div class="{style.west}">
+            <g:Tree ui:field="dirTree">
+                <g:TreeItem text="Data" state="true">
+                    <g:TreeItem text="CodeRepository" state="true">
+                        <g:TreeItem text="Sender" state="true">
+                            <g:TreeItem text="version_1"></g:TreeItem>
+                            <g:TreeItem text="version_2"></g:TreeItem>
+                            <g:TreeItem text="version_3"></g:TreeItem>
+                        </g:TreeItem>
+                        <g:TreeItem text="Receiver">
+                            <g:TreeItem text="version_1"></g:TreeItem>
+                            <g:TreeItem text="version_2"></g:TreeItem>
+                            <g:TreeItem text="version_3"></g:TreeItem>           
+                        </g:TreeItem>
+                        <g:TreeItem text="Channel">
+                            <g:TreeItem text="version_1"></g:TreeItem>
+                            <g:TreeItem text="version_2"></g:TreeItem>
+                            <g:TreeItem text="version_3"></g:TreeItem>           
+                        </g:TreeItem>
+                    </g:TreeItem>
+                    <g:TreeItem text="VirtualServer" state="true">
+                        <g:TreeItem text="DataRepository">
+                            <g:TreeItem text="version_1"></g:TreeItem>
+                            <g:TreeItem text="version_2"></g:TreeItem>
+                            <g:TreeItem text="version_3"></g:TreeItem>           
+                        </g:TreeItem>
+                        <g:TreeItem text="HttpServer">
+                            <g:TreeItem text="version_1"></g:TreeItem>
+                            <g:TreeItem text="version_2"></g:TreeItem>
+                            <g:TreeItem text="version_3"></g:TreeItem>           
+                        </g:TreeItem>
+                    </g:TreeItem>
+                    <g:TreeItem text="Test" state="true">
+                        <g:TreeItem text="Sender">
+                            <g:TreeItem text="version_1"></g:TreeItem>
+                            <g:TreeItem text="version_2"></g:TreeItem>
+                            <g:TreeItem text="version_3"></g:TreeItem>           
+                        </g:TreeItem>
+                    </g:TreeItem>
+                </g:TreeItem>
+            </g:Tree>
+        </div>
         <g:FormPanel ui:field="form" action="/upload/upload" encoding="multipart/form-data" method="POST">
+            <g:HTMLPanel addStyleNames="{style.east}">
+                <div class="{style.intro}">Current Path: <g:InlineLabel ui:field="pathLabel"></g:InlineLabel></div>
+                <g:Hidden ui:field="pathHidden" name="dir"></g:Hidden>
+                <g:FlowPanel addStyleNames="{style.filePanel}" ui:field="filePanel">
+                    <s:FileUploadWrapper></s:FileUploadWrapper>
+                </g:FlowPanel>
+                <div class="{style.buttonPanel}">
+                    <g:Button addStyleNames="{style.submit}" ui:field="submitButton">Upload All</g:Button>
+                </div>
+            </g:HTMLPanel>
+        </g:FormPanel>
+        <!--        <g:FormPanel ui:field="form" action="/upload/upload" encoding="multipart/form-data" method="POST">
             <g:HTMLPanel>
                 <div class="{style.label}">File 1:</div>
                 <div class="{style.body}">
@@ -46,6 +126,6 @@ Uncomment this for XHTML entities
                 </div>
                 <g:Button addStyleNames="{style.submit}" ui:field="submitButton">Submit</g:Button>
             </g:HTMLPanel>
-        </g:FormPanel>
+        </g:FormPanel>-->
     </g:HTMLPanel>
 </ui:UiBinder>
