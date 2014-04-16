@@ -83,7 +83,7 @@ public:
     RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping);
     virtual ~RequestHandlerThread(){}
     // Returns the socket handled by the thread.
-    Socket* getSocket();
+    void closeCurrentSocket();
 private:
     BlockingQueue<Socket*>& queue;
     IHttpServletMapping& mapping;

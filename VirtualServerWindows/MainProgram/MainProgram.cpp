@@ -2,6 +2,7 @@
   Main Program Entry
   */
 
+//#include <vld.h>
 #include "HttpServer.h"
 #include "MainProgram.h"
 #include "MainObjectFactoryImpl.h"
@@ -30,7 +31,8 @@ void MainProgram::launch(){
         LOG(INFO) << "Starting Virtual Server.";
     }
     catch (std::exception& ex){
-        std::cerr << "Failed to start the server: " << ex.what();
+        std::cerr << "Failed to start the server: " << ex.what() << std::endl;
+        clear();
         return;
     }
 
@@ -46,6 +48,7 @@ void MainProgram::launch(){
     }
     catch (std::exception& ex){
         LOG(ERROR) << "Failed to start the server: " << ex.what();
+        clear();
         return;
     }
 
@@ -55,8 +58,12 @@ void MainProgram::launch(){
     }
     catch (std::exception& ex){
         LOG(ERROR) << "Got exception when running HTTP server: " << ex.what();
+        clear();
         return;
     }
+
+    // clear
+    clear();
 }
 
 void MainProgram::checkConfigs(){
@@ -91,13 +98,16 @@ void MainProgram::checkConfigs(){
 }
 
 void MainProgram::setupLoggers(){
+#ifdef ENABLE_LOGGING
     // Load configuration from file
     el::Configurations conf(getLoggingConfigFilePath());
     // Reconfigure single logger
     el::Loggers::reconfigureLogger("default", conf);
     // Set logging storage so that modules can get it.
     factory->setObject("LoggingStorage", new el::base::type::StoragePointer(el::Helpers::storage()));
+#endif
 }
+
 
 
 void MainProgram::setupConfigs(){
@@ -107,7 +117,7 @@ void MainProgram::setupConfigs(){
 
     // properties in config.xml cannot be overrided by Module.xml
     // so we use primaryKeys to keep those keys
-    std::unordered_set<std::string>* primaryKeys = new std::unordered_set<std::string>();
+    KeySet* primaryKeys = factory->getPrimaryKeys();
 
     // Load config.xml
     LOG(DEBUG) << "Loading config.xml.";
@@ -130,7 +140,6 @@ void MainProgram::setupConfigs(){
             prop = prop->NextSiblingElement();
         }
     }
-    factory->setObject("primaryKeys", primaryKeys);
 
     LOG(DEBUG) << "Finished loading config.xml.";
 }
@@ -161,9 +170,15 @@ void MainProgram::runHttpServer(){
     delete server;
 }
 
+void MainProgram::clear(){
+    MainObjectFactoryImpl::clearInstance();
+}
+
 
 // Program entry.
 int main(){
+    //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     MainProgram program;
     program.launch();
+    //_CrtDumpMemoryLeaks();
 }

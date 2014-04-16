@@ -5,12 +5,19 @@
 #include "DefaultHttpServletMapping.h"
 #include "ModuleManagerImpl.h"
 #include "ClientManagerImpl.h"
+#include <mutex>
 
 typedef std::map<std::string, std::string> PropertyMap;
+
+typedef std::unordered_set<std::string> KeySet;
 
 class MainObjectFactoryImpl : public IMainObjectFactory{
 public:
 	static MainObjectFactoryImpl* getInstance();
+
+    static void clearInstance();
+
+    ~MainObjectFactoryImpl();
 	// Returns an object by key.
 	void* getObject(const string& key);
 	// Sets an object with its key.
@@ -22,10 +29,16 @@ public:
     // Returns an property map of configurations.
     PropertyMap* getPropertyMap();
 
+    KeySet* getPrimaryKeys();
+
 	DefaultHttpServletMapping* getHttpServletMapping();
 private:
 	static MainObjectFactoryImpl* INSTANCE;
-	DefaultHttpServletMapping* mapping;
+    static std::recursive_mutex staticLock;
 
-	unordered_map<string, void*> objectMap;
+	DefaultHttpServletMapping* mapping;
+    unordered_map<string, void*> objectMap;
+    std::mutex lock;
+
+    void* getExistingObject(const string& key);
 };

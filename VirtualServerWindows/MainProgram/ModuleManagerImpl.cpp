@@ -11,10 +11,12 @@ ModuleManagerImpl::ModuleManagerImpl(){
 }
 
 vector<ModuleStruct> ModuleManagerImpl::getModules() {
+    std::lock_guard<std::recursive_mutex> guard(lock);
     return modules;
 }
 
 void ModuleManagerImpl::load(string moduleName) {
+    std::lock_guard<std::recursive_mutex> guard(lock);
     LOG(INFO) << "Loading module: " << moduleName;
     // check whether it has been loaded
     if (isModuleLoaded(moduleName)){
@@ -76,6 +78,7 @@ void ModuleManagerImpl::load(string moduleName) {
 }
 
 void ModuleManagerImpl::loadAll() {
+    std::lock_guard<std::recursive_mutex> guard(lock);
     LOG(DEBUG) << "Loading all modules.";
     // load primaryKeys
     primaryKeys = (std::unordered_set<std::string>*) factory->getObject("primaryKeys");
@@ -94,11 +97,13 @@ void ModuleManagerImpl::loadAll() {
 }
 
 bool ModuleManagerImpl::isModuleLoaded(string moduleName){
+    std::lock_guard<std::recursive_mutex> guard(lock);
     unordered_map<string, string>::iterator it = stateMap.find(moduleName);
     return it != stateMap.end();
 }
 
 string ModuleManagerImpl::getModuleState(string moduleName){
+    std::lock_guard<std::recursive_mutex> guard(lock);
     unordered_map<string, string>::iterator it = stateMap.find(moduleName);
     if (it != stateMap.end()){
         return it->second;
@@ -107,6 +112,7 @@ string ModuleManagerImpl::getModuleState(string moduleName){
 }
 
 void ModuleManagerImpl::setModuleState(string moduleName, string state){
+    std::lock_guard<std::recursive_mutex> guard(lock);
     stateMap[moduleName] = state;
 }
 

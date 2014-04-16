@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 #include "IModuleManager.h"
 #include "IClientManager.h"
 #include "ILogger.h"

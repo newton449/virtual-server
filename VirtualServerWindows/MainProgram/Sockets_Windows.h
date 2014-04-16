@@ -118,7 +118,8 @@
 
 #include <string>
 #include <winsock2.h>
-
+#include <ws2tcpip.h>
+#pragma comment(lib,"Ws2_32.lib")
 
 // In the ISO C++11 Standard, the noexcept operator is introduced, but support
 // for this feature is not yet present in Visual C++.
@@ -209,16 +210,17 @@ public:
     std::string getLocalIP();
     // Return the local port.
     int getLocalPort();
-    HANDLE getHandle() { return (HANDLE)s_; }
-    SocketSystem& System() { return ss_; }
 
 private:
+    SOCKET s_;
+    SocketSystem ss_;
+    
     explicit Socket(SOCKET s);
     operator SOCKET () { return s_; };
     Socket& operator=(const Socket& sock);
     Socket& operator=(SOCKET sock);
-    SOCKET s_;
-    SocketSystem ss_;
+    HANDLE getHandle() { return (HANDLE)s_; }
+    SocketSystem& System() { return ss_; }
 
     friend class SocketListener;
 };
@@ -241,6 +243,7 @@ public:
 
     long getInvalidSocketCount();
 private:
+    bool _stopRequested;
     SOCKADDR_IN tcpAddr;
     Socket s_;
     SocketSystem ss_;

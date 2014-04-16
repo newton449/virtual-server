@@ -8,6 +8,10 @@
     <MainProgram.httpServerPort>8080</MainProgram.httpServerPort>
     <MainProgram.httpThreadMinCount>10</MainProgram.httpThreadMinCount>
     <MainProgram.httpThreadMaxCount>25</MainProgram.httpThreadMaxCount>
+    <MainProgram.httpThreadMaxCount>25</MainProgram.httpThreadMaxCount>
+    <MainProgram.httpRecieveTimeoutInitial>5000</MainProgram.httpRecieveTimeoutInitial>
+    <MainProgram.httpReceiveTimeoutHeader>20000</MainProgram.httpReceiveTimeoutHeader>
+    <MainProgram.httpReceiveTimeoutBody>20000</MainProgram.httpReceiveTimeoutBody>
   </properties>
 
   <!-- Configure dynamic libraries. (they are runnable programs actually) -->

@@ -9,6 +9,7 @@
 #include "XMLDocument.h"
 #include "DefaultHttpServletMapping.h"
 #include "MainObjectFactoryImpl.h"
+#include <mutex>
 
 using namespace std;
 
@@ -51,4 +52,5 @@ private:
     unordered_map<string, string> stateMap;
     unordered_map<string, IModuleObjectFactory*> factoryMap;
     std::unordered_set<std::string>* primaryKeys;
+    std::recursive_mutex lock;
 };

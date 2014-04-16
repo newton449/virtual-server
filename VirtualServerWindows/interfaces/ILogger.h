@@ -27,6 +27,16 @@
 #define _ELPP_DISABLE_DEFAULT_CRASH_HANDLING
 
 #endif
-
+#ifdef ENABLE_LOGGING
 #include "easylogging++.h"
+#else
+#include <sstream>
+extern std::ostringstream NULL_STREAM;
+#define LOG(INFO) NULL_STREAM
+#define LOG(DEBUG) NULL_STREAM
+#define LOG(INFO) NULL_STREAM
+#define LOG(WARNNING) NULL_STREAM
+#define LOG(ERROR) NULL_STREAM
+#define LOG(FATAL) NULL_STREAM
+#endif
 

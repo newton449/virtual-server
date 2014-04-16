@@ -151,7 +151,7 @@ std::string SocketSystem::getNameFromIp(const std::string& ip)
 // constructor creates TCP Stream socket
 Socket::Socket()
 {
-    s_ = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    s_ = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, NULL, WSA_FLAG_OVERLAPPED);
     if (s_ == INVALID_SOCKET){
         throw SocketException("Failed to create socket: " + ss_.getLastErrorMessage());
     }
@@ -275,7 +275,7 @@ void Socket::shutdownBoth(){
 int Socket::send(const char* block, size_t len)
 {
     int ret = ::send(s_, block, len, 0);
-    if (SOCKET_ERROR != ret){
+    if (SOCKET_ERROR == ret){
         throw SocketException("Failed to send block: " + ss_.getLastErrorMessage());
     }
     return ret;
@@ -285,7 +285,7 @@ int Socket::send(const char* block, size_t len)
 int Socket::receive(char* block, size_t len)
 {
     int ret = ::recv(s_, block, len, 0);
-    if (SOCKET_ERROR != ret){
+    if (SOCKET_ERROR == ret){
         throw SocketException("Failed to receive block: " + ss_.getLastErrorMessage());
     }
     return ret;
@@ -295,7 +295,7 @@ int Socket::receive(char* block, size_t len)
 int Socket::getLeftBytesSize()
 {
     unsigned long bytes;
-    if (SOCKET_ERROR != ::ioctlsocket(s_, FIONREAD, &bytes)){
+    if (SOCKET_ERROR == ::ioctlsocket(s_, FIONREAD, &bytes)){
         throw SocketException("Failed to get left bytes size: " + ss_.getLastErrorMessage());
     }
     return bytes;
@@ -362,6 +362,7 @@ int Socket::receiveAll(char* block, size_t len, size_t maxTries)
     }
     return len;
 }
+
 // write a line of text
 void Socket::writeLine(const std::string& str)
 {
@@ -408,8 +409,8 @@ std::string Socket::readLine()
 void Socket::setReceiveTimeout(int milliseconds){
     int iResult;
     timeval time;
-    time.tv_sec = milliseconds / 1000;
-    time.tv_usec = milliseconds % 1000;
+    time.tv_sec = milliseconds / 100;
+    time.tv_usec = 0;
     iResult = setsockopt(s_, SOL_SOCKET, SO_RCVTIMEO, (char *)&time, sizeof(time));
     if (iResult == SOCKET_ERROR) {
         throw SocketException(ss_.getLastErrorMessage());
@@ -474,7 +475,7 @@ int Socket::getLocalPort()
 }
 
 // starts listener socket listening for connections
-SocketListener::SocketListener(int port) : invalidSocketCount(0)
+SocketListener::SocketListener(int port) : _stopRequested(false), invalidSocketCount(0)
 {
     tcpAddr.sin_family = AF_INET;   // TCP/IP
     tcpAddr.sin_port = htons(port); // listening port
@@ -485,7 +486,12 @@ SocketListener::SocketListener(int port) : invalidSocketCount(0)
     {
         throw SocketException("Failed to bind listener port: " + ss_.getLastErrorMessage());
     }
-
+    int milliseconds = 1000;
+    int iResult;
+    iResult = setsockopt(s_, SOL_SOCKET, SO_RCVTIMEO, (char *)&milliseconds, sizeof(milliseconds));
+    if (iResult == SOCKET_ERROR) {
+        throw SocketException(ss_.getLastErrorMessage());
+    }
     /////////////////////////////////////////////////////////////////
     // listen for incoming connection requests
 
@@ -509,6 +515,7 @@ SocketListener::~SocketListener()
 // blocks until a connection request has been received
 Socket SocketListener::waitForConnection()
 {
+    _stopRequested = false;
     const long MaxCount = 20;
     invalidSocketCount = 0;
     TRACE("listener waiting for connection request");
@@ -516,7 +523,7 @@ Socket SocketListener::waitForConnection()
     SOCKET toClient;
     while (INVALID_SOCKET == (toClient = accept(s_, (SOCKADDR*)&tcpAddr, &size))){
         ++invalidSocketCount;
-        if (invalidSocketCount >= 20)
+        if (_stopRequested || invalidSocketCount >= 20)
             throw SocketException("Failed to accept a connection: " + ss_.getLastErrorMessage());
     }
     TRACE("connection establishted");
@@ -528,6 +535,7 @@ Socket SocketListener::waitForConnection()
 void SocketListener::stop()
 {
     TRACE("shutting down listener in SocketListerer");
+    _stopRequested = true;
     closesocket(s_);
 }
 //----< test stub >--------------------------------------------------
