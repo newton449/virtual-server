@@ -22,9 +22,9 @@
 
 // Constructor with the socket queue, the url-socket mapping and the id of the thread.
 
-RequestHandlerThread::RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping, int id)
+RequestHandlerThread::RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping)
 : queue(queue), mapping(mapping), pSocket(NULL), pInput(NULL), pOutput(NULL), pRequest(NULL), pResponse(NULL),
-needCloseConnection(true), id(id) {
+needCloseConnection(true) {
 }
 
 // Returns the socket handled by the thread.
@@ -32,6 +32,7 @@ needCloseConnection(true), id(id) {
 Socket* RequestHandlerThread::getSocket() {
     return pSocket;
 }
+
 
 // Run the thread.
 
@@ -387,7 +388,7 @@ void RequestHandlerThread::executeServlet() {
 // the working thread count.
 
 HttpServer::HttpServer(IHttpServletMapping& mapping, int port, int threadCount)
-: port(port), pListener(NULL), mapping(mapping), threadCount(threadCount) {
+: stopRequested(false), port(port), pListener(NULL), mapping(mapping), threadCount(threadCount) {
 }
 
 // Desctructor.
@@ -402,6 +403,7 @@ HttpServer::~HttpServer() {
 // failed, it will throw an exception.
 
 void HttpServer::start() {
+    std::lock_guard<std::mutex> guard(lock);
     if (pListener != NULL) {
         throw std::logic_error("HTTP server has been started");
     }
@@ -426,8 +428,11 @@ void HttpServer::join() {
 // Asks the server to stop. Use join() to wait for it.
 
 void HttpServer::stop() {
+    std::lock_guard<std::mutex> guard(lock);
     if (pListener != NULL) {
+        stopRequested = true;
         pListener->stop();
+        delete pListener;
         pListener = NULL;
     }
 }
@@ -435,15 +440,17 @@ void HttpServer::stop() {
 // Returns true if the server has been started.
 
 bool HttpServer::isStarted() {
+    std::lock_guard<std::mutex> guard(lock);
     return pListener != NULL;
 }
 
 // Runs the thread.
 
 void HttpServer::run() {
+    stopRequested = false;
     // Create threads to handling
     for (int i = 0; i < threadCount; i++) {
-        threads.push_back(new RequestHandlerThread(queue, mapping, i));
+        threads.push_back(new RequestHandlerThread(queue, mapping));
         threads.back()->start();
     }
     LOG(INFO) << "HTTP server has started on port " << port;
@@ -457,8 +464,15 @@ void HttpServer::run() {
             pSocket = NULL;
         }
     }
-    catch (std::exception&) {
-        LOG(INFO) << "Closing HTTP server";
+    catch (std::exception& ex) {
+        if (!stopRequested){
+            // got unexpected exception
+            LOG(ERROR) << "Got unexpected exception of SocketListener: " << ex.what();
+        }
+        else{
+            stopRequested = false;
+        }
+        LOG(INFO) << "Closing HTTP server.";
         if (pSocket != NULL){
             delete pSocket;
         }

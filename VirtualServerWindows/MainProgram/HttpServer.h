@@ -70,6 +70,7 @@ ver 1.0 : 4/15/2013
 #include "BlockingQueue.h"
 #include "SocketStream.h"
 #include "Logger.h"
+#include <mutex>
 
 /////////////////////////////////////////////////////////////////////////
 // A thread to handle each coming socket and execute servlets.
@@ -79,7 +80,7 @@ public:
     typedef std::vector<String> Vector;
 
     // Constructor with the socket queue, the url-socket mapping and the id of the thread.
-    RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping, int id=0);
+    RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping);
     virtual ~RequestHandlerThread(){}
     // Returns the socket handled by the thread.
     Socket* getSocket();
@@ -92,7 +93,6 @@ private:
     HttpServletRequestImpl* pRequest;
     HttpServletResponseImpl* pResponse;
     bool needCloseConnection; // decided by both request and response
-    int id; // for logging
 
     /************************* functions *******************************/
     // Run the thread.
@@ -135,12 +135,15 @@ public:
     // Returns true if the server has been started.
     bool isStarted();
 private:
+    bool stopRequested;
     int port;
     SocketListener* pListener;
     BlockingQueue<Socket*> queue;
     IHttpServletMapping& mapping;
     std::vector<RequestHandlerThread*> threads;
     int threadCount;
+    std::mutex lock;
+
     // Runs the thread.
     void run();
 };

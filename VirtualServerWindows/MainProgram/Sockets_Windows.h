@@ -172,7 +172,7 @@ public:
     // Connect to a url and port. The url can be a domain or an IP. Use maxTries to assign max tries.
     // Throw SocketException if it fails to connect.
     void connect(std::string url, int port, size_t maxTries = 50);
-    // Close the socket. Before calling this function, stream operations should be shutdowned.
+    // Close the socket. Before calling this function, shutdown streams for integrated data.
     void close() NOEXCEPT;
     // Shutdown the receive operation. It cannot be read anymore.
     void shutdownReceive();
