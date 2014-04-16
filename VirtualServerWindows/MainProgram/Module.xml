@@ -5,12 +5,22 @@
   
   <!-- properties -->
   <properties>
+    <!-- HTTP server's port. Default value is 8080. -->
     <MainProgram.httpServerPort>8080</MainProgram.httpServerPort>
+    
+    <!-- min count of theads for HTTP server -->
     <MainProgram.httpThreadMinCount>10</MainProgram.httpThreadMinCount>
+    
+    <!-- max count of theads for HTTP server (NOT SUPPORT) -->
     <MainProgram.httpThreadMaxCount>25</MainProgram.httpThreadMaxCount>
-    <MainProgram.httpThreadMaxCount>25</MainProgram.httpThreadMaxCount>
+    
+    <!-- milliseconds of timeout when waiting for receiving the first byte of a HTTP request -->
     <MainProgram.httpRecieveTimeoutInitial>5000</MainProgram.httpRecieveTimeoutInitial>
-    <MainProgram.httpReceiveTimeoutHeader>20000</MainProgram.httpReceiveTimeoutHeader>
+    
+    <!-- milliseconds of timeout when receiving headers of a HTTP request -->
+    <MainProgram.httpReceiveTimeoutHeader>10000</MainProgram.httpReceiveTimeoutHeader>
+    
+    <!-- milliseconds of timeout when receiving body of a HTTP request -->
     <MainProgram.httpReceiveTimeoutBody>20000</MainProgram.httpReceiveTimeoutBody>
   </properties>
 

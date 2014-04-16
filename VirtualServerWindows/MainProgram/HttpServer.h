@@ -84,6 +84,9 @@ public:
     virtual ~RequestHandlerThread(){}
     // Returns the socket handled by the thread.
     void closeCurrentSocket();
+    // Set timeouts when waiting for initial request, request header and request body in
+    // milliseconds. Use 0 to disable timeouts.
+    void setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout);
 private:
     BlockingQueue<Socket*>& queue;
     IHttpServletMapping& mapping;
@@ -93,6 +96,9 @@ private:
     HttpServletRequestImpl* pRequest;
     HttpServletResponseImpl* pResponse;
     bool needCloseConnection; // decided by both request and response
+    int initialTimeout;
+    int headerTimeout;
+    int bodyTimeout;
 
     /************************* functions *******************************/
     // Run the thread.
@@ -134,6 +140,9 @@ public:
     void stop();
     // Returns true if the server has been started.
     bool isStarted();
+    // Set timeouts when waiting for initial request, request header and request body in
+    // milliseconds. Use 0 to disable timeouts.
+    void setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout);
 private:
     bool stopRequested;
     int port;
@@ -143,6 +152,9 @@ private:
     std::vector<RequestHandlerThread*> threads;
     int threadCount;
     std::mutex lock;
+    int initialTimeout;
+    int headerTimeout;
+    int bodyTimeout;
 
     // Runs the thread.
     void run();

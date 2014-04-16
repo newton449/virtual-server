@@ -156,8 +156,13 @@ void MainProgram::runHttpServer(){
     // Create a HttpServer.
     int port = StringUtils::parseInt((*map)["MainProgram.httpServerPort"]);
     int threadCount = StringUtils::parseInt((*map)["MainProgram.httpThreadMinCount"]);
-
     HttpServer* server = new HttpServer(*mapping, port, threadCount);
+    
+    // set timeouts
+    int initialTimeout = StringUtils::parseInt((*map)["MainProgram.httpRecieveTimeoutInitial"]);
+    int headerTimeout = StringUtils::parseInt((*map)["MainProgram.httpReceiveTimeoutHeader"]);
+    int bodyTimeout = StringUtils::parseInt((*map)["MainProgram.httpReceiveTimeoutBody"]);
+    server->setTimeouts(initialTimeout, headerTimeout, bodyTimeout);
 
     // put the server to factory
     factory->setObject("HttpServer", server);

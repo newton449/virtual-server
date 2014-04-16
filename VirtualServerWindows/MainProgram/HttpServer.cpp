@@ -24,7 +24,7 @@
 
 RequestHandlerThread::RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping)
 : queue(queue), mapping(mapping), pSocket(NULL), pInput(NULL), pOutput(NULL), pRequest(NULL), pResponse(NULL),
-needCloseConnection(true) {
+needCloseConnection(true),initialTimeout(0), headerTimeout(0), bodyTimeout(0) {
 }
 
 // Returns the socket handled by the thread.
@@ -42,6 +42,12 @@ void RequestHandlerThread::closeCurrentSocket() {
 }
 
 
+void RequestHandlerThread::setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout){
+    this->initialTimeout = initialTimeout;
+    this->headerTimeout = headerTimeout;
+    this->bodyTimeout = bodyTimeout;
+}
+
 // Run the thread.
 
 void RequestHandlerThread::run() {
@@ -49,8 +55,6 @@ void RequestHandlerThread::run() {
     pSocket = queue.deQ();
     while (pSocket != NULL) {
         LOG(DEBUG) << "Got a socket from " << pSocket->getRemoteIP();
-        //pSocket->setReceiveTimeout(5000);
-
         // Get a socket from the queue
         pInput = new SocketInputStream(pSocket);
         pOutput = new SocketOutputStream(pSocket);
@@ -76,21 +80,21 @@ void RequestHandlerThread::handleOneRequest() {
             pResponse = new HttpServletResponseImpl(*pOutput);
             needCloseConnection = false;
             // set timeout for initial data
-            pSocket->setReceiveTimeout(5000);
+            pSocket->setReceiveTimeout(initialTimeout);
             int iRet = pInput->peek();
             if (pInput->bad()){
                 LOG(TRACE) << "Failure or timeout occured when waiting for client's initial data.";
                 needCloseConnection = true;
             }
-            else if(iRet == EOF){
+            else if (iRet == EOF){
                 LOG(TRACE) << "Input stream of socket has been closed.";
                 needCloseConnection = true;
             }
             else{
                 // TODO Read body for POST parameters
                 LOG(TRACE) << "Reading HTTP request headers.";
-                // set timeout for headers and body
-                pSocket->setReceiveTimeout(20000);
+                // set timeout for header
+                pSocket->setReceiveTimeout(headerTimeout);
                 // get headers
                 headerContents = getHeaderContents();
                 if (headerContents == NULL || headerContents->empty()) {
@@ -99,6 +103,8 @@ void RequestHandlerThread::handleOneRequest() {
                 }
                 else {
                     if (buildRequest(*headerContents)) {
+                        // set timeout for body
+                        pSocket->setReceiveTimeout(bodyTimeout);
                         if (pRequest->getMethod() == "GET"){
                             pInput->setExpectedBytesLength(0);
                             // Call services to handle the request
@@ -109,8 +115,6 @@ void RequestHandlerThread::handleOneRequest() {
                             if (!pRequest->getHeader("Content-Length").empty()) {
                                 pInput->setExpectedBytesLength(std::atoi(pRequest->getHeader("Content-Length").c_str()));
                             }
-                            // set longer timeout for request body
-                            //pSocket->setReceiveTimeout(200000);
                             // Call services to handle the request
                             executeServlet();
                         }
@@ -410,7 +414,8 @@ void RequestHandlerThread::executeServlet() {
 // the working thread count.
 
 HttpServer::HttpServer(IHttpServletMapping& mapping, int port, int threadCount)
-: stopRequested(false), port(port), pListener(NULL), mapping(mapping), threadCount(threadCount) {
+: stopRequested(false), port(port), pListener(NULL), mapping(mapping), threadCount(threadCount),
+initialTimeout(0), headerTimeout(0), bodyTimeout(0){
 }
 
 // Desctructor.
@@ -464,6 +469,13 @@ bool HttpServer::isStarted() {
     return pListener != NULL;
 }
 
+void HttpServer::setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout){
+    std::lock_guard<std::mutex> guard(lock);
+    this->initialTimeout = initialTimeout;
+    this->headerTimeout = headerTimeout;
+    this->bodyTimeout = bodyTimeout;
+}
+
 // Runs the thread.
 
 void HttpServer::run() {
@@ -472,8 +484,10 @@ void HttpServer::run() {
         stopRequested = false;
         // Create threads to handling
         for (int i = 0; i < threadCount; i++) {
-            threads.push_back(new RequestHandlerThread(queue, mapping));
-            threads.back()->start();
+            RequestHandlerThread* t = new RequestHandlerThread(queue, mapping);
+            t->setTimeouts(initialTimeout, headerTimeout, bodyTimeout);
+            threads.push_back(t);
+            t->start();
         }
     }
     LOG(INFO) << "HTTP server has started on port " << port;

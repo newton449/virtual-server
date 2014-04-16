@@ -301,7 +301,7 @@ int Socket::getLeftBytesSize()
     return bytes;
 }
 
-#define FATAL_SOCKET_ERROR(err) (err == WSAECONNRESET || err == WSAENETDOWN || err == WSAEFAULT || err == WSAENOTCONN || err == WSAENOTSOCK || err == WSAECONNABORTED)
+#define FATAL_SOCKET_ERROR(err) (err == WSAETIMEDOUT || err == WSAECONNRESET || err == WSAENETDOWN || err == WSAEFAULT || err == WSAENOTCONN || err == WSAENOTSOCK || err == WSAECONNABORTED)
 
 // send blocks until all characters are sent
 void Socket::sendAll(const char* block, size_t len, size_t maxTries)
@@ -408,10 +408,7 @@ std::string Socket::readLine()
 // set receive timeout in milliseconds
 void Socket::setReceiveTimeout(int milliseconds){
     int iResult;
-    timeval time;
-    time.tv_sec = milliseconds / 100;
-    time.tv_usec = 0;
-    iResult = setsockopt(s_, SOL_SOCKET, SO_RCVTIMEO, (char *)&time, sizeof(time));
+    iResult = setsockopt(s_, SOL_SOCKET, SO_RCVTIMEO, (char *)&milliseconds, sizeof(milliseconds));
     if (iResult == SOCKET_ERROR) {
         throw SocketException(ss_.getLastErrorMessage());
     }
