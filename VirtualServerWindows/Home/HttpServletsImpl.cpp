@@ -1,4 +1,6 @@
 #include <fstream>
+#include <string.h>
+#include <stdexcept>
 #include "HttpServletsImpl.h"
 #include "../interfaces/ILogger.h"
 #include "../interfaces/IClientManager.h"

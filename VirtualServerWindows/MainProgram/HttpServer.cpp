@@ -76,7 +76,7 @@ void RequestHandlerThread::handleOneRequest() {
             pResponse = new HttpServletResponseImpl(*pOutput);
             needCloseConnection = false;
             // set timeout for initial data
-            pSocket->setReceiveTimeout(10000);
+            pSocket->setReceiveTimeout(5000);
             int iRet = pInput->peek();
             if (pInput->bad()){
                 LOG(TRACE) << "Failure or timeout occured when waiting for client's initial data.";
