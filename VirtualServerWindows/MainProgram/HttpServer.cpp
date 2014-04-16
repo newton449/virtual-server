@@ -65,6 +65,8 @@ void RequestHandlerThread::handleOneRequest() {
             pRequest = new HttpServletRequestImpl(*pInput);
             pResponse = new HttpServletResponseImpl(*pOutput);
             needCloseConnection = false;
+            // set timeout for header
+            pSocket->setReceiveTimeout(1000);
             // TODO Read body for POST parameters
             headerContents = getHeaderContents();
             if (headerContents == NULL || headerContents->empty()) {
@@ -83,6 +85,8 @@ void RequestHandlerThread::handleOneRequest() {
                         if (!pRequest->getHeader("Content-Length").empty()) {
                             pInput->setExpectedBytesLength(std::atoi(pRequest->getHeader("Content-Length").c_str()));
                         }
+                        // set longer timeout for request body
+                        pSocket->setReceiveTimeout(200000);
                         // Call services to handle the request
                         executeServlet();
                     }
@@ -106,7 +110,9 @@ void RequestHandlerThread::handleOneRequest() {
             // Close the socket if needed
             if (needCloseConnection || !pResponse->isKeepAliveAllowed()) {
                 LOG(DEBUG) << "Closing socket.";
-                pSocket->shutdownBoth();
+                if (pSocket->isValid()){
+                    pSocket->shutdownBoth();
+                }
                 pSocket->close();
             }
             else {
@@ -123,12 +129,17 @@ void RequestHandlerThread::handleOneRequest() {
             }
         }
     }
-    catch (std::exception& ex) {
-        LOG(DEBUG) << "Clearing a socket because: " << +ex.what();
+    catch (SocketException& ex){
+        LOG(WARNING) << "Clearing a socket because of SocketException: " << +ex.what();
         if (pRequest != NULL) delete pRequest;
         if (pResponse != NULL) delete pResponse;
         if (headerContents != NULL) delete headerContents;
-
+    }
+    catch (std::exception& ex) {
+        LOG(DEBUG) << "Clearing a socket because of unknown exception: " << +ex.what();
+        if (pRequest != NULL) delete pRequest;
+        if (pResponse != NULL) delete pResponse;
+        if (headerContents != NULL) delete headerContents;
     }
 }
 
