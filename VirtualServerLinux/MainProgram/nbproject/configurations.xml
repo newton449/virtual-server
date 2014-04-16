@@ -16,9 +16,9 @@
         <itemPath>../../VirtualServerWindows/interfaces/easylogging++.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="shared" projectFiles="true">
-        <itemPath>../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/BlockingQueue.h</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/ClientManagerImpl.h</itemPath>
+        <itemPath>../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.h</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/FileSystem.h</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/HttpServer.h</itemPath>
         <itemPath>../../VirtualServerWindows/MainProgram/HttpServerSupport.h</itemPath>
@@ -106,13 +106,30 @@
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
           </linkerLibItems>
         </linkerTool>
+        <requiredProjects>
+          <makeArtifact PL="../Home"
+                        CT="2"
+                        CN="Debug"
+                        AC="true"
+                        BL="true"
+                        WD="../Home"
+                        BC="${MAKE}  -f Makefile CONF=Debug"
+                        CC="${MAKE}  -f Makefile CONF=Debug clean"
+                        OP="../../TestTarget/Home/Home_x64.so">
+          </makeArtifact>
+          <makeArtifact PL="../Installer"
+                        CT="2"
+                        CN="Debug"
+                        AC="true"
+                        BL="true"
+                        WD="../Installer"
+                        BC="${MAKE}  -f Makefile CONF=Debug"
+                        CC="${MAKE}  -f Makefile CONF=Debug clean"
+                        OP="../../TestTarget/Installer/Installer_x64.so">
+          </makeArtifact>
+        </requiredProjects>
       </compileType>
       <item path="../../VirtualServerWindows/Installer/Module.xml"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -135,6 +152,11 @@
       <item path="../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp"
             ex="false"
             tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.h"
+            ex="false"
+            tool="3"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/MainProgram/FileSystem.h"
@@ -367,11 +389,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../VirtualServerWindows/MainProgram/AggregateHttpServletMapping.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="../../VirtualServerWindows/MainProgram/BlockingQueue.h"
             ex="false"
             tool="3"
@@ -390,6 +407,11 @@
       <item path="../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp"
             ex="false"
             tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.h"
+            ex="false"
+            tool="3"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/MainProgram/FileSystem.h"
