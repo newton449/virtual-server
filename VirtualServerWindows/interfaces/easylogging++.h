@@ -1,8 +1,8 @@
 //
-//  Easylogging++ v9.58
+//  Easylogging++ v9.69
 //  Single-header only, cross-platform logging library for C++ applications
 //
-//  Copyright (c) 2012 - 2014 Majid Khan
+//  Copyright (c) 2014 Majid Khan
 //
 //  This library is released under the MIT Licence.
 //  http://www.easylogging.org/licence.php
@@ -34,8 +34,6 @@
 #   elif(_MSC_VER >= 1700)
 #      define _ELPP_CXX11 1
 #   endif  // (_MSC_VER == 1600)
-#else
-#   define _ELPP_CRT_DBG_WARNINGS 0
 #endif  // defined(_MSC_VER)
 // Clang++
 #if defined(__clang__) && (__clang__ == 1)
@@ -63,72 +61,101 @@
 // Windows
 #if defined(_WIN32) || defined(_WIN64)
 #   define _ELPP_OS_WINDOWS 1
-#else
-#   define _ELPP_OS_WINDOWS 0
 #endif  // defined(_WIN32) || defined(_WIN64)
 // Linux
 #if (defined(__linux) || defined(__linux__))
 #   define _ELPP_OS_LINUX 1
-#else
-#   define _ELPP_OS_LINUX 0
 #endif  // (defined(__linux) || defined(__linux__))
 // Mac
 #if defined(__APPLE__)
 #   define _ELPP_OS_MAC 1
-#else
-#   define _ELPP_OS_MAC 0
 #endif  // defined(__APPLE__)
 // FreeBSD
 #if defined(__FreeBSD__)
 #   define _ELPP_OS_FREEBSD 1
-#else
-#   define _ELPP_OS_FREEBSD 0
 #endif
 // Unix
-#define _ELPP_OS_UNIX ((_ELPP_OS_LINUX || _ELPP_OS_MAC || _ELPP_OS_FREEBSD) && (!_ELPP_OS_WINDOWS))
+#if ((_ELPP_OS_LINUX || _ELPP_OS_MAC || _ELPP_OS_FREEBSD) && (!_ELPP_OS_WINDOWS))
+#   define _ELPP_OS_UNIX 1
+#endif  // ((_ELPP_OS_LINUX || _ELPP_OS_MAC || _ELPP_OS_FREEBSD) && (!_ELPP_OS_WINDOWS))
 // Android
 #if defined(__ANDROID__)
 #   define _ELPP_OS_ANDROID 1
-#else
-#   define _ELPP_OS_ANDROID 0
 #endif  // defined(__ANDROID__)
-// Evaluating Cygwin as unix OS
-#if (!_ELPP_OS_UNIX && !_ELPP_OS_WINDOWS && _ELPP_CYGWIN)
+// Evaluating Cygwin as *nix OS
+#if !_ELPP_OS_UNIX && !_ELPP_OS_WINDOWS && _ELPP_CYGWIN
 #   undef _ELPP_OS_UNIX
 #   undef _ELPP_OS_LINUX
 #   define _ELPP_OS_UNIX 1
 #   define _ELPP_OS_LINUX 1
-#endif
+#endif //  !_ELPP_OS_UNIX && !_ELPP_OS_WINDOWS && _ELPP_CYGWIN
+#if !defined(_ELPP_INTERNAL_DEBUGGING_OUT_INFO)
+#   define _ELPP_INTERNAL_DEBUGGING_OUT_INFO std::cout
+#endif // !defined(_ELPP_INTERNAL_DEBUGGING_OUT)
+#if !defined(_ELPP_INTERNAL_DEBUGGING_OUT_ERROR)
+#   define _ELPP_INTERNAL_DEBUGGING_OUT_ERROR std::cerr
+#endif // !defined(_ELPP_INTERNAL_DEBUGGING_OUT)
+#if !defined(_ELPP_INTERNAL_DEBUGGING_ENDL)
+#   define _ELPP_INTERNAL_DEBUGGING_ENDL std::endl
+#endif // !defined(_ELPP_INTERNAL_DEBUGGING_OUT)
+#if !defined(_ELPP_INTERNAL_DEBUGGING_MSG)
+#   define _ELPP_INTERNAL_DEBUGGING_MSG(msg) msg
+#endif // !defined(_ELPP_INTERNAL_DEBUGGING_OUT)
 // Internal Assertions and errors
-// Important Macros:
-//    _ELPP_DISABLE_ASSERT             |     Disables assertion
-//    _ELPP_STOP_ON_FIRST_ASSERTION    |     Stops execution on first assert failure
-#if (!defined(_ELPP_DISABLE_ASSERT))
-#   if (defined(_ELPP_STOP_ON_FIRST_ASSERTION))
+#if !defined(_ELPP_DISABLE_ASSERT)
+#   if (defined(_ELPP_DEBUG_ASSERT_FAILURE))
 #      define ELPP_ASSERT(expr, msg) if (!(expr)) { \
-          std::cerr << "EASYLOGGING++ ASSERTION FAILED (LINE: " << __LINE__ << ") [" #expr << "] WITH MESSAGE \"" \
-              << msg << "\"" << std::endl; base::utils::abort(1, "ELPP Assertion failure, please define _ELPP_STOP_ON_FIRST_ASSERTION"); }
+          std::stringstream internalInfoStream; internalInfoStream << msg; \
+          _ELPP_INTERNAL_DEBUGGING_OUT_ERROR \
+              << "EASYLOGGING++ ASSERTION FAILED (LINE: " << __LINE__ << ") [" #expr << "] WITH MESSAGE \"" \
+              << _ELPP_INTERNAL_DEBUGGING_MSG(internalInfoStream.str()) << "\"" << _ELPP_INTERNAL_DEBUGGING_ENDL; base::utils::abort(1, \
+                  "ELPP Assertion failure, please define _ELPP_DEBUG_ASSERT_FAILURE"); }
 #   else
-#      define ELPP_ASSERT(expr, msg) if (!(expr)) { std::cerr << "ASSERTION FAILURE FROM EASYLOGGING++ (LINE: " <<\
-        __LINE__ << ") [" #expr << "] WITH MESSAGE \"" << msg << "\"" << std::endl; }
-#   endif  // (defined(_ELPP_STOP_ON_FIRST_ASSERTION))
+#      define ELPP_ASSERT(expr, msg) if (!(expr)) { \
+          std::stringstream internalInfoStream; internalInfoStream << msg; \
+          _ELPP_INTERNAL_DEBUGGING_OUT_ERROR\
+             << "ASSERTION FAILURE FROM EASYLOGGING++ (LINE: " \
+             << __LINE__ << ") [" #expr << "] WITH MESSAGE \"" << _ELPP_INTERNAL_DEBUGGING_MSG(internalInfoStream.str()) << "\"" \
+             << _ELPP_INTERNAL_DEBUGGING_ENDL; }
+#   endif  // (defined(_ELPP_DEBUG_ASSERT_FAILURE))
 #else
 #   define ELPP_ASSERT(x, y)
-#endif  // (!defined(_ELPP_DISABLE_ASSERT))
-#if (defined(_ELPP_ENABLE_ERRORS))
-#   define ELPP_INTERNAL_ERROR(msg, pe) std::cerr << "ERROR FROM EASYLOGGING++ (LINE: " << __LINE__ << ") " << \
-    msg << std::endl; if (pe) { std::cerr << "    "; perror(""); }
+#endif  //(!defined(_ELPP_DISABLE_ASSERT)
+#if _ELPP_COMPILER_MSVC
+#   define _ELPP_INTERNAL_DEBUGGING_WRITE_PERROR \
+       { char buff[256]; strerror_s(buff, 256, errno); \
+       _ELPP_INTERNAL_DEBUGGING_OUT_ERROR << ": " << buff << " [" << errno << "]";} (void)0
 #else
+#   define _ELPP_INTERNAL_DEBUGGING_WRITE_PERROR \
+        _ELPP_INTERNAL_DEBUGGING_OUT_ERROR << ": " << strerror(errno) << " [" << errno << "]"; (void)0
+#endif  // _ELPP_COMPILER_MSVC
+#if defined(_ELPP_DEBUG_ERRORS)
+#   if !defined(ELPP_INTERNAL_ERROR)
+#      define ELPP_INTERNAL_ERROR(msg, pe) { \
+          std::stringstream internalInfoStream; internalInfoStream << msg; \
+          _ELPP_INTERNAL_DEBUGGING_OUT_ERROR \
+          << "ERROR FROM EASYLOGGING++ (LINE: " << __LINE__ << ") " \
+          << _ELPP_INTERNAL_DEBUGGING_MSG(internalInfoStream.str()) << _ELPP_INTERNAL_DEBUGGING_ENDL; \
+          if (pe) { _ELPP_INTERNAL_DEBUGGING_OUT_ERROR << "    "; _ELPP_INTERNAL_DEBUGGING_WRITE_PERROR; }} (void)0
+#   endif
+#else
+#   undef ELPP_INTERNAL_INFO
 #   define ELPP_INTERNAL_ERROR(msg, pe)
-#endif  // (defined(_ELPP_ENABLE_ERRORS))
-#if (defined(_ELPP_ENABLE_INFO))
+#endif  // defined(_ELPP_DEBUG_ERRORS)
+#if (defined(_ELPP_DEBUG_INFO))
 #   if !(defined(_ELPP_INTERNAL_INFO_LEVEL))
 #      define _ELPP_INTERNAL_INFO_LEVEL 9
 #   endif  // !(defined(_ELPP_INTERNAL_INFO_LEVEL))
-#   define ELPP_INTERNAL_INFO(lvl, msg) { if (lvl <= _ELPP_INTERNAL_INFO_LEVEL) std::cout << msg << std::endl; }
+#   if !defined(ELPP_INTERNAL_INFO)
+#      define ELPP_INTERNAL_INFO(lvl, msg) { if (lvl <= _ELPP_INTERNAL_INFO_LEVEL) { \
+          std::stringstream internalInfoStream; internalInfoStream << msg; \
+          _ELPP_INTERNAL_DEBUGGING_OUT_INFO << _ELPP_INTERNAL_DEBUGGING_MSG(internalInfoStream.str()) \
+             << _ELPP_INTERNAL_DEBUGGING_ENDL; }}
+#   endif
 #else
+#   undef ELPP_INTERNAL_INFO
 #   define ELPP_INTERNAL_INFO(lvl, msg)
-#endif  // (defined(_ELPP_ENABLE_INFO))
+#endif  // (defined(_ELPP_DEBUG_INFO))
 #if defined(_ELPP_STACKTRACE_ON_CRASH)
 #   if (_ELPP_COMPILER_GCC && !_ELPP_MINGW)
 #      define _ELPP_STACKTRACE 1
@@ -141,7 +168,7 @@
 #   endif  // _ELPP_COMPILER_GCC
 #endif  // (defined(_ELPP_STACKTRACE_ON_CRASH))
 // Miscellaneous macros
-#define _ELPP_UNUSED(x) (void)x;
+#define _ELPP_UNUSED(x) (void)x
 #if _ELPP_OS_UNIX
 // Log file permissions for unix-based systems
 #   define _ELPP_LOG_PERMS S_IRUSR | S_IWUSR | S_IXUSR | S_IWGRP | S_IRGRP | S_IXGRP | S_IWOTH | S_IXOTH
@@ -151,10 +178,10 @@
 #      define _ELPP_EXPORT __declspec(dllexport)
 #   else
 #      define _ELPP_EXPORT __declspec(dllimport)
-#   endif // defined(_ELPP_EXPORT_SYMBOLS)
+#   endif  // defined(_ELPP_EXPORT_SYMBOLS)
 #else
 #   define _ELPP_EXPORT
-#endif // defined(_ELPP_DLL_EXPORTS)
+#endif  // defined(_ELPP_AS_DLL) && _ELPP_COMPILER_MSVC
 // Some special functions that are VC++ specific
 #undef STRTOK
 #undef STRERROR
@@ -174,8 +201,6 @@
 // Compiler specific support evaluations
 #if (!_ELPP_MINGW && !_ELPP_COMPILER_CLANG) || defined(_ELPP_FORCE_USE_STD_THREAD)
 #   define _ELPP_USE_STD_THREADING 1
-#else
-#   define _ELPP_USE_STD_THREADING 0
 #endif  // (!_ELPP_MINGW && !_ELPP_COMPILER_CLANG) || defined(_ELPP_FORCE_USE_STD_THREAD)
 #undef FINAL
 #if _ELPP_COMPILER_INTEL || (_ELPP_GCC_VERSION < 40702)
@@ -188,13 +213,13 @@
 #endif  // defined(_ELPP_THREAD_SAFE)
 // Function macro _ELPP_FUNC
 #undef _ELPP_FUNC
-#if defined(_MSC_VER)  // Visual C++
+#if _ELPP_COMPILER_MSVC  // Visual C++
 #   define _ELPP_FUNC __FUNCSIG__
-#elif(defined(__GNUC__) && (__GNUC__ >= 2))  // GCC
+#elif _ELPP_COMPILER_GCC  // GCC
 #   define _ELPP_FUNC __PRETTY_FUNCTION__
-#elif(defined(__INTEL_COMPILER))  // Intel C++
+#elif _ELPP_COMPILER_INTEL  // Intel C++
 #   define _ELPP_FUNC __PRETTY_FUNCTION__
-#elif(defined(__clang__) && (__clang__ == 1))  // Clang++
+#elif _ELPP_COMPILER_CLANG  // Clang++
 #   define _ELPP_FUNC __PRETTY_FUNCTION__
 #else
 #   if defined(__func__)
@@ -203,12 +228,15 @@
 #      define _ELPP_FUNC ""
 #   endif  // defined(__func__)
 #endif  // defined(_MSC_VER)
+#undef _ELPP_VARIADIC_TEMPLATES_SUPPORTED
+// Keep following line commented until features are fixed
+#if _ELPP_COMPILER_GCC || _ELPP_COMPILER_CLANG || _ELPP_COMPILER_INTEL || (_ELPP_COMPILER_MSVC && _MSC_VER >= 1800)
+#   define _ELPP_VARIADIC_TEMPLATES_SUPPORTED 1
+#endif  // _ELPP_COMPILER_GCC || _ELPP_COMPILER_CLANG || _ELPP_COMPILER_INTEL || (_ELPP_COMPILER_MSVC && _MSC_VER >= 1800)
 // Logging Enable/Disable macros
-#if (defined(_ELPP_DISABLE_LOGS))
-#   define _ELPP_LOGGING_ENABLED 0
-#else
+#if (!defined(_ELPP_DISABLE_LOGS))
 #   define _ELPP_LOGGING_ENABLED 1
-#endif  // (defined(_ELPP_DISABLE_LOGS))
+#endif  // (!defined(_ELPP_DISABLE_LOGS))
 #if (!defined(_ELPP_DISABLE_DEBUG_LOGS) && (_ELPP_LOGGING_ENABLED) && ((defined(_DEBUG)) || (!defined(NDEBUG))))
 #   define _ELPP_DEBUG_LOG 1
 #else
@@ -244,7 +272,6 @@
 #else
 #   define _ELPP_VERBOSE_LOG 0
 #endif  // (!defined(_ELPP_DISABLE_VERBOSE_LOGS) && (_ELPP_LOGGING_ENABLED))
-// Now let user know that we only support C++0x/C++11 applications
 #if (!(_ELPP_CXX0X || _ELPP_CXX11))
 #   error "Easylogging++ 9.0+ is only compatible with C++0x (or higher) compliant compiler"
 #endif  // (!(_ELPP_CXX0X || _ELPP_CXX11))
@@ -287,6 +314,7 @@
 #include <iostream>  // NOLINT
 #include <sstream>
 #include <memory>
+#include <type_traits>
 #if _ELPP_THREADING_ENABLED
 #   if _ELPP_USE_STD_THREADING
 #      include <mutex>
@@ -345,15 +373,30 @@
 // For logging wxWidgets based classes & templates
 #   include <wx/vector.h>
 #endif  // defined(_ELPP_WXWIDGETS_LOGGING)
-/// @brief Easylogging++ entry namespace. Classes present <b>directly</b> in this namespace can be used by
-/// developer. Any other class is for internal use only.
+// Forward declarations
 namespace el {
-/// @brief Namespace containing base/internal functionality used by easylogging++
+class Logger;
+class LogMessage;
+class PerformanceTrackingData;
+class Loggers;
+class Helpers;
+class LogDispatchCallback;
 namespace base {
 class Storage;
 class RegisteredLoggers;
-class Trackable;
-/// @brief Data types for unicode support
+class PerformanceTracker;
+class MessageBuilder;
+class Writer;
+class PErrorWriter;
+class LogDispatcher;
+class DefaultLogBuilder;
+}  // namespace base
+}  // namespace el
+/// @brief Easylogging++ entry namespace
+namespace el {
+/// @brief Namespace containing base/internal functionality used by Easylogging++
+namespace base {
+/// @brief Data types used by Easylogging++
 namespace type {
 #undef ELPP_LITERAL
 #undef ELPP_STRLEN
@@ -361,7 +404,11 @@ namespace type {
 #if defined(_ELPP_UNICODE)
 #   define ELPP_LITERAL(txt) L##txt
 #   define ELPP_STRLEN wcslen
-#   define ELPP_COUT std::wcout
+#   if defined ELPP_CUSTOM_COUT
+#      define ELPP_COUT ELPP_CUSTOM_COUT
+#   else
+#      define ELPP_COUT std::wcout
+#   endif  // defined ELPP_CUSTOM_COUT
 typedef wchar_t char_t;
 typedef std::wstring string_t;
 typedef std::wstringstream stringstream_t;
@@ -370,15 +417,26 @@ typedef std::wostream ostream_t;
 #else
 #   define ELPP_LITERAL(txt) txt
 #   define ELPP_STRLEN strlen
-#   define ELPP_COUT std::cout
+#   if defined ELPP_CUSTOM_COUT
+#      define ELPP_COUT ELPP_CUSTOM_COUT
+#   else
+#      define ELPP_COUT std::cout
+#   endif  // defined ELPP_CUSTOM_COUT
 typedef char char_t;
 typedef std::string string_t;
 typedef std::stringstream stringstream_t;
 typedef std::fstream fstream_t;
 typedef std::ostream ostream_t;
 #endif  // defined(_ELPP_UNICODE)
+#if defined(ELPP_CUSTOM_COUT_LINE)
+#   define ELPP_COUT_LINE(logLine) ELPP_CUSTOM_COUT_LINE(logLine)
+#else
+#   define ELPP_COUT_LINE(logLine) logLine << std::flush
+#endif // defined(ELPP_CUSTOM_COUT_LINE)
 typedef unsigned short EnumType;  // NOLINT
 typedef std::shared_ptr<base::Storage> StoragePointer;
+typedef int VerboseLevel;
+typedef std::shared_ptr<LogDispatchCallback> LogDispatchCallbackPtr;
 }  // namespace type
 /// @brief Internal helper class that prevent copy constructor for class
 ///
@@ -403,26 +461,25 @@ private:
 }  // namespace base
 /// @brief Represents enumeration for severity level used to determine level of logging
 ///
-/// @detail Easylogging++ has different concept of level. Developers may disable or enable any level regardless of
-/// what the severity is
-/// @see el::LevelHelper
+/// @detail With Easylogging++, developers may disable or enable any level regardless of
+/// what the severity is. Or they can choose to log using hierarchical logging flag
 enum class Level : base::type::EnumType {
         /// @brief Generic level that represents all the levels. Useful when setting global configuration for all levels
         Global = 1,
+        /// @brief Information that can be useful to back-trace certain events - mostly useful than debug logs.
+        Trace = 2,
         /// @brief Informational events most useful for developers to debug application
-        Debug = 2,
-        /// @brief Mainly useful to represent current progress of application
-        Info = 4,
-        /// @brief Useful when application has potentially harmful situtaions
-        Warning = 8,
+        Debug = 4,
+        /// @brief Severe error information that will presumably abort application
+        Fatal = 8, 
         /// @brief Information representing errors in application but application will keep running
         Error = 16,
-        /// @brief Severe error information that will presumably abort application
-        Fatal = 32,
+        /// @brief Useful when application has potentially harmful situtaions
+        Warning = 32, 
         /// @brief Information that can be highly useful and vary with verbose logging level.
         Verbose = 64,
-        /// @brief Information that can be useful to back-trace certain events - mostly useful than debug logs.
-        Trace = 128,
+        /// @brief Mainly useful to represent current progress of application
+        Info = 128, 
         /// @brief Represents unknown level
         Unknown = 1010
 };
@@ -430,11 +487,11 @@ enum class Level : base::type::EnumType {
 class LevelHelper : base::StaticClass {
 public:
     /// @brief Represents minimum valid level. Useful when iterating through enum.
-    static const base::type::EnumType kMinValid = static_cast<base::type::EnumType>(Level::Debug);
+    static const base::type::EnumType kMinValid = static_cast<base::type::EnumType>(Level::Trace);
     /// @brief Represents maximum valid level. This is used internally and you should not need it.
-    static const base::type::EnumType kMaxValid = static_cast<base::type::EnumType>(Level::Trace);
+    static const base::type::EnumType kMaxValid = static_cast<base::type::EnumType>(Level::Info);
     /// @brief Casts level to int, useful for iterating through enum.
-    static base::type::EnumType castToInt(const Level& level) {
+    static base::type::EnumType castToInt(Level level) {
         return static_cast<base::type::EnumType>(level);
     }
     /// @brief Casts int(ushort) to level, useful for iterating through enum.
@@ -443,8 +500,8 @@ public:
     }
     /// @brief Converts level to associated const char*
     /// @return Upper case string based level.
-    static const char* convertToString(const Level& level) {
-        // Do not use switch over strongly typed enums because Intel C++ compilers dont support them yet.
+    static const char* convertToString(Level level) {
+       // Do not use switch over strongly typed enums because Intel C++ compilers dont support them yet.
         if (level == Level::Global) return "GLOBAL";
         if (level == Level::Debug) return "DEBUG";
         if (level == Level::Info) return "INFO";
@@ -477,69 +534,52 @@ public:
             return Level::Trace;
         return Level::Unknown;
     }
-    /// @brief Applies specified lambda to each level starting from startIndex
-    /// @param startIndex initial value to start the iteration from. This is passed by reference and is incremented (left-shifted)
-    ///        so this can be used inside lambda function as well to represent current level.
-    /// @param lambdaFn Lambda function having no param with bool return type to apply with each level. See more details below
-    ///
-    /// @detail The bool return type of lambda expression represents whether or not to skip rest of levels. Consider following example;
-    /// <pre>base::type::EnumType currLevel = LevelHelper::kMinValid;
-    ///    bool result = false;
-    ///    forEachLevel(&currLevel, [&]() -> bool {
-    ///       if (hasConfiguration(currLevel)) {
-    ///          result = true;
-    ///       }
-    ///       return result;
-    ///    });
-    ///    return result;</pre>
-    /// Code above is very good example of possible usages, returns inside lambda tells function not to exit/break iteration yet. Meaning
-    /// if result is true the expression will return right away and result from main function will be return as soon as second <code>return result;</code>
-    /// is hit.
-    static void forEachLevel(base::type::EnumType* startIndex, const std::function<bool(void)>& lambdaFn) {
+    /// @brief Applies specified function to each level starting from startIndex
+    /// @param startIndex initial value to start the iteration from. This is passed as pointer and 
+    ///        is left-shifted so this can be used inside function (fn) to represent current level.
+    /// @param fn function to apply with each level. This bool represent whether or not to stop iterating through levels.
+    static inline void forEachLevel(base::type::EnumType* startIndex, const std::function<bool(void)>& fn) {
         base::type::EnumType lIndexMax = LevelHelper::kMaxValid;
         do {
-            if (lambdaFn())
+            if (fn()) {
                 break;
+            }
             *startIndex = *startIndex << 1;
         } while (*startIndex <= lIndexMax);
     }
 };
 /// @brief Represents enumeration of ConfigurationType used to configure or access certain aspect
 /// of logging
-///
-/// @detail NOTE: All the configurations for corresponding level also depend on loggers. You can use one
-/// configuration for one logger and different for other logger.
-/// @see el::ConfigurationTypeHelper
 enum class ConfigurationType : base::type::EnumType {
-    /// @brief Determines whether or not corresponding level and logger of logging is enabled
-    /// You may disable all logs by using el::Level::Global
+   /// @brief Determines whether or not corresponding level and logger of logging is enabled
+   /// You may disable all logs by using el::Level::Global
     Enabled = 1,
-    /// @brief Whether or not to write corresponding log to log file
+   /// @brief Whether or not to write corresponding log to log file
     ToFile = 2,
-    /// @brief Whether or not to write corresponding level and logger log to standard output.
-    /// By standard output meaning termnal, command prompt etc
+   /// @brief Whether or not to write corresponding level and logger log to standard output.
+   /// By standard output meaning termnal, command prompt etc
     ToStandardOutput = 4,
-    /// @brief Determines format of logging corresponding level and logger.
+   /// @brief Determines format of logging corresponding level and logger.
     Format = 8,
-    /// @brief Determines log file (full path) to write logs to for correponding level and logger
+   /// @brief Determines log file (full path) to write logs to for correponding level and logger
     Filename = 16,
-    /// @brief Specifies milliseconds width. Width can be within range (1-6)
+   /// @brief Specifies milliseconds width. Width can be within range (1-6)
     MillisecondsWidth = 32,
-    /// @brief Determines whether or not performance tracking is enabled.
-    ///
-    /// @detail This does not depend on logger or level. Performance tracking always uses 'performance' logger
+   /// @brief Determines whether or not performance tracking is enabled.
+   ///
+   /// @detail This does not depend on logger or level. Performance tracking always uses 'performance' logger
     PerformanceTracking = 64,
-    /// @brief Specifies log file max size.
-    ///
-    /// @detail If file size of corresponding log file (for corresponding level) is >= specified size, log file will be truncated
-    /// and re-initiated.
+   /// @brief Specifies log file max size.
+   ///
+   /// @detail If file size of corresponding log file (for corresponding level) is >= specified size, log file will 
+   /// be truncated and re-initiated.
     MaxLogFileSize = 128,
-    /// @brief Specifies number of log entries to hold until we flush pending log data
+   /// @brief Specifies number of log entries to hold until we flush pending log data
     LogFlushThreshold = 256,
-    /// @brief Represents unknown configuration
+   /// @brief Represents unknown configuration
     Unknown = 1010
 };
-/// @brief Static class that contains conversion helper functions for el::ConfigurationType
+/// @brief Static class that contains helper functions for el::ConfigurationType
 class ConfigurationTypeHelper : base::StaticClass {
 public:
     /// @brief Represents minimum valid configuration type. Useful when iterating through enum.
@@ -547,7 +587,7 @@ public:
     /// @brief Represents maximum valid configuration type. This is used internally and you should not need it.
     static const base::type::EnumType kMaxValid = static_cast<base::type::EnumType>(ConfigurationType::MaxLogFileSize);
     /// @brief Casts configuration type to int, useful for iterating through enum.
-    static base::type::EnumType castToInt(const ConfigurationType& configurationType) {
+    static base::type::EnumType castToInt(ConfigurationType configurationType) {
         return static_cast<base::type::EnumType>(configurationType);
     }
     /// @brief Casts int(ushort) to configurationt type, useful for iterating through enum.
@@ -556,7 +596,7 @@ public:
     }
     /// @brief Converts configuration type to associated const char*
     /// @returns Upper case string based configuration type.
-    static const char* convertToString(const ConfigurationType& configurationType) {
+    static const char* convertToString(ConfigurationType configurationType) {
         // Do not use switch over strongly typed enums because Intel C++ compilers dont support them yet.
         if (configurationType == ConfigurationType::Enabled) return "ENABLED";
         if (configurationType == ConfigurationType::Filename) return "FILENAME";
@@ -593,33 +633,27 @@ public:
             return ConfigurationType::LogFlushThreshold;
         return ConfigurationType::Unknown;
     }
-    /// @brief Applies specified lambda to each configuration type starting from startIndex
-    /// @param startIndex initial value to start the iteration from. This is passed by reference and is incremented (left-shifted)
-    ///        so this can be used inside lambda function as well to represent current configuration type.
-    /// @param lambdaFn Lambda function having no param with bool return type to apply with each configuration type. This bool represent
-    ///        whether or not to continue iterating through configurations. For details please see
-    ///        LevelHelper::forEachLevel
-    static void forEachConfigType(base::type::EnumType* startIndex, const std::function<bool(void)>& lambdaFn) {
+    /// @brief Applies specified function to each configuration type starting from startIndex
+    /// @param startIndex initial value to start the iteration from. This is passed by pointer and is left-shifted
+    ///        so this can be used inside function (fn) to represent current configuration type.
+    /// @param fn function to apply with each configuration type. 
+    ///        This bool represent whether or not to stop iterating through configurations.
+    static inline void forEachConfigType(base::type::EnumType* startIndex, const std::function<bool(void)>& fn) {
         base::type::EnumType cIndexMax = ConfigurationTypeHelper::kMaxValid;
         do {
-            if (lambdaFn())
+            if (fn()) {
                 break;
+            }
             *startIndex = *startIndex << 1;
         } while (*startIndex <= cIndexMax);
     }
 };
 /// @brief Flags used while writing logs. This flags are set by user
-///
-/// @see el::Helpers
 enum class LoggingFlag : base::type::EnumType {
     /// @brief Makes sure we have new line for each container log entry
     NewLineForContainer = 1,
     /// @brief Makes sure if -vmodule is used and does not specifies a module, then verbose
     /// logging is allowed via that module.
-    ///
-    /// @detail Say param was -vmodule=main*=3 and a verbose log is being written from a file
-    /// called something.cpp then if this flag is enabled, log will be written otherwise
-    /// it will be disallowed.
     AllowVerboseIfModuleNotSpecified = 2,
     /// @brief When handling crashes by default, detailed crash reason will be logged as well
     LogDetailedCrashReason = 4,
@@ -630,10 +664,28 @@ enum class LoggingFlag : base::type::EnumType {
     /// @brief Enables strict file rolling
     StrictLogFileSizeCheck = 32,
     /// @brief Make terminal output colorful for supported terminals
-    ColoredTerminalOutput = 64
+    ColoredTerminalOutput = 64,
+    /// @brief Supports use of multiple logging in same macro, e.g, CLOG(INFO, "default", "network")
+    MultiLoggerSupport = 128,
+    /// @brief Disables log dispatch for performance tracking
+    DisablePerformanceTrackingDispatch = 256,
+    /// @brief Disables comparing performance tracker's checkpoints
+    DisablePerformanceTrackingCheckpointComparison = 512,
+    /// @brief Enables callback
+    PerformanceTrackingCallback = 1024,
+    /// @brief Disable VModules
+    DisableVModules = 2048,
+    /// @brief Disable VModules extensions
+    DisableVModulesExtensions = 4096,
+    /// @brief Enables post log callback
+    EnableLogDispatchCallback = 8192,
+    /// @brief Enables hierarchical logging
+    HierarchicalLogging = 16384,
+    /// @brief Creates logger automatically when not available
+    CreateLoggerAutomatically = 32768
 };
 namespace base {
-/// @brief Namespace containing constants used internally. This is in seperate namespace to avoid confusions.
+/// @brief Namespace containing constants used internally.
 namespace consts {
     // Level log values - These are values that are replaced in place of %level format specifier
     static const base::type::char_t* kInfoLevelLogValue     =   ELPP_LITERAL("INFO ");
@@ -673,13 +725,15 @@ namespace consts {
     static const char* kDefaultLoggerId                        =      "default";
     static const char* kPerformanceLoggerId                    =      "performance";
     static const char* kSysLogLoggerId                         =      "syslog";
-    static const char* kInternalHelperLoggerId                 =      "el_internal_helper_logger";
     static const char* kNullPointer                            =      "nullptr";
-    static const char  kFormatEscapeChar                       =      '%';
-    static const unsigned short kMaxLogPerContainer            =      100;  // NOLINT
+    static const char  kFormatSpecifierChar                    =      '%';
+#if _ELPP_VARIADIC_TEMPLATES_SUPPORTED
+    static const char  kFormatSpecifierCharValue               =      'v';
+#endif  // _ELPP_VARIADIC_TEMPLATES_SUPPORTED
+    static const unsigned int kMaxLogPerContainer              =      100;
     static const unsigned int kMaxLogPerCounter                =      100000;
     static const unsigned int  kDefaultMillisecondsWidth       =      3;
-    static const short kMaxVerboseLevel                        =      9;  // NOLINT
+    static const base::type::VerboseLevel kMaxVerboseLevel     =      9;
     static const char* kUnknownUser                            =      "user";
     static const char* kUnknownHost                            =      "unknown-host";
 #if defined(_ELPP_DEFAULT_LOG_FILE)
@@ -698,9 +752,9 @@ namespace consts {
 #if !defined(_ELPP_DISABLE_LOG_FILE_FROM_ARG)
     static const char* kDefaultLogFileParam                    =      "--default-log-file";
 #endif  // !defined(_ELPP_DISABLE_LOG_FILE_FROM_ARG)
-#if !defined(_ELPP_DISABLE_LOGGING_FLAGS_FROM_ARG)
+#if defined(_ELPP_LOGGING_FLAGS_FROM_ARG)
     static const char* kLoggingFlagsParam                      =      "--logging-flags";
-#endif  // !defined(_ELPP_DISABLE_LOGGING_FLAGS_FROM_ARG)
+#endif  // defined(_ELPP_LOGGING_FLAGS_FROM_ARG)
 #if _ELPP_OS_WINDOWS
     static const char* kFilePathSeperator                      =      "\\";
 #else
@@ -710,13 +764,13 @@ namespace consts {
     static const char* kConfigurationComment                   =      "##";
     static const char* kConfigurationLevel                     =      "*";
     static const char* kConfigurationLoggerId                  =      "--";
-    static const std::size_t kSourceFilenameMaxLength                  =      100;
-    static const std::size_t kSourceLineMaxLength                      =      10;
-    static const int kMaxTimeFormats                           =      6;
+    static const std::size_t kSourceFilenameMaxLength          =      100;
+    static const std::size_t kSourceLineMaxLength              =      10;
+    static const Level kPerformanceTrackerDefaultLevel         =      Level::Info;
     const struct {
         double value;
         const base::type::char_t* unit;
-    } kTimeFormats[kMaxTimeFormats] = {
+    } kTimeFormats[] = {
        { 1000.0f, ELPP_LITERAL("mis") },
        { 1000.0f, ELPP_LITERAL("ms") },
        { 60.0f, ELPP_LITERAL("seconds") },
@@ -724,13 +778,13 @@ namespace consts {
        { 24.0f, ELPP_LITERAL("hours") },
        { 7.0f, ELPP_LITERAL("days") }
     };
-    static const int kMaxCrashSignals                          =      5;
+    static const int kTimeFormatsCount                           =      sizeof(kTimeFormats) / sizeof(kTimeFormats[0]);
     const struct {
         int numb;
         const char* name;
         const char* brief;
         const char* detail;
-    } kCrashSignals[kMaxCrashSignals] = {
+    } kCrashSignals[] = {
         // NOTE: Do not re-order, if you do please check CrashHandler(bool) constructor and CrashHandler::setHandler(..)
         { SIGABRT, "SIGABRT", "Abnormal termination",
                 "Program was abnormally terminated." },
@@ -743,18 +797,14 @@ namespace consts {
         { SIGINT, "SIGINT", "Interactive attention signal",
                  "Interruption generated (generally) by user or operating system." },
     };
+    static const int kCrashSignalsCount                          =      sizeof(kCrashSignals) / sizeof(kCrashSignals[0]);
 }  // namespace consts
 }  // namespace base
-typedef std::function<void(const char*, std::size_t)> PreRollOutHandler;
-class LogMessage;
-typedef std::function<void(const LogMessage* logMessage)> PostLogDispatchHandler;
-class PerformanceTrackingData;
-typedef std::function<void(const PerformanceTrackingData* performanceTrackingData)> PostPerformanceTrackingHandler;
-class Logger;
+typedef std::function<void(const char*, std::size_t)> PreRollOutCallback;
+typedef std::function<void(const PerformanceTrackingData* performanceTrackingData)> PerformanceTrackingCallback;
 namespace base {
-static inline void defaultPostLogDispatchHandler(const LogMessage*) {}
-static inline void defaultPreRollOutHandler(const char*, std::size_t) {}
-static inline void defaultPostPerformanceTrackingHandler(const PerformanceTrackingData*) {}
+static inline void defaultPreRollOutCallback(const char*, std::size_t) {}
+static inline void defaultPerformanceTrackingCallback(const PerformanceTrackingData*) {}
 /// @brief Enum to represent timestamp unit
 enum class TimestampUnit : base::type::EnumType {
     Microsecond = 0, Millisecond = 1, Second = 2, Minute = 3, Hour = 4, Day = 5
@@ -791,23 +841,24 @@ private:
 namespace utils {
 /// @brief Deletes memory safely and points to null
 template <typename T>
-inline static void safeDelete(T*& pointer) {  // NOLINT
+typename std::enable_if<std::is_pointer<T*>::value, void>::type
+static inline safeDelete(T*& pointer) {  // NOLINT
     if (pointer == nullptr)
         return;
     delete pointer;
     pointer = nullptr;
 }
 /// @brief Gets value of const char* but if it is nullptr, a string nullptr is returned
-inline static const char* charPtrVal(const char* pointer) {
+static inline const char* charPtrVal(const char* pointer) {
     return pointer == nullptr ? base::consts::kNullPointer : pointer;
 }
 /// @brief Aborts application due with user-defined status
-inline static void abort(int status, const std::string& reason = std::string()) {
+static inline void abort(int status, const std::string& reason = std::string()) {
     // Both status and reason params are there for debugging with tools like gdb etc
     _ELPP_UNUSED(status);
     _ELPP_UNUSED(reason);
 #if defined(_ELPP_COMPILER_MSVC) && defined(_M_IX86) && defined(_DEBUG)
-    // Ignore msvc critical error dialog - break instead (on debug mode)
+   // Ignore msvc critical error dialog - break instead (on debug mode)
     _asm int 3
 #else
     ::abort();
@@ -817,37 +868,35 @@ inline static void abort(int status, const std::string& reason = std::string()) 
 /// Use these function as <pre>flag = bitwise::Or<MyEnum>(MyEnum::val1, flag);</pre>
 namespace bitwise {
 template <typename Enum>
-inline static base::type::EnumType And(const Enum& e, base::type::EnumType flag) {
+static inline base::type::EnumType And(Enum e, base::type::EnumType flag) {
     return static_cast<base::type::EnumType>(flag) & static_cast<base::type::EnumType>(e);
 }
 template <typename Enum>
-inline static base::type::EnumType Not(const Enum& e, base::type::EnumType flag) {
+static inline base::type::EnumType Not(Enum e, base::type::EnumType flag) {
     return static_cast<base::type::EnumType>(flag) & ~(static_cast<base::type::EnumType>(e));
 }
 template <typename Enum>
-inline static base::type::EnumType Or(const Enum& e, base::type::EnumType flag) {
+static inline base::type::EnumType Or(Enum e, base::type::EnumType flag) {
     return static_cast<base::type::EnumType>(flag) | static_cast<base::type::EnumType>(e);
 }
 }  // namespace bitwise
-/// @brief Adds flag
 template <typename Enum>
-inline static void addFlag(const Enum& e, base::type::EnumType* flag) {
+static inline void addFlag(Enum e, base::type::EnumType* flag) {
     *flag = base::utils::bitwise::Or<Enum>(e, *flag);
 }
-/// @brief Removes flag
 template <typename Enum>
-inline static void removeFlag(const Enum& e, base::type::EnumType* flag) {
+static inline void removeFlag(Enum e, base::type::EnumType* flag) {
     *flag = base::utils::bitwise::Not<Enum>(e, *flag);
 }
-/// @brief Determines whether flag is set or not
 template <typename Enum>
-inline static bool hasFlag(const Enum& e, base::type::EnumType flag) {
+static inline bool hasFlag(Enum e, base::type::EnumType flag) {
     return base::utils::bitwise::And<Enum>(e, flag) > 0x0;
 }
 }  // namespace utils
 namespace threading {
 #if _ELPP_THREADING_ENABLED
 #   if !_ELPP_USE_STD_THREADING
+namespace internal {
 /// @brief A mutex wrapper for compiler that dont yet support std::mutex
 class Mutex {
 public:
@@ -914,6 +963,7 @@ private:
     M* m_mutex;
     ScopedLock(void);
 };
+} // namespace internal
 /// @brief Gets ID of currently running threading in windows systems. On unix, nothing is returned.
 static inline std::string getCurrentThreadId(void) {
     std::stringstream ss;
@@ -922,8 +972,8 @@ static inline std::string getCurrentThreadId(void) {
 #      endif  // (_ELPP_OS_WINDOWS)
     return ss.str();
 }
-typedef base::threading::Mutex mutex;
-typedef base::threading::ScopedLock<base::threading::Mutex> lock_guard;
+typedef base::threading::internal::Mutex Mutex;
+typedef base::threading::internal::ScopedLock<base::threading::Mutex> ScopedLock;
 #   else
 /// @brief Gets ID of currently running threading using std::this_thread::get_id()
 static inline std::string getCurrentThreadId(void) {
@@ -931,10 +981,11 @@ static inline std::string getCurrentThreadId(void) {
     ss << std::this_thread::get_id();
     return ss.str();
 }
-typedef std::mutex mutex;
-typedef std::lock_guard<std::mutex> lock_guard;
+typedef std::mutex Mutex;
+typedef std::lock_guard<std::mutex> ScopedLock;
 #   endif  // !_ELPP_USE_STD_THREADING
 #else
+namespace internal {
 /// @brief Mutex wrapper used when multi-threading is disabled.
 class NoMutex {
 public:
@@ -954,29 +1005,30 @@ public:
 private:
     NoScopedLock(void);
 };
+} // namespace internal
 static inline std::string getCurrentThreadId(void) {
     return std::string();
 }
-typedef base::threading::NoMutex mutex;
-typedef base::threading::NoScopedLock<base::threading::NoMutex> lock_guard;
+typedef base::threading::internal::NoMutex Mutex;
+typedef base::threading::internal::NoScopedLock<base::threading::Mutex> ScopedLock;
 #endif  // _ELPP_THREADING_ENABLED
 /// @brief Base of thread safe class, this class is inheritable-only
 class ThreadSafe {
 public:
-    virtual inline void lock(void) FINAL {
+    virtual inline void acquireLock(void) FINAL {
         m_mutex.lock();
     }
-    virtual inline void unlock(void) FINAL {
+    virtual inline void releaseLock(void) FINAL {
         m_mutex.unlock();
     }
-    virtual inline base::threading::mutex& mutex(void) FINAL {
+    virtual inline base::threading::Mutex& lock(void) FINAL {
         return m_mutex;
     }
 protected:
     ThreadSafe(void) {}
     virtual ~ThreadSafe(void) {}
 private:
-    base::threading::mutex m_mutex;
+    base::threading::Mutex m_mutex;
 };
 }  // namespace threading
 namespace utils {
@@ -985,11 +1037,12 @@ public:
     /// @brief Creates new out file stream for specified filename.
     /// @return Pointer to newly created fstream or nullptr
     static base::type::fstream_t* newFileStream(const std::string& filename) {
-        base::type::fstream_t *fs = new base::type::fstream_t(filename.c_str(), base::type::fstream_t::out | base::type::fstream_t::app);
+        base::type::fstream_t *fs = new base::type::fstream_t(filename.c_str(), 
+            base::type::fstream_t::out | base::type::fstream_t::app);
 #if defined(_ELPP_UNICODE)
         std::locale elppUnicodeLocale("");
         fs->imbue(elppUnicodeLocale);
-#endif
+#endif  // defined(_ELPP_UNICODE)
         if (fs->is_open()) {
             fs->flush();
         } else {
@@ -1051,6 +1104,7 @@ public:
         // Use secure functions API
         char* nextTok_;
         currPath = STRTOK(currPath, base::consts::kFilePathSeperator, &nextTok_);
+        _ELPP_UNUSED(nextTok_);
 #endif  // _ELPP_OS_UNIX
         while (currPath != nullptr) {
             builtPath.append(currPath);
@@ -1082,7 +1136,8 @@ public:
         return fullPath.substr(0, lastSlashAt + 1);
     }
     /// @brief builds stripped filename and puts it in buff
-    static void buildStrippedFilename(const char* filename, char buff[], std::size_t limit = base::consts::kSourceFilenameMaxLength) {
+    static void buildStrippedFilename(const char* filename, char buff[], 
+            std::size_t limit = base::consts::kSourceFilenameMaxLength) {
         std::size_t sizeOfFilename = strlen(filename);
         if (sizeOfFilename >= limit) {
             filename += (sizeOfFilename - limit);
@@ -1179,7 +1234,8 @@ public:
     /// @param replaceWhat Character to replace
     /// @param replaceWith Character to replace with
     /// @return Modified (original) str
-    static inline std::string& replaceAll(std::string& str, const std::string& replaceWhat, const std::string& replaceWith) {  // NOLINT
+    static inline std::string& replaceAll(std::string& str, const std::string& replaceWhat, // NOLINT
+            const std::string& replaceWith) {
         if (replaceWhat == replaceWith)
             return str;
         std::size_t foundAt = std::string::npos;
@@ -1189,10 +1245,11 @@ public:
         return str;
     }
 
-    static void replaceFirstWithEscape(base::type::string_t& str, const base::type::string_t& replaceWhat, const base::type::string_t& replaceWith) {  // NOLINT
+    static void replaceFirstWithEscape(base::type::string_t& str, const base::type::string_t& replaceWhat, // NOLINT
+            const base::type::string_t& replaceWith) {
         std::size_t foundAt = base::type::string_t::npos;
         while ((foundAt = str.find(replaceWhat, foundAt + 1)) != base::type::string_t::npos) {
-            if (foundAt > 0 && str[foundAt - 1] == base::consts::kFormatEscapeChar) {
+            if (foundAt > 0 && str[foundAt - 1] == base::consts::kFormatSpecifierChar) {
                 str.erase(foundAt > 0 ? foundAt - 1 : 0, 1);
                 ++foundAt;
             } else {
@@ -1202,7 +1259,8 @@ public:
         }
     }
 #if defined(_ELPP_UNICODE)
-    static void replaceFirstWithEscape(base::type::string_t& str, const base::type::string_t& replaceWhat, const std::string& replaceWith) {  // NOLINT
+    static void replaceFirstWithEscape(base::type::string_t& str, const base::type::string_t& replaceWhat, // NOLINT
+            const std::string& replaceWith) {
         replaceFirstWithEscape(str, replaceWhat, base::type::string_t(replaceWith.begin(), replaceWith.end()));
     }
 #endif  // defined(_ELPP_UNICODE)
@@ -1247,7 +1305,13 @@ public:
     static inline char* convertAndAddToBuff(std::size_t n, int len, char* buf, const char* bufLim, bool zeroPadded = true) {
         char localBuff[10] = "";
         char* p = localBuff + sizeof(localBuff) - 2;
-        for (; n > 0 && p > localBuff && len > 0; n /= 10, --len) *--p = static_cast<char>(n % 10 + '0');
+        if (n > 0) {
+            for (; n > 0 && p > localBuff && len > 0; n /= 10, --len)
+                *--p = static_cast<char>(n % 10 + '0');
+        } else {
+            *--p = '0';
+            --len;
+        }
         if (zeroPadded)
             while (p > localBuff && len-- > 0) *--p = static_cast<char>('0');
         return addToBuff(p, buf, bufLim);
@@ -1264,7 +1328,7 @@ public:
         _ELPP_UNUSED(lim);  // For *nix we dont have anything using lim in above STRCPY macro
         return buff;
     }
-    
+
     /// @brief Converst wchar* to char*
     ///        NOTE: Need to free return value after use!
     static char* wcharPtrToCharPtr(const wchar_t* line) {
@@ -1281,19 +1345,12 @@ public:
        return buff_;
     }
 };
-#define ELPP_RESOLVED_VAL(var) s_##var
-#define ELPP_RESOLVED(var) s_##var##resolved
-#define ELPP_RESOLVED_VAR_DECLARE(type, var) static type ELPP_RESOLVED_VAL(var); static bool ELPP_RESOLVED(var)
-#define ELPP_RETURN_IF_RESOLVED(var) if (ELPP_RESOLVED(var)) return ELPP_RESOLVED_VAL(var)
-#define ELPP_RESOLVE_AND_RETURN(var) (0 ? (void)0; ELPP_RESOLVED(var) = true; ELPP_RESOLVED_VAL(var))
-ELPP_RESOLVED_VAR_DECLARE(std::string, currentUser);
-ELPP_RESOLVED_VAR_DECLARE(std::string, currentHost);
-ELPP_RESOLVED_VAR_DECLARE(bool, terminalSupportsColor);
 /// @brief Operating System helper static class used internally. You should not use it.
 class OS : base::StaticClass {
 public:
 #if _ELPP_OS_WINDOWS
-    /// @brief Gets environment variables for Windows based OS. We are not using <code>getenv(const char*)</code> because of CRT deprecation
+    /// @brief Gets environment variables for Windows based OS. 
+    ///        We are not using <code>getenv(const char*)</code> because of CRT deprecation
     /// @param varname Variable name to get environment variable value for
     /// @return If variable exist the value of it otherwise nullptr
     static const char* getWindowsEnvironmentVariable(const char* varname) {
@@ -1307,21 +1364,18 @@ public:
 #endif  // _ELPP_OS_WINDOWS
 #if _ELPP_OS_ANDROID
     /// @brief Reads android property value
-    static inline char* getProperty(const char* prop) {
+    static inline std::string getProperty(const char* prop) {
         char propVal[PROP_VALUE_MAX + 1];
         int ret = __system_property_get(prop, propVal);
-        if (ret != 0) {
-            return propVal;
-        }
-        return nullptr;
+        return ret == 0 ? std::string() : std::string(propVal);
     }
 
     /// @brief Reads android device name
     static std::string getDeviceName(void) {
         std::stringstream ss;
-        char* manufacturer = getProperty("ro.product.manufacturer");
-        char* model = getProperty("ro.product.model");
-        if (manufacturer == nullptr || model == nullptr) {
+        std::string manufacturer = getProperty("ro.product.manufacturer");
+        std::string model = getProperty("ro.product.model");
+        if (manufacturer.empty() || model.empty()) {
             return std::string();
         }
         ss << manufacturer << "-" << model;
@@ -1372,7 +1426,7 @@ public:
 #endif  // _ELPP_OS_UNIX
         if ((val == nullptr) || ((strcmp(val, "") == 0))) {
 #if _ELPP_OS_UNIX && defined(_ELPP_FORCE_ENV_VAR_FROM_BASH)
-            // Try harder on unix-based systems
+           // Try harder on unix-based systems
             std::string valBash = base::utils::OS::getBashOutput(alternativeBashCommand);
             if (valBash.empty()) {
                 return std::string(defaultVal);
@@ -1386,54 +1440,55 @@ public:
         }
         return std::string(val);
     }
-
-    /// @brief Gets current username.
-    static inline const std::string currentUser(void) {
-        ELPP_RETURN_IF_RESOLVED(currentUser);
+   /// @brief Gets current username.
+    static inline std::string currentUser(void) {
 #if _ELPP_OS_UNIX && !_ELPP_OS_ANDROID
-        ELPP_RESOLVED_VAL(currentUser) = getEnvironmentVariable("USER", base::consts::kUnknownUser, "whoami");
+        return getEnvironmentVariable("USER", base::consts::kUnknownUser, "whoami");
 #elif _ELPP_OS_WINDOWS
-        ELPP_RESOLVED_VAL(currentUser) = getEnvironmentVariable("USERNAME", base::consts::kUnknownUser);
+        return getEnvironmentVariable("USERNAME", base::consts::kUnknownUser);
 #elif _ELPP_OS_ANDROID
-        ELPP_RESOLVED_VAL(currentUser) = std::string("android");
+        _ELPP_UNUSED(base::consts::kUnknownUser);
+        return std::string("android");
 #else
-        ELPP_RESOLVED_VAL(currentUser) = std::string();
+        return std::string();
 #endif  // _ELPP_OS_UNIX && !_ELPP_OS_ANDROID
-       ELPP_RESOLVED(currentUser) = true;
-       return ELPP_RESOLVED_VAL(currentUser);
     }
 
     /// @brief Gets current host name or computer name.
     ///
     /// @detail For android systems this is device name with its manufacturer and model seperated by hyphen
-    static inline const std::string currentHost(void) {
-       ELPP_RETURN_IF_RESOLVED(currentHost);
+    static inline std::string currentHost(void) {
 #if _ELPP_OS_UNIX && !_ELPP_OS_ANDROID
-        ELPP_RESOLVED_VAL(currentHost) = getEnvironmentVariable("HOSTNAME", base::consts::kUnknownHost, "hostname");
+        return getEnvironmentVariable("HOSTNAME", base::consts::kUnknownHost, "hostname");
 #elif _ELPP_OS_WINDOWS
-        ELPP_RESOLVED_VAL(currentHost) = getEnvironmentVariable("COMPUTERNAME", base::consts::kUnknownHost);
+        return getEnvironmentVariable("COMPUTERNAME", base::consts::kUnknownHost);
 #elif _ELPP_OS_ANDROID
-        ELPP_RESOLVED_VAL(currentHost) = getDeviceName();
+        _ELPP_UNUSED(base::consts::kUnknownHost);
+        return getDeviceName();
 #else
-        ELPP_RESOLVED_VAL(currentHost) = std::string();
+        return std::string();
 #endif  // _ELPP_OS_UNIX && !_ELPP_OS_ANDROID
-       ELPP_RESOLVED(currentHost) = true;
-       return ELPP_RESOLVED_VAL(currentHost);
     }
     /// @brief Whether or not terminal supports colors
     static inline bool termSupportsColor(void) {
-        ELPP_RETURN_IF_RESOLVED(terminalSupportsColor);
         std::string term = getEnvironmentVariable("TERM", "");
-        ELPP_RESOLVED_VAL(terminalSupportsColor) = term == "xterm" || term == "xterm-color" || term == "xterm-256color" ||
+        return term == "xterm" || term == "xterm-color" || term == "xterm-256color" ||
                               term == "screen" || term == "linux" || term == "cygwin";
-        ELPP_RESOLVED(terminalSupportsColor) = true;
-        return ELPP_RESOLVED_VAL(terminalSupportsColor);
     }
 };
-#undef ELPP_RESOLVED_VAL
-#undef ELPP_RESOLVED
-#undef ELPP_RESOLVED_VAR_DECLARE
-#undef ELPP_RETURN_IF_RESOLVED
+extern std::string s_currentUser;
+extern std::string s_currentHost;
+extern bool s_termSupportsColor;
+#define _ELPP_INITI_BASIC_DECLR \
+    namespace el {\
+        namespace base {\
+            namespace utils {\
+                std::string s_currentUser = el::base::utils::OS::currentUser(); \
+                std::string s_currentHost = el::base::utils::OS::currentHost(); \
+                bool s_termSupportsColor = el::base::utils::OS::termSupportsColor(); \
+            }\
+        }\
+   }
 /// @brief Contains utilities for cross-platform date/time. This class make use of el::base::utils::Str
 class DateTime : base::StaticClass {
 public:
@@ -1458,7 +1513,7 @@ public:
             present = present << 32;
             present |= fileTime.dwLowDateTime;
             present /= 10;  // mic-sec
-            // Subtract the difference
+           // Subtract the difference
             present -= delta_;
             tv->tv_sec = static_cast<long>(present * secOffSet);  // NOLINT
             tv->tv_usec = static_cast<long>(present % usecOffSet);  // NOLINT
@@ -1484,11 +1539,11 @@ public:
     }
 
     /// @brief Formats time to get unit accordingly, units like second if > 1000 or minutes if > 60000 etc
-    static base::type::string_t formatTime(unsigned long long time, const base::TimestampUnit& timestampUnit) {  // NOLINT
+    static base::type::string_t formatTime(unsigned long long time, base::TimestampUnit timestampUnit) {  // NOLINT
         double result = static_cast<double>(time);
         base::type::EnumType start = static_cast<base::type::EnumType>(timestampUnit);
         const base::type::char_t* unit = base::consts::kTimeFormats[start].unit;
-        for (base::type::EnumType i = start; i < base::consts::kMaxTimeFormats - 1; ++i) {
+        for (base::type::EnumType i = start; i < base::consts::kTimeFormatsCount - 1; ++i) {
             if (result <= base::consts::kTimeFormats[i].value) {
                 break;
             }
@@ -1501,7 +1556,7 @@ public:
     }
 
     /// @brief Gets time difference in milli/micro second depending on timestampUnit
-    static inline unsigned long long getTimeDifference(const struct timeval& endTime, const struct timeval& startTime, const base::TimestampUnit& timestampUnit) {  // NOLINT
+    static inline unsigned long long getTimeDifference(const struct timeval& endTime, const struct timeval& startTime, base::TimestampUnit timestampUnit) {  // NOLINT
         if (timestampUnit == base::TimestampUnit::Microsecond) {
             return static_cast<unsigned long long>(static_cast<unsigned long long>(1000000 * endTime.tv_sec + endTime.tv_usec) -  // NOLINT
                     static_cast<unsigned long long>(1000000 * startTime.tv_sec + startTime.tv_usec));  // NOLINT
@@ -1536,9 +1591,9 @@ private:
             std::size_t msec, const base::MillisecondsWidth* msWidth) {
         const char* bufLim = buf + bufSz;
         for (; *format; ++format) {
-            if (*format == '%') {
+            if (*format == base::consts::kFormatSpecifierChar) {
                 switch (*++format) {
-                case base::consts::kFormatEscapeChar:  // Escape
+                case base::consts::kFormatSpecifierChar:  // Escape
                     break;
                 case '\0':  // End
                     --format;
@@ -1628,7 +1683,8 @@ public:
                 std::string key = std::string(m_argv[i]);
                 key = key.substr(0, key.find_first_of('='));
                 if (hasParamWithValue(key.c_str())) {
-                    ELPP_INTERNAL_INFO(1, "Skipping [" << key << "] arg since it already has value [" << getParamValue(key.c_str()) << "]");
+                    ELPP_INTERNAL_INFO(1, "Skipping [" << key << "] arg since it already has value [" 
+                        << getParamValue(key.c_str()) << "]");
                 } else {
                     m_paramsWithValue.insert(std::make_pair(key, std::string(v + 1)));
                 }
@@ -1798,7 +1854,8 @@ private:
 /// @brief A pointer registry mechanism to manage memory and provide search functionalities. (non-predicate version)
 ///
 /// @detail NOTE: This is thread-unsafe implementation (although it contains lock function, it does not use these functions)
-///         of AbstractRegistry<T_Ptr, Container>. Any implementation of this class should be  explicitly (by using lock functions)
+///         of AbstractRegistry<T_Ptr, Container>. Any implementation of this class should be  
+///         explicitly (by using lock functions)
 template <typename T_Ptr, typename T_Key = const char*>
 class Registry : public AbstractRegistry<T_Ptr, std::map<T_Key, T_Ptr*>> {
 public:
@@ -1945,17 +2002,6 @@ protected:
 
     /// @brief Gets pointer from repository with speicifed arguments. Arguments are passed to predicate
     /// in order to validate pointer.
-    ///
-    /// @detail Varidiac templates are not yet supported by Visual C++ 11.0 and since Easylogging++ has to be available
-    /// for latest flavour of Visual C++ so we explicitely define templates arguments. Once the varidiac templates
-    /// are available for all the compiler that are supported by easylogging++, we will replace this function with
-    /// following signature
-    ///     <pre>
-    ///          template <typename... T>
-    ///          inline T_Ptr* get(const T&... args) {
-    ///             std::find_if(this->list().begin(), this->list().end(), Pred(args...));
-    ///                ... rest will be same
-    ///     </pre>
     template <typename T, typename T2>
     inline T_Ptr* get(const T& arg1, const T2 arg2) {
         iterator iter = std::find_if(this->list().begin(), this->list().end(), Pred(arg1, arg2));
@@ -1974,8 +2020,23 @@ private:
 };
 
 }  // namespace utils
+} // namespace base
+/// @brief Base of Easylogging++ friendly class
+///
+/// @detail After inheriting this class publicly, implement pure-virtual function `void log(std::ostream&) const`
+class Loggable {
+public:
+    virtual void log(el::base::type::ostream_t&) const = 0;
+
+private:
+    friend inline el::base::type::ostream_t& operator<<(el::base::type::ostream_t& os, const Loggable& loggable) {
+        loggable.log(os);
+        return os;
+    }
+};
+namespace base {
 /// @brief Represents log format containing flags and date format. This is used internally to start initial log
-class LogFormat {
+class LogFormat : public Loggable {
 public:
     LogFormat(void) :
         m_level(Level::Unknown),
@@ -1985,7 +2046,7 @@ public:
         m_flags(0x0) {
     }
 
-    LogFormat(const Level& level, const base::type::string_t& format)
+    LogFormat(Level level, const base::type::string_t& format)
             : m_level(level), m_userFormat(format) {
         parseFromFormat(m_userFormat);
     }
@@ -2030,10 +2091,10 @@ public:
         // and then storing it.
         base::type::string_t formatCopy = userFormat;
         m_flags = 0x0;
-        auto conditionalAddFlag = [&](const base::type::char_t* specifier, const base::FormatFlags& flag) {
+        auto conditionalAddFlag = [&](const base::type::char_t* specifier, base::FormatFlags flag) {
             std::size_t foundAt = base::type::string_t::npos;
             while ((foundAt = formatCopy.find(specifier, foundAt + 1)) != base::type::string_t::npos){
-                if (foundAt > 0 && formatCopy[foundAt - 1] == base::consts::kFormatEscapeChar) {
+                if (foundAt > 0 && formatCopy[foundAt - 1] == base::consts::kFormatSpecifierChar) {
                     if (hasFlag(flag)) {
                         // If we already have flag we remove the escape chars so that '%%' is turned to '%'
                         // even after specifier resolution - this is because we only replaceFirst specifier
@@ -2060,7 +2121,7 @@ public:
         // For date/time we need to extract user's date format first
         std::size_t dateIndex = std::string::npos;
         if ((dateIndex = formatCopy.find(base::consts::kDateTimeFormatSpecifier)) != std::string::npos) {
-            while (dateIndex > 0 && formatCopy[dateIndex - 1] == base::consts::kFormatEscapeChar) {
+            while (dateIndex > 0 && formatCopy[dateIndex - 1] == base::consts::kFormatSpecifierChar) {
                 dateIndex = formatCopy.find(base::consts::kDateTimeFormatSpecifier, dateIndex + 1);
             }
             if (dateIndex != std::string::npos) {
@@ -2072,7 +2133,7 @@ public:
         updateFormatSpec();
     }
 
-    inline const Level& level(void) const {
+    inline Level level(void) const {
         return m_level;
     }
 
@@ -2092,13 +2153,12 @@ public:
        return m_flags;
     }
 
-    inline bool hasFlag(const base::FormatFlags& flag) const {
+    inline bool hasFlag(base::FormatFlags flag) const {
         return base::utils::hasFlag(flag, m_flags);
     }
 
-    friend inline base::type::ostream_t& operator<<(base::type::ostream_t& os, const LogFormat& format) {
-        os << format.m_format;
-        return os;
+    virtual void log(el::base::type::ostream_t& os) const {
+        os << m_format;
     }
 
 protected:
@@ -2158,17 +2218,18 @@ protected:
                     base::consts::kTraceLevelLogValue);
         }
         if (hasFlag(base::FormatFlags::User)) {
+            std::string s = base::utils::s_currentUser;
             base::utils::Str::replaceFirstWithEscape(m_format, base::consts::kCurrentUserFormatSpecifier,
-                    base::utils::OS::currentUser());
+                    base::utils::s_currentUser);
         }
         if (hasFlag(base::FormatFlags::Host)) {
             base::utils::Str::replaceFirstWithEscape(m_format, base::consts::kCurrentHostFormatSpecifier,
-                    base::utils::OS::currentHost());
+                    base::utils::s_currentHost);
         }
         // Ignore Level::Global and Level::Unknown
     }
 
-    inline void addFlag(const base::FormatFlags& flag) {
+    inline void addFlag(base::FormatFlags flag) {
         base::utils::addFlag(flag, &m_flags);
     }
 
@@ -2200,20 +2261,30 @@ private:
     const char* m_formatSpecifier;
     FormatSpecifierValueResolver m_resolver;
 };
-class Loggers;
-class Helpers;
+class LogDispatchCallback : public base::threading::ThreadSafe {
+public:
+    LogDispatchCallback(void) : m_enabled(true) {}
+    inline bool enabled(void) const { return m_enabled; }
+    inline void setEnabled(bool enabled) {
+        base::threading::ScopedLock scopedLock(lock());
+        m_enabled = enabled;
+    }
+protected:
+    virtual void handle(const LogMessage* logMessage) = 0;
+private:
+    bool m_enabled;
+    friend class base::LogDispatcher;
+};
 /// @brief Represents single configuration that has representing level, configuration type and a string based value.
 ///
 /// @detail String based value means any value either its boolean, integer or string itself, it will be embedded inside quotes
 /// and will be parsed later.
 ///
 /// Consider some examples below:
-/// <ul>
-///   <li>  el::Configuration confEnabledInfo(el::Level::Info, el::ConfigurationType::Enabled, "true");  </li>
-///   <li>  el::Configuration confMaxLogFileSizeInfo(el::Level::Info, el::ConfigurationType::MaxLogFileSize, "2048");  </li>
-///   <li>  el::Configuration confFilenameInfo(el::Level::Info, el::ConfigurationType::Filename, "/var/log/my.log");  </li>
-/// </ul>
-class Configuration {
+///   * el::Configuration confEnabledInfo(el::Level::Info, el::ConfigurationType::Enabled, "true");
+///   * el::Configuration confMaxLogFileSizeInfo(el::Level::Info, el::ConfigurationType::MaxLogFileSize, "2048");
+///   * el::Configuration confFilenameInfo(el::Level::Info, el::ConfigurationType::Filename, "/var/log/my.log");
+class Configuration : public Loggable {
 public:
     Configuration(const Configuration& c) :
             m_level(c.m_level),
@@ -2232,19 +2303,19 @@ public:
     }
 
     /// @brief Full constructor used to sets value of configuration
-    Configuration(const Level& level, const ConfigurationType& configurationType, const std::string& value) :
+    Configuration(Level level, ConfigurationType configurationType, const std::string& value) :
         m_level(level),
         m_configurationType(configurationType),
         m_value(value) {
     }
 
     /// @brief Gets level of current configuration
-    inline const Level& level(void) const {
+    inline Level level(void) const {
         return m_level;
     }
 
     /// @brief Gets configuration type of current configuration
-    inline const ConfigurationType& configurationType(void) const {
+    inline ConfigurationType configurationType(void) const {
         return m_configurationType;
     }
 
@@ -2254,23 +2325,22 @@ public:
     }
 
     /// @brief Set string based configuration value
-    /// @param value_ Value to set. Values have to be std::string; For boolean values use "true", "false", for any integral values
+    /// @param value Value to set. Values have to be std::string; For boolean values use "true", "false", for any integral values
     ///        use them in quotes. They will be parsed when configuring
     inline void setValue(const std::string& value) {
         m_value = value;
     }
 
-    friend base::type::ostream_t& operator<<(base::type::ostream_t& os, const Configuration& c) {
-        os << LevelHelper::convertToString(c.m_level)
-            << ELPP_LITERAL(" ") << ConfigurationTypeHelper::convertToString(c.m_configurationType)
-            << ELPP_LITERAL(" = ") << c.m_value.c_str();
-        return os;
+    virtual inline void log(el::base::type::ostream_t& os) const {
+        os << LevelHelper::convertToString(m_level)
+            << ELPP_LITERAL(" ") << ConfigurationTypeHelper::convertToString(m_configurationType)
+            << ELPP_LITERAL(" = ") << m_value.c_str();
     }
 
     /// @brief Used to find configuration from configuration (pointers) repository. Avoid using it.
     class Predicate {
     public:
-        Predicate(const Level& level, const ConfigurationType& configurationType) :
+        Predicate(Level level, ConfigurationType configurationType) :
             m_level(level),
             m_configurationType(configurationType) {
         }
@@ -2323,7 +2393,7 @@ public:
     /// @param configurationFile Full path to configuration file
     /// @param base Configurations to base new configuration repository off. This value is used when you want to use
     ///        existing Configurations to base all the values and then set rest of configuration via configuration file.
-    /// @return True if successfully parsed, false otherwise. You may define '_STOP_ON_FIRST_ELPP_ASSERTION' to make sure you
+    /// @return True if successfully parsed, false otherwise. You may define '_ELPP_DEBUG_ASSERT_FAILURE' to make sure you
     ///         do not proceed without successful parse.
     inline bool parseFromFile(const std::string& configurationFile, Configurations* base = nullptr) {
         bool assertionPassed = false;
@@ -2343,7 +2413,7 @@ public:
     /// new line characters are provided.
     /// @param base Configurations to base new configuration repository off. This value is used when you want to use
     ///        existing Configurations to base all the values and then set rest of configuration via configuration text.
-    /// @return True if successfully parsed, false otherwise. You may define '_STOP_ON_FIRST_ELPP_ASSERTION' to make sure you
+    /// @return True if successfully parsed, false otherwise. You may define '_ELPP_DEBUG_ASSERT_FAILURE' to make sure you
     ///         do not proceed without successful parse.
     inline bool parseFromText(const std::string& configurationsString, Configurations* base = nullptr) {
         bool success = Parser::parseFromText(configurationsString, this, base);
@@ -2359,7 +2429,7 @@ public:
         if (base == nullptr || base == this) {
             return;
         }
-        base::threading::lock_guard lock(base->mutex());
+        base::threading::ScopedLock scopedLock(base->lock());
         for (Configuration*& conf : base->list()) {
             set(conf);
         }
@@ -2369,7 +2439,7 @@ public:
     ///
     /// @detail Returns as soon as first level is found.
     /// @param configurationType Type of configuration to check existence for.
-    bool hasConfiguration(const ConfigurationType& configurationType) {
+    bool hasConfiguration(ConfigurationType configurationType) {
         base::type::EnumType lIndex = LevelHelper::kMinValid;
         bool result = false;
         LevelHelper::forEachLevel(&lIndex, [&](void) -> bool {
@@ -2384,8 +2454,8 @@ public:
     /// @brief Determines whether or not specified configuration type exists for specified level
     /// @param level Level to check
     /// @param configurationType Type of configuration to check existence for.
-    inline bool hasConfiguration(const Level& level, const ConfigurationType& configurationType) {
-        base::threading::lock_guard lock(mutex());
+    inline bool hasConfiguration(Level level, ConfigurationType configurationType) {
+        base::threading::ScopedLock scopedLock(lock());
 #if _ELPP_COMPILER_INTEL
         // We cant specify template types here, Intel C++ throws compilation error
         // "error: type name is not allowed"
@@ -2407,8 +2477,8 @@ public:
     /// @see Configuration::setValue(const std::string& value)
     /// @see el::Level
     /// @see el::ConfigurationType
-    inline void set(const Level& level, const ConfigurationType& configurationType, const std::string& value) {
-        base::threading::lock_guard lock(mutex());
+    inline void set(Level level, ConfigurationType configurationType, const std::string& value) {
+        base::threading::ScopedLock scopedLock(lock());
         unsafeSet(level, configurationType, value);  // This is not unsafe anymore as we have locked mutex
         if (level == Level::Global) {
             unsafeSetGlobally(configurationType, value, false);  // Again this is not unsafe either
@@ -2416,7 +2486,7 @@ public:
     }
 
     /// @brief Sets single configuration based on other single configuration.
-    /// @see set(const Level& level, const ConfigurationType& configurationType, const std::string& value)
+    /// @see set(Level level, ConfigurationType configurationType, const std::string& value)
     inline void set(Configuration* conf) {
         if (conf == nullptr) {
             return;
@@ -2424,22 +2494,22 @@ public:
         set(conf->level(), conf->configurationType(), conf->value());
     }
 
-    inline Configuration* get(const Level& level, const ConfigurationType& configurationType) {
-        base::threading::lock_guard lock(mutex());
+    inline Configuration* get(Level level, ConfigurationType configurationType) {
+        base::threading::ScopedLock scopedLock(lock());
         return RegistryWithPred<Configuration, Configuration::Predicate>::get(level, configurationType);
     }
 
     /// @brief Sets configuration for all levels.
     /// @param configurationType Type of configuration
     /// @param value String based value
-    /// @see Configurations::set(const Level& level, const ConfigurationType& configurationType, const std::string& value)
-    inline void setGlobally(const ConfigurationType& configurationType, const std::string& value) {
+    /// @see Configurations::set(Level level, ConfigurationType configurationType, const std::string& value)
+    inline void setGlobally(ConfigurationType configurationType, const std::string& value) {
         setGlobally(configurationType, value, false);
     }
 
     /// @brief Clears repository so that all the configurations are unset
     inline void clear(void) {
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         unregisterAll();
     }
 
@@ -2482,7 +2552,7 @@ public:
     /// true. If you dont do this explicitley (either by calling this function or by using second param in Constructor
     /// and try to access a value, an error is thrown
     void setRemainingToDefault(void) {
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         unsafeSetIfNotExist(Level::Global, ConfigurationType::Enabled, "true");
 #if !defined(_ELPP_NO_DEFAULT_LOG_FILE)
         unsafeSetIfNotExist(Level::Global, ConfigurationType::Filename, std::string(base::consts::kDefaultLogFile));
@@ -2493,7 +2563,8 @@ public:
         unsafeSetIfNotExist(Level::Global, ConfigurationType::PerformanceTracking, "true");
         unsafeSetIfNotExist(Level::Global, ConfigurationType::MaxLogFileSize, "0");
         unsafeSetIfNotExist(Level::Global, ConfigurationType::Format, "%datetime %level [%logger] %msg");
-        unsafeSetIfNotExist(Level::Debug, ConfigurationType::Format, "%datetime %level [%logger] [%user@%host] [%func] [%loc] %msg");
+        unsafeSetIfNotExist(Level::Debug, ConfigurationType::Format, 
+            "%datetime %level [%logger] [%user@%host] [%func] [%loc] %msg");
         // INFO and WARNING are set to default by Level::Global
         unsafeSetIfNotExist(Level::Error, ConfigurationType::Format, "%datetime %level [%logger] %msg");
         unsafeSetIfNotExist(Level::Fatal, ConfigurationType::Format, "%datetime %level [%logger] %msg");
@@ -2632,7 +2703,8 @@ public:
                 }
                 if (quotesStart != std::string::npos && quotesEnd != std::string::npos) {
                     // Quote provided - check and strip if valid
-                    ELPP_ASSERT((quotesStart < quotesEnd), "Configuration error - No ending quote found in [" << currConfigStr << "]");
+                    ELPP_ASSERT((quotesStart < quotesEnd), "Configuration error - No ending quote found in [" 
+                        << currConfigStr << "]");
                     ELPP_ASSERT((quotesStart + 1 != quotesEnd), "Empty configuration value for [" << currConfigStr << "]");
                     if ((quotesStart != quotesEnd) && (quotesStart + 1 != quotesEnd)) {
                         // Explicit check in case if assertion is disabled
@@ -2656,7 +2728,7 @@ private:
     friend class el::Loggers;
 
     /// @brief Unsafely sets configuration if does not already exist
-    void unsafeSetIfNotExist(const Level& level, const ConfigurationType& configurationType, const std::string& value) {
+    void unsafeSetIfNotExist(Level level, ConfigurationType configurationType, const std::string& value) {
         Configuration* conf = RegistryWithPred<Configuration, Configuration::Predicate>::get(level, configurationType);
         if (conf == nullptr) {
             unsafeSet(level, configurationType, value);
@@ -2664,7 +2736,7 @@ private:
     }
 
     /// @brief Thread unsafe set
-    void unsafeSet(const Level& level, const ConfigurationType& configurationType, const std::string& value) {
+    void unsafeSet(Level level, ConfigurationType configurationType, const std::string& value) {
         Configuration* conf = RegistryWithPred<Configuration, Configuration::Predicate>::get(level, configurationType);
         if (conf == nullptr) {
             registerNew(new Configuration(level, configurationType, value));
@@ -2677,8 +2749,8 @@ private:
     }
 
     /// @brief Sets configurations for all levels including Level::Global if includeGlobalLevel is true
-    /// @see Configurations::setGlobally(const ConfigurationType& configurationType, const std::string& value)
-    void setGlobally(const ConfigurationType& configurationType, const std::string& value, bool includeGlobalLevel) {
+    /// @see Configurations::setGlobally(ConfigurationType configurationType, const std::string& value)
+    void setGlobally(ConfigurationType configurationType, const std::string& value, bool includeGlobalLevel) {
         if (includeGlobalLevel) {
             set(Level::Global, configurationType, value);
         }
@@ -2690,8 +2762,8 @@ private:
     }
 
     /// @brief Sets configurations (Unsafely) for all levels including Level::Global if includeGlobalLevel is true
-    /// @see Configurations::setGlobally(const ConfigurationType& configurationType, const std::string& value)
-    void unsafeSetGlobally(const ConfigurationType& configurationType, const std::string& value, bool includeGlobalLevel) {
+    /// @see Configurations::setGlobally(ConfigurationType configurationType, const std::string& value)
+    void unsafeSetGlobally(ConfigurationType configurationType, const std::string& value, bool includeGlobalLevel) {
         if (includeGlobalLevel) {
             unsafeSet(Level::Global, configurationType, value);
         }
@@ -2706,9 +2778,6 @@ private:
 namespace base {
 typedef std::shared_ptr<base::type::fstream_t> FileStreamPtr;
 typedef std::map<std::string, FileStreamPtr> LogStreamsReferenceMap;
-class Writer;
-class PErrorWriter;
-class LogDispatcher;
 /// @brief Configurations with data types.
 ///
 /// @detail el::Configurations have string based values. This is whats used internally in order to read correct configurations.
@@ -2725,7 +2794,7 @@ public:
         m_logStreamsReference = logStreamsReference;
         build(m_configurations);
     }
-    
+
     TypedConfigurations(const TypedConfigurations& other) {
         this->m_configurations = other.m_configurations;
         this->m_logStreamsReference = other.m_logStreamsReference;
@@ -2739,43 +2808,43 @@ public:
         return m_configurations;
     }
 
-    inline bool enabled(const Level& level) {
+    inline bool enabled(Level level) {
         return getConfigByVal<bool>(level, &m_enabledMap, "enabled");
     }
 
-    inline bool toFile(const Level& level) {
+    inline bool toFile(Level level) {
         return getConfigByVal<bool>(level, &m_toFileMap, "toFile");
     }
 
-    inline const std::string& filename(const Level& level) {
+    inline const std::string& filename(Level level) {
         return getConfigByRef<std::string>(level, &m_filenameMap, "filename");
     }
 
-    inline bool toStandardOutput(const Level& level) {
+    inline bool toStandardOutput(Level level) {
         return getConfigByVal<bool>(level, &m_toStandardOutputMap, "toStandardOutput");
     }
 
-    inline const base::LogFormat& logFormat(const Level& level) {
+    inline const base::LogFormat& logFormat(Level level) {
         return getConfigByRef<base::LogFormat>(level, &m_logFormatMap, "logFormat");
     }
 
-    inline const base::MillisecondsWidth& millisecondsWidth(const Level& level = Level::Global) {
+    inline const base::MillisecondsWidth& millisecondsWidth(Level level = Level::Global) {
         return getConfigByRef<base::MillisecondsWidth>(level, &m_millisecondsWidthMap, "millisecondsWidth");
     }
 
-    inline bool performanceTracking(const Level& level = Level::Global) {
+    inline bool performanceTracking(Level level = Level::Global) {
         return getConfigByVal<bool>(level, &m_performanceTrackingMap, "performanceTracking");
     }
 
-    inline base::type::fstream_t* fileStream(const Level& level) {
+    inline base::type::fstream_t* fileStream(Level level) {
         return getConfigByRef<base::FileStreamPtr>(level, &m_fileStreamMap, "fileStream").get();
     }
 
-    inline std::size_t maxLogFileSize(const Level& level) {
+    inline std::size_t maxLogFileSize(Level level) {
         return getConfigByVal<std::size_t>(level, &m_maxLogFileSizeMap, "maxLogFileSize");
     }
 
-    inline std::size_t logFlushThreshold(const Level& level) {
+    inline std::size_t logFlushThreshold(Level level) {
         return getConfigByVal<std::size_t>(level, &m_logFlushThresholdMap, "logFlushThreshold");
     }
 
@@ -2794,30 +2863,32 @@ private:
     base::LogStreamsReferenceMap* m_logStreamsReference;
 
     friend class el::Helpers;
+    friend class el::base::MessageBuilder;
     friend class el::base::Writer;
     friend class el::base::LogDispatcher;
 
     template <typename Conf_T>
-    inline Conf_T getConfigByVal(const Level& level, const std::map<Level, Conf_T>* confMap, const char* confName) {
-        base::threading::lock_guard lock(mutex());
+    inline Conf_T getConfigByVal(Level level, const std::map<Level, Conf_T>* confMap, const char* confName) {
+        base::threading::ScopedLock scopedLock(lock());
         return unsafeGetConfigByVal(level, confMap, confName);  // This is not unsafe anymore - mutex locked in scope
     }
 
     template <typename Conf_T>
-    inline Conf_T& getConfigByRef(const Level& level, std::map<Level, Conf_T>* confMap, const char* confName) {
-        base::threading::lock_guard lock(mutex());
+    inline Conf_T& getConfigByRef(Level level, std::map<Level, Conf_T>* confMap, const char* confName) {
+        base::threading::ScopedLock scopedLock(lock());
         return unsafeGetConfigByRef(level, confMap, confName);  // This is not unsafe anymore - mutex locked in scope
     }
 
     template <typename Conf_T>
-    inline Conf_T unsafeGetConfigByVal(const Level& level, const std::map<Level, Conf_T>* confMap, const char* confName) {
+    inline Conf_T unsafeGetConfigByVal(Level level, const std::map<Level, Conf_T>* confMap, const char* confName) {
         _ELPP_UNUSED(confName);
         typename std::map<Level, Conf_T>::const_iterator it = confMap->find(level);
         if (it == confMap->end()) {
             try {
                 return confMap->at(Level::Global);
             } catch (...) {
-                ELPP_INTERNAL_ERROR("Unable to get configuration [" << confName << "] for level [" << LevelHelper::convertToString(level) << "]"
+                ELPP_INTERNAL_ERROR("Unable to get configuration [" << confName << "] for level [" 
+                    << LevelHelper::convertToString(level) << "]"
                         << std::endl << "Please ensure you have properly configured logger.", false);
                 return Conf_T();
             }
@@ -2826,14 +2897,15 @@ private:
     }
 
     template <typename Conf_T>
-    inline Conf_T& unsafeGetConfigByRef(const Level& level, std::map<Level, Conf_T>* confMap, const char* confName) {
+    inline Conf_T& unsafeGetConfigByRef(Level level, std::map<Level, Conf_T>* confMap, const char* confName) {
         _ELPP_UNUSED(confName);
         typename std::map<Level, Conf_T>::iterator it = confMap->find(level);
         if (it == confMap->end()) {
             try {
                 return confMap->at(Level::Global);
             } catch (...) {
-                ELPP_INTERNAL_ERROR("Unable to get configuration [" << confName << "] for level [" << LevelHelper::convertToString(level) << "]"
+                ELPP_INTERNAL_ERROR("Unable to get configuration [" << confName << "] for level [" 
+                    << LevelHelper::convertToString(level) << "]"
                         << std::endl << "Please ensure you have properly configured logger.", false);
             }
         }
@@ -2841,7 +2913,7 @@ private:
     }
 
     template <typename Conf_T>
-    void setValue(const Level& level, const Conf_T& value, std::map<Level, Conf_T>* confMap, bool includeGlobalLevel = true) {
+    void setValue(Level level, const Conf_T& value, std::map<Level, Conf_T>* confMap, bool includeGlobalLevel = true) {
         // If map is empty and we are allowed to add into generic level (Level::Global), do it!
         if (confMap->empty() && includeGlobalLevel) {
             confMap->insert(std::make_pair(Level::Global, value));
@@ -2864,7 +2936,7 @@ private:
     }
 
     void build(Configurations* configurations) {
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         auto getBool = [] (std::string boolStr) -> bool {  // Pass by value for trimming
             base::utils::Str::trim(boolStr);
             return (boolStr == "TRUE" || boolStr == "true" || boolStr == "1");
@@ -2880,11 +2952,17 @@ private:
             } else if (conf->configurationType() == ConfigurationType::ToStandardOutput) {
                 setValue(conf->level(), getBool(conf->value()), &m_toStandardOutputMap);
             } else if (conf->configurationType() == ConfigurationType::Filename) {
-                insertFile(conf->level(), conf->value());
+                // We do not yet configure filename but we will configure in another
+                // loop. This is because if file cannot be created, we will force ToFile
+                // to be false. Because configuring logger is not necessarily performance
+                // sensative operation, we can live with another loop; (by the way this loop
+                // is not very heavy either)
             } else if (conf->configurationType() == ConfigurationType::Format) {
-                setValue(conf->level(), base::LogFormat(conf->level(), base::type::string_t(conf->value().begin(), conf->value().end())), &m_logFormatMap);
+                setValue(conf->level(), base::LogFormat(conf->level(), 
+                    base::type::string_t(conf->value().begin(), conf->value().end())), &m_logFormatMap);
             } else if (conf->configurationType() == ConfigurationType::MillisecondsWidth) {
-                setValue(Level::Global, base::MillisecondsWidth(static_cast<int>(getULong(conf->value()))), &m_millisecondsWidthMap);
+                setValue(Level::Global, 
+                    base::MillisecondsWidth(static_cast<int>(getULong(conf->value()))), &m_millisecondsWidthMap);
             } else if (conf->configurationType() == ConfigurationType::PerformanceTracking) {
                 setValue(Level::Global, getBool(conf->value()), &m_performanceTrackingMap);
             } else if (conf->configurationType() == ConfigurationType::MaxLogFileSize) {
@@ -2896,9 +2974,17 @@ private:
                 setValue(conf->level(), static_cast<std::size_t>(getULong(conf->value())), &m_logFlushThresholdMap);
             }
         }
+        // As mentioned early, we will now set filename configuration in separate loop to deal with non-existent files
+        for (Configurations::const_iterator it = configurations->begin(); it != configurations->end(); ++it) {
+            Configuration* conf = *it;
+            if (conf->configurationType() == ConfigurationType::Filename) {
+                insertFile(conf->level(), conf->value());
+            }
+        }
         for (std::vector<Configuration*>::iterator conf = withFileSizeLimit.begin();
-            conf != withFileSizeLimit.end(); ++conf) {
-                unsafeValidateFileRolling((*conf)->level(), base::defaultPreRollOutHandler);  // This is not unsafe as mutex is locked in currect scope
+                conf != withFileSizeLimit.end(); ++conf) {
+                // This is not unsafe as mutex is locked in currect scope
+                unsafeValidateFileRolling((*conf)->level(), base::defaultPreRollOutCallback);
         }
     }
 
@@ -2920,7 +3006,7 @@ private:
         std::size_t dateIndex = std::string::npos;
         std::string dateTimeFormatSpecifierStr = std::string(base::consts::kDateTimeFormatSpecifierForFilename);
         if ((dateIndex = resultingFilename.find(dateTimeFormatSpecifierStr.c_str())) != std::string::npos) {
-            while (dateIndex > 0 && resultingFilename[dateIndex - 1] == base::consts::kFormatEscapeChar) {
+            while (dateIndex > 0 && resultingFilename[dateIndex - 1] == base::consts::kFormatSpecifierChar) {
                 dateIndex = resultingFilename.find(dateTimeFormatSpecifierStr.c_str(), dateIndex + 1);
             }
             if (dateIndex != std::string::npos) {
@@ -2954,7 +3040,7 @@ private:
         return resultingFilename;
     }
 
-    void insertFile(const Level& level, const std::string& fullFilename) {
+    void insertFile(Level level, const std::string& fullFilename) {
         std::string resolvedFilename = resolveFilename(fullFilename);
         if (resolvedFilename.empty()) {
             std::cerr << "Could not load empty file for logging, please re-check your configurations for level ["
@@ -2964,33 +3050,34 @@ private:
         if (filePath.size() < resolvedFilename.size()) {
             base::utils::File::createPath(filePath);
         }
-        auto create = [&](const Level& level) {
+        auto create = [&](Level level) {
             base::LogStreamsReferenceMap::iterator filestreamIter = m_logStreamsReference->find(resolvedFilename);
+            base::type::fstream_t* fs = nullptr;
             if (filestreamIter == m_logStreamsReference->end()) {
                 // We need a completely new stream, nothing to share with
-                base::type::fstream_t* fs = base::utils::File::newFileStream(resolvedFilename);
-                if (fs != nullptr) {
-                    m_filenameMap.insert(std::make_pair(level, resolvedFilename));
-                    m_fileStreamMap.insert(std::make_pair(level, base::FileStreamPtr(fs)));
-                    m_logStreamsReference->insert(std::make_pair(resolvedFilename, base::FileStreamPtr(m_fileStreamMap.at(level))));
-                }
-                // else we already display error from File::newFileStream()
+                fs = base::utils::File::newFileStream(resolvedFilename);
+                m_filenameMap.insert(std::make_pair(level, resolvedFilename));
+                m_fileStreamMap.insert(std::make_pair(level, base::FileStreamPtr(fs)));
+                m_logStreamsReference->insert(std::make_pair(resolvedFilename, base::FileStreamPtr(m_fileStreamMap.at(level))));
             } else {
                 // Woops! we have an existing one, share it!
                 m_filenameMap.insert(std::make_pair(level, filestreamIter->first));
                 m_fileStreamMap.insert(std::make_pair(level, base::FileStreamPtr(filestreamIter->second)));
+                fs = filestreamIter->second.get();
+            }
+            if (fs == nullptr) {
+                // We display bad file error from newFileStream()
+                ELPP_INTERNAL_ERROR("Setting [TO_FILE] of [" 
+                    << LevelHelper::convertToString(level) << "] to FALSE", false);
+                setValue(level, false, &m_toFileMap);
             }
         };  // NOLINT
-        if (m_filenameMap.empty() && m_fileStreamMap.empty()) {
-            // If we dont have file conf for any level, create it for Level::Global first
-            create(Level::Global);
-        } else {
-            // Create a shared or new file stream depending on file path
-            create(level);
-        }
+        // If we dont have file conf for any level, create it for Level::Global first
+        // otherwise create for specified level
+        create(m_filenameMap.empty() && m_fileStreamMap.empty() ? Level::Global : level);
     }
 
-    bool unsafeValidateFileRolling(const Level& level, const PreRollOutHandler& preRollOutHandler) {
+    bool unsafeValidateFileRolling(Level level, const PreRollOutCallback& PreRollOutCallback) {
         base::type::fstream_t* fs = unsafeGetConfigByRef(level, &m_fileStreamMap, "fileStream").get();
         if (fs == nullptr) {
             return true;
@@ -3002,16 +3089,16 @@ private:
             ELPP_INTERNAL_INFO(1, "Truncating log file [" << fname << "] as a result of configurations for level ["
                     << LevelHelper::convertToString(level) << "]");
             fs->close();
-            preRollOutHandler(fname.c_str(), currFileSize);
+            PreRollOutCallback(fname.c_str(), currFileSize);
             fs->open(fname, std::fstream::out | std::fstream::trunc);
             return true;
         }
         return false;
     }
 
-    bool validateFileRolling(const Level& level, const PreRollOutHandler& preRollOutHandler) {
-        base::threading::lock_guard lock(mutex());
-        return unsafeValidateFileRolling(level, preRollOutHandler);
+    bool validateFileRolling(Level level, const PreRollOutCallback& PreRollOutCallback) {
+        base::threading::ScopedLock scopedLock(lock());
+        return unsafeValidateFileRolling(level, PreRollOutCallback);
     }
 };
 /// @brief Class that keeps record of current line hit for occasional logging
@@ -3070,7 +3157,7 @@ public:
     inline std::size_t hitCounts(void) const {
         return m_hitCounts;
     }
-    
+
     inline void increment(void) {
         ++m_hitCounts;
     }
@@ -3103,7 +3190,7 @@ public:
     /// @brief Validates counter for every N, i.e, registers new if does not exist otherwise updates original one
     /// @return True if validation resulted in triggering hit. Meaning logs should be written everytime true is returned
     bool validateEveryN(const char* filename, unsigned long int lineNumber, std::size_t n) {  // NOLINT
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         base::HitCounter* counter = get(filename, lineNumber);
         if (counter == nullptr) {
             registerNew(counter = new base::HitCounter(filename, lineNumber));
@@ -3112,11 +3199,11 @@ public:
         bool result = (n >= 1 && counter->hitCounts() != 0 && counter->hitCounts() % n == 0);
         return result;
     }
-    
+
     /// @brief Validates counter for hits >= N, i.e, registers new if does not exist otherwise updates original one
     /// @return True if validation resulted in triggering hit. Meaning logs should be written everytime true is returned
     bool validateAfterN(const char* filename, unsigned long int lineNumber, std::size_t n) {  // NOLINT
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         base::HitCounter* counter = get(filename, lineNumber);
         if (counter == nullptr) {
             registerNew(counter = new base::HitCounter(filename, lineNumber));
@@ -3129,11 +3216,11 @@ public:
         counter->increment();
         return false;
     }
-        
+
     /// @brief Validates counter for hits are <= n, i.e, registers new if does not exist otherwise updates original one
     /// @return True if validation resulted in triggering hit. Meaning logs should be written everytime true is returned
     bool validateNTimes(const char* filename, unsigned long int lineNumber, std::size_t n) {  // NOLINT
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         base::HitCounter* counter = get(filename, lineNumber);
         if (counter == nullptr) {
             registerNew(counter = new base::HitCounter(filename, lineNumber));
@@ -3147,12 +3234,15 @@ public:
 
     /// @brief Gets hit counter registered at specified position
     inline const base::HitCounter* getCounter(const char* filename, unsigned long int lineNumber) {  // NOLINT
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         return get(filename, lineNumber);
     }
 };
+/// @brief Action to be taken for dispatching
+enum class DispatchAction : base::type::EnumType {
+    None = 1, NormalLog = 2, SysLog = 4
+};
 }  // namespace base
-namespace api {
 class LogBuilder : base::NoCopy {
 public:
     virtual ~LogBuilder(void) { ELPP_INTERNAL_INFO(3, "Destroying log builder...")}
@@ -3160,8 +3250,8 @@ public:
 private:
     friend class el::base::LogDispatcher;
 
-    void convertToColoredOutput(base::type::string_t* logLine, const Level& level) {
-        if (!base::utils::OS::termSupportsColor()) return;
+    void convertToColoredOutput(base::type::string_t* logLine, Level level) {
+        if (!base::utils::s_termSupportsColor) return;
         const base::type::char_t* resetColor = ELPP_LITERAL("\x1b[0m");
         if (level == Level::Error || level == Level::Fatal)
             *logLine = ELPP_LITERAL("\x1b[31m") + *logLine + resetColor;
@@ -3170,11 +3260,10 @@ private:
     }
 };
 typedef std::shared_ptr<LogBuilder> LogBuilderPtr;
-}  // namespace api
 /// @brief Represents a logger holding ID and configurations we need to write logs
 ///
 /// @detail This class does not write logs itself instead its used by writer to read configuations from.
-class Logger : public base::threading::ThreadSafe {
+class Logger : public base::threading::ThreadSafe, public Loggable {
 public:
     Logger(const std::string& id, base::LogStreamsReferenceMap* logStreamsReference) :
             m_id(id),
@@ -3222,9 +3311,8 @@ public:
         base::utils::safeDelete(m_typedConfigurations);
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Logger& logger) {
-        os << logger.m_id;
-        return os;
+    virtual inline void log(el::base::type::ostream_t& os) const {
+        os << m_id.c_str();
     }
 
     /// @brief Configures the logger using specified configurations.
@@ -3238,18 +3326,17 @@ public:
                 flush();
             }
         }
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         if (m_configurations != configurations) {
             m_configurations.setFromBase(const_cast<Configurations*>(&configurations));
         }
-        ELPP_INTERNAL_INFO(9, "Configuring logger [" << id() << "] with configurations [\n" << m_configurations << "]");
         base::utils::safeDelete(m_typedConfigurations);
         m_typedConfigurations = new base::TypedConfigurations(&m_configurations, m_logStreamsReference);
         resolveLoggerFormatSpec();
         m_isConfigured = true;
     }
 
-    /// @brief Reconfigures logger using configurations previously provided.
+    /// @brief Reconfigures logger using existing configurations
     inline void reconfigure(void) {
         ELPP_INTERNAL_INFO(1, "Reconfiguring logger [" << m_id << "]");
         configure(m_configurations);
@@ -3275,7 +3362,7 @@ public:
         return m_typedConfigurations;
     }
 
-    inline static bool isValidId(const std::string& id) {
+    static inline bool isValidId(const std::string& id) {
         for (std::string::const_iterator it = id.begin(); it != id.end(); ++it) {
             if (!base::utils::Str::contains(base::consts::kValidLoggerIdSymbols, *it)) {
                 return false;
@@ -3286,7 +3373,7 @@ public:
     /// @brief Flushes logger to sync all log files for all levels
     inline void flush(void) {
         ELPP_INTERNAL_INFO(3, "Flushing logger [" << m_id << "] all levels");
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         base::type::EnumType lIndex = LevelHelper::kMinValid;
         LevelHelper::forEachLevel(&lIndex, [&](void) -> bool {
             flush(LevelHelper::castFromInt(lIndex), nullptr);
@@ -3294,14 +3381,39 @@ public:
         });
     }
 
-    inline api::LogBuilder* logBuilder(void) const {
+    inline LogBuilder* logBuilder(void) const {
         return m_logBuilder.get();
     }
 
-    inline void setLogBuilder(const api::LogBuilderPtr& logBuilder) {
+    inline void setLogBuilder(const LogBuilderPtr& logBuilder) {
         m_logBuilder = logBuilder;
     }
 
+    inline bool enabled(Level level) const {
+        return m_typedConfigurations->enabled(level);
+    }
+    
+#if _ELPP_VARIADIC_TEMPLATES_SUPPORTED
+#   define LOGGER_LEVEL_WRITERS_SIGNATURES(FUNCTION_NAME)\
+    template <typename T, typename... Args>\
+    inline void FUNCTION_NAME(const char*, const T&, const Args&...);\
+    template <typename T>\
+    inline void FUNCTION_NAME(const T&);
+
+    template <typename T, typename... Args> 
+    inline void verbose(int, const char*, const T&, const Args&...);
+
+    template <typename T> 
+    inline void verbose(int, const T&);
+
+    LOGGER_LEVEL_WRITERS_SIGNATURES(info)
+    LOGGER_LEVEL_WRITERS_SIGNATURES(debug)
+    LOGGER_LEVEL_WRITERS_SIGNATURES(warn)
+    LOGGER_LEVEL_WRITERS_SIGNATURES(error)
+    LOGGER_LEVEL_WRITERS_SIGNATURES(fatal)
+    LOGGER_LEVEL_WRITERS_SIGNATURES(trace)
+#   undef LOGGER_LEVEL_WRITERS_SIGNATURES
+#endif // _ELPP_VARIADIC_TEMPLATES_SUPPORTED
 private:
     std::string m_id;
     base::TypedConfigurations* m_typedConfigurations;
@@ -3311,19 +3423,34 @@ private:
     Configurations m_configurations;
     std::map<Level, unsigned int> m_unflushedCount;
     base::LogStreamsReferenceMap* m_logStreamsReference;
-    api::LogBuilderPtr m_logBuilder;
+    LogBuilderPtr m_logBuilder;
 
     friend class el::LogMessage;
     friend class el::Loggers;
     friend class el::Helpers;
     friend class el::base::RegisteredLoggers;
     friend class el::base::LogDispatcher;
+    friend class el::base::MessageBuilder;
     friend class el::base::Writer;
     friend class el::base::PErrorWriter;
     friend class el::base::Storage;
-    friend class el::base::Trackable;
+    friend class el::base::PerformanceTracker;
 
     Logger(void);
+
+#if _ELPP_VARIADIC_TEMPLATES_SUPPORTED
+    template <typename T, typename... Args>
+    void log_(Level, int, const char*, const T&, const Args&...);
+
+    template <typename T>
+    inline void log_(Level, int, const T&);
+
+    template <typename T, typename... Args>
+    void log(Level, const char*, const T&, const Args&...);
+
+    template <typename T>
+    inline void log(Level, const T&);
+#endif // _ELPP_VARIADIC_TEMPLATES_SUPPORTED
 
     void initUnflushedCount(void) {
         m_unflushedCount.clear();
@@ -3338,7 +3465,7 @@ private:
         return m_stream;
     }
 
-    inline void flush(const Level& level, base::type::fstream_t* fs) {
+    inline void flush(Level level, base::type::fstream_t* fs) {
         if (fs == nullptr && m_typedConfigurations->toFile(level)) {
             fs = m_typedConfigurations->fileStream(level);
         }
@@ -3348,14 +3475,15 @@ private:
         }
     }
 
-    inline bool isFlushNeeded(const Level& level) {
+    inline bool isFlushNeeded(Level level) {
         return ++m_unflushedCount.find(level)->second >= m_typedConfigurations->logFlushThreshold(level);
     }
 
     void resolveLoggerFormatSpec(void) const {
         base::type::EnumType lIndex = LevelHelper::kMinValid;
         LevelHelper::forEachLevel(&lIndex, [&](void) -> bool {
-            base::LogFormat* logFormat = const_cast<base::LogFormat*>(&m_typedConfigurations->logFormat(LevelHelper::castFromInt(lIndex)));
+            base::LogFormat* logFormat = 
+                const_cast<base::LogFormat*>(&m_typedConfigurations->logFormat(LevelHelper::castFromInt(lIndex)));
             base::utils::Str::replaceFirstWithEscape(logFormat->m_format,
                     base::consts::kLoggerIdFormatSpecifier, m_id);
             return false;
@@ -3366,7 +3494,7 @@ namespace base {
 /// @brief Loggers repository
 class RegisteredLoggers : public base::utils::Registry<Logger, std::string> {
 public:
-    explicit RegisteredLoggers(const api::LogBuilderPtr& defaultLogBuilder) :
+    explicit RegisteredLoggers(const LogBuilderPtr& defaultLogBuilder) :
         m_defaultLogBuilder(defaultLogBuilder) {
         m_defaultConfigurations.setToDefault();
     }
@@ -3376,7 +3504,7 @@ public:
     }
 
     inline void setDefaultConfigurations(const Configurations& configurations) {
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         m_defaultConfigurations.setFromBase(const_cast<Configurations*>(&configurations));
     }
 
@@ -3385,7 +3513,7 @@ public:
     }
 
     Logger* get(const std::string& id, bool forceCreation = true) {
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         Logger* logger_ = base::utils::Registry<Logger, std::string>::get(id);
         if (logger_ == nullptr && forceCreation) {
             bool validId = Logger::isValidId(id);
@@ -3416,7 +3544,7 @@ public:
     }
 
     inline void unregister(Logger*& logger) {  // NOLINT
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         base::utils::Registry<Logger, std::string>::unregister(logger->id());
     }
 
@@ -3426,15 +3554,16 @@ public:
 
     inline void flushAll(void) {
         ELPP_INTERNAL_INFO(1, "Flushing all log files");
-        base::threading::lock_guard lock(mutex());
-        for (base::LogStreamsReferenceMap::iterator it = m_logStreamsReference.begin(); it != m_logStreamsReference.end(); ++it) {
+        base::threading::ScopedLock scopedLock(lock());
+        for (base::LogStreamsReferenceMap::iterator it = m_logStreamsReference.begin();
+                it != m_logStreamsReference.end(); ++it) {
             if (it->second.get() == nullptr) continue;
             it->second->flush();
         }
     }
 
 private:
-    api::LogBuilderPtr m_defaultLogBuilder;
+    LogBuilderPtr m_defaultLogBuilder;
     Configurations m_defaultConfigurations;
     base::LogStreamsReferenceMap m_logStreamsReference;
     friend class el::base::Storage;
@@ -3442,14 +3571,12 @@ private:
 /// @brief Represents registries for verbose logging
 class VRegistry : base::NoCopy, public base::threading::ThreadSafe {
 public:
-    typedef int VLevel;
-
-    explicit VRegistry(VLevel level) : m_level(level) {
+    explicit VRegistry(base::type::VerboseLevel level, base::type::EnumType* pFlags) : m_level(level), m_pFlags(pFlags) {
     }
 
     /// @brief Sets verbose level. Accepted range is 0-9
-    inline void setLevel(VLevel level) {
-        base::threading::lock_guard lock(mutex());
+    inline void setLevel(base::type::VerboseLevel level) {
+        base::threading::ScopedLock scopedLock(lock());
         if (level < 0)
             m_level = 0;
         else if (level > 9)
@@ -3458,13 +3585,12 @@ public:
             m_level = level;
     }
 
-    inline VLevel level(void) const {
+    inline base::type::VerboseLevel level(void) const {
         return m_level;
     }
 
     void setModules(const char* modules) {
-        base::threading::lock_guard lock(mutex());
-#if !defined(_ELPP_DISABLE_VMODULES_EXTENSION)
+        base::threading::ScopedLock scopedLock(lock());
         auto addSuffix = [](std::stringstream& ss, const char* sfx, const char* prev) {
             if (prev != nullptr && base::utils::Str::endsWith(ss.str(), prev)) {
                 std::string chr(ss.str().substr(0, ss.str().size() - strlen(prev)));
@@ -3478,25 +3604,26 @@ public:
             }
             ss << sfx;
         };  // NOLINT
-#endif  // !defined(_ELPP_DISABLE_VMODULES_EXTENSION)
-        auto insert = [&](std::stringstream& ss, VLevel level) {
-#if !defined(_ELPP_DISABLE_VMODULES_EXTENSION)
-            addSuffix(ss, ".h", nullptr);
-            m_modules.insert(std::make_pair(ss.str(), level));
-            addSuffix(ss, ".c", ".h");
-            m_modules.insert(std::make_pair(ss.str(), level));
-            addSuffix(ss, ".cpp", ".c");
-            m_modules.insert(std::make_pair(ss.str(), level));
-            addSuffix(ss, ".cc", ".cpp");
-            m_modules.insert(std::make_pair(ss.str(), level));
-            addSuffix(ss, ".cxx", ".cc");
-            m_modules.insert(std::make_pair(ss.str(), level));
-            addSuffix(ss, ".-inl.h", ".cxx");
-            m_modules.insert(std::make_pair(ss.str(), level));
-            addSuffix(ss, ".hxx", ".-inl.h");
-            m_modules.insert(std::make_pair(ss.str(), level));
-            addSuffix(ss, ".hpp", ".hxx");
-#endif  // !defined(_ELPP_DISABLE_VMODULES_EXTENSION)
+        auto insert = [&](std::stringstream& ss, base::type::VerboseLevel level) {
+            if (!base::utils::hasFlag(LoggingFlag::DisableVModulesExtensions, *m_pFlags)) {
+                addSuffix(ss, ".h", nullptr);
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".c", ".h");
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".cpp", ".c");
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".cc", ".cpp");
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".cxx", ".cc");
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".-inl.h", ".cxx");
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".hxx", ".-inl.h");
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".hpp", ".hxx");
+                m_modules.insert(std::make_pair(ss.str(), level));
+                addSuffix(ss, ".hh", ".hpp");
+            }
             m_modules.insert(std::make_pair(ss.str(), level));
         };  // NOLINT
         bool isMod = true;
@@ -3523,7 +3650,7 @@ public:
                     ss << *modules;
                 } else if (isLevel) {
                     if (isdigit(*modules)) {
-                        level = static_cast<VLevel>(*modules) - 48;
+                        level = static_cast<base::type::VerboseLevel>(*modules) - 48;
                     }
                 }
                 break;
@@ -3534,25 +3661,25 @@ public:
         }
     }
 
-    bool allowed(VLevel vlevel, const char* file, unsigned int flags = 0x0) {
-        base::threading::lock_guard lock(mutex());
+    bool allowed(base::type::VerboseLevel vlevel, const char* file) {
+        base::threading::ScopedLock scopedLock(lock());
         if (m_modules.empty() || file == nullptr) {
             return vlevel <= m_level;
         } else {
-            std::map<std::string, VLevel>::iterator it = m_modules.begin();
+            std::map<std::string, base::type::VerboseLevel>::iterator it = m_modules.begin();
             for (; it != m_modules.end(); ++it) {
                 if (base::utils::Str::wildCardMatch(file, it->first.c_str())) {
                     return vlevel <= it->second;
                 }
             }
-            if (base::utils::hasFlag(LoggingFlag::AllowVerboseIfModuleNotSpecified, flags)) {
+            if (base::utils::hasFlag(LoggingFlag::AllowVerboseIfModuleNotSpecified, *m_pFlags)) {
                 return true;
             }
             return false;
         }
     }
 
-    inline const std::map<std::string, VLevel>& modules(void) const {
+    inline const std::map<std::string, base::type::VerboseLevel>& modules(void) const {
         return m_modules;
     }
 
@@ -3564,33 +3691,33 @@ public:
             setLevel(atoi(commandLineArgs->getParamValue("--v")));
         } else if (commandLineArgs->hasParamWithValue("--V")) {
             setLevel(atoi(commandLineArgs->getParamValue("--V")));
-        }
-#if (!defined(_ELPP_DISABLE_VMODULES))
-        else if (commandLineArgs->hasParamWithValue("-vmodule")) {
+        } else if ((commandLineArgs->hasParamWithValue("-vmodule"))
+                && (!base::utils::hasFlag(LoggingFlag::DisableVModules, *m_pFlags))) {
             setModules(commandLineArgs->getParamValue("-vmodule"));
-        } else if (commandLineArgs->hasParamWithValue("-VMODULE")) {
+        } else if (commandLineArgs->hasParamWithValue("-VMODULE") 
+                && (!base::utils::hasFlag(LoggingFlag::DisableVModules, *m_pFlags))) {
             setModules(commandLineArgs->getParamValue("-VMODULE"));
         }
-#endif  // (!defined(_ELPP_DISABLE_VMODULES))
     }
 
 private:
-    VLevel m_level;
-    std::map<std::string, VLevel> m_modules;
+    base::type::VerboseLevel m_level;
+    base::type::EnumType* m_pFlags;
+    std::map<std::string, base::type::VerboseLevel> m_modules;
 };
 }  // namespace base
 class LogMessage {
 public:
-    LogMessage(const Level& level, const std::string& file, unsigned long int line, const std::string& func,  // NOLINT
-                          base::VRegistry::VLevel verboseLevel, Logger* logger) :
+    LogMessage(Level level, const std::string& file, unsigned long int line, const std::string& func,  // NOLINT
+                          base::type::VerboseLevel verboseLevel, Logger* logger) :
                   m_level(level), m_file(file), m_line(line), m_func(func),
                   m_verboseLevel(verboseLevel), m_logger(logger), m_message(std::move(logger->stream().str())) {
     }
-    inline const Level& level(void) const { return m_level; }
+    inline Level level(void) const { return m_level; }
     inline const std::string& file(void) const { return m_file; }
-    inline unsigned long int line(void) const { return m_line; }  // NOLINT
+    inline unsigned long int line(void) const { return m_line; } // NOLINT
     inline const std::string& func(void) const { return m_func; }
-    inline base::VRegistry::VLevel verboseLevel(void) const { return m_verboseLevel; }
+    inline base::type::VerboseLevel verboseLevel(void) const { return m_verboseLevel; }
     inline Logger* logger(void) const { return m_logger; }
     inline const base::type::string_t& message(void) const { return m_message; }
 private:
@@ -3598,32 +3725,24 @@ private:
     std::string m_file;
     unsigned long int m_line;  // NOLINT
     std::string m_func;
-    base::VRegistry::VLevel m_verboseLevel;
+    base::type::VerboseLevel m_verboseLevel;
     Logger* m_logger;
     base::type::string_t m_message;
 };
 namespace base {
-class DefaultLogBuilder;
-/// @brief Action to be taken for dispatching
-enum class DispatchAction : base::type::EnumType {
-    None = 1, NormalLog = 2, SysLog = 4
-};
-/// @brief Contains all the storages that is needed by writer
-///
-/// @detail This is initialized when Easylogging++ is initialized and is used by Writer
+/// @brief Easylogging++ management storage
 class Storage : base::NoCopy, public base::threading::ThreadSafe {
 public:
-    explicit Storage(const api::LogBuilderPtr& defaultLogBuilder) :
+    explicit Storage(const LogBuilderPtr& defaultLogBuilder) :
         m_registeredHitCounters(new base::RegisteredHitCounters()),
         m_registeredLoggers(new base::RegisteredLoggers(defaultLogBuilder)),
-        m_vRegistry(new base::VRegistry(0)),
         m_flags(0x0),
-        m_preRollOutHandler(base::defaultPreRollOutHandler),
-        m_postLogDispatchHandler(base::defaultPostLogDispatchHandler),
-        m_postPerformanceTrackingHandler(base::defaultPostPerformanceTrackingHandler) {
+        m_vRegistry(new base::VRegistry(0, &m_flags)),
+        m_preRollOutCallback(base::defaultPreRollOutCallback),
+        m_performanceTrackingCallback(base::defaultPerformanceTrackingCallback),
+        m_callingDispatchCallback(false) {
         // Register default logger
         m_registeredLoggers->get(std::string(base::consts::kDefaultLoggerId));
-
         // Register performance logger and reconfigure format
         Logger* performanceLogger = m_registeredLoggers->get(std::string(base::consts::kPerformanceLoggerId));
         performanceLogger->configurations()->setGlobally(ConfigurationType::Format, "%datetime %level %msg");
@@ -3636,15 +3755,7 @@ public:
 #else
         _ELPP_UNUSED(base::consts::kSysLogLoggerId);
 #endif  //  defined(_ELPP_SYSLOG)
-        // Register template helper test logger - see Helpers::convertTemplateToStdString(const T&)
-        Logger* templateHelperLogger = m_registeredLoggers->get(std::string(base::consts::kInternalHelperLoggerId));
-        templateHelperLogger->configurations()->setGlobally(ConfigurationType::Format, "[DO NOT USE THIS LOGGER '%logger']");
-        templateHelperLogger->reconfigure();
-
         addFlag(LoggingFlag::AllowVerboseIfModuleNotSpecified);
-#if defined(_ELPP_STRICT_SIZE_CHECK)
-        addFlag(LoggingFlag::StrictLogFileSizeCheck);
-#endif  // defined(_ELPP_STRICT_SIZE_CHECK)
         ELPP_INTERNAL_INFO(1, "Easylogging++ has been initialized");
     }
 
@@ -3657,11 +3768,11 @@ public:
     inline bool validateEveryNCounter(const char* filename, unsigned long int lineNumber, std::size_t occasion) {  // NOLINT
         return hitCounters()->validateEveryN(filename, lineNumber, occasion);
     }
-    
+
     inline bool validateAfterNCounter(const char* filename, unsigned long int lineNumber, std::size_t n) { // NOLINT
         return hitCounters()->validateAfterN(filename, lineNumber, n);
     }
-    
+
     inline bool validateNTimesCounter(const char* filename, unsigned long int lineNumber, std::size_t n) { // NOLINT
         return hitCounters()->validateNTimes(filename, lineNumber, n);
     }
@@ -3682,15 +3793,15 @@ public:
         return &m_commandLineArgs;
     }
 
-    inline void addFlag(const LoggingFlag& flag) {
+    inline void addFlag(LoggingFlag flag) {
         base::utils::addFlag(flag, &m_flags);
     }
 
-    inline void removeFlag(const LoggingFlag& flag) {
+    inline void removeFlag(LoggingFlag flag) {
         base::utils::removeFlag(flag, &m_flags);
     }
 
-    inline bool hasFlag(const LoggingFlag& flag) const {
+    inline bool hasFlag(LoggingFlag flag) const {
         return base::utils::hasFlag(flag, m_flags);
     }
 
@@ -3702,44 +3813,32 @@ public:
         m_flags = flags;
     }
 
-    inline void setPreRollOutHandler(const PreRollOutHandler& handler) {
-        m_preRollOutHandler = handler;
+    inline void setPreRollOutCallback(const PreRollOutCallback& callback) {
+        m_preRollOutCallback = callback;
     }
 
-    inline void unsetPreRollOutHandler(void) {
-        m_preRollOutHandler = base::defaultPreRollOutHandler;
+    inline void unsetPreRollOutCallback(void) {
+        m_preRollOutCallback = base::defaultPreRollOutCallback;
     }
 
-    inline PreRollOutHandler& preRollOutHandler(void) {
-        return m_preRollOutHandler;
+    inline PreRollOutCallback& preRollOutCallback(void) {
+        return m_preRollOutCallback;
     }
 
-    inline void setPostLogDispatchHandler(const PostLogDispatchHandler& handler) {
-        m_postLogDispatchHandler = handler;
+    inline void setPerformanceTrackingCallback(const PerformanceTrackingCallback& callback) {
+        m_performanceTrackingCallback = callback;
     }
 
-    inline void unsetPostLogDispatchHandler(void) {
-        m_postLogDispatchHandler = base::defaultPostLogDispatchHandler;
+    inline void unsetPerformanceTrackingCallback(void) {
+        m_performanceTrackingCallback = base::defaultPerformanceTrackingCallback;
     }
 
-    inline PostLogDispatchHandler& postLogDispatchHandler(void) {
-        return m_postLogDispatchHandler;
-    }
-
-    inline void setPostPerformanceTrackingHandler(const PostPerformanceTrackingHandler& handler) {
-        m_postPerformanceTrackingHandler = handler;
-    }
-
-    inline void unsetPostPerformanceTrackingHandler(void) {
-        m_postPerformanceTrackingHandler = base::defaultPostPerformanceTrackingHandler;
-    }
-
-    inline PostPerformanceTrackingHandler postPerformanceTrackingHandler(void) {
-        return m_postPerformanceTrackingHandler;
+    inline PerformanceTrackingCallback performanceTrackingCallback(void) {
+        return m_performanceTrackingCallback;
     }
 
     inline bool hasCustomFormatSpecifier(const char* formatSpecifier) {
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         return std::find(m_customFormatSpecifiers.begin(), m_customFormatSpecifiers.end(),
                 formatSpecifier) != m_customFormatSpecifiers.end();
     }
@@ -3748,12 +3847,12 @@ public:
         if (hasCustomFormatSpecifier(customFormatSpecifier.formatSpecifier())) {
             return;
         }
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         m_customFormatSpecifiers.push_back(customFormatSpecifier);
     }
 
     inline bool uninstallCustomFormatSpecifier(const char* formatSpecifier) {
-        base::threading::lock_guard lock(mutex());
+        base::threading::ScopedLock scopedLock(lock());
         std::vector<CustomFormatSpecifier>::iterator it = std::find(m_customFormatSpecifiers.begin(),
                 m_customFormatSpecifiers.end(), formatSpecifier);
         if (it != m_customFormatSpecifiers.end() && strcmp(formatSpecifier, it->formatSpecifier()) == 0) {
@@ -3767,21 +3866,60 @@ public:
         return &m_customFormatSpecifiers;
     }
 
+    inline void setLoggingLevel(Level level) {
+        m_loggingLevel = level;
+    }
+
+    template <typename T>
+    inline bool installLogDispatchCallback(const std::string& id) {
+        if (m_logDispatchCallbacks.find(id) == m_logDispatchCallbacks.end()) {
+            m_logDispatchCallbacks.insert(
+                std::make_pair(id, base::type::LogDispatchCallbackPtr(new T())));
+            return true;
+        }
+        return false;
+    }
+
+    template <typename T>
+    inline void uninstallLogDispatchCallback(const std::string& id) {
+        m_logDispatchCallbacks.erase(id);
+    }
+    template <typename T>
+    inline T* logDispatchCallback(const std::string& id) {
+        std::map<std::string, base::type::LogDispatchCallbackPtr>::iterator iter
+            = m_logDispatchCallbacks.find(id);
+        if (iter != m_logDispatchCallbacks.end()) {
+            return static_cast<T*>(iter->second.get());
+        }
+        return nullptr;
+    }
 private:
     base::RegisteredHitCounters* m_registeredHitCounters;
     base::RegisteredLoggers* m_registeredLoggers;
+    base::type::EnumType m_flags;
     base::VRegistry* m_vRegistry;
     base::utils::CommandLineArgs m_commandLineArgs;
-    base::type::EnumType m_flags;
-    PreRollOutHandler m_preRollOutHandler;
-    PostLogDispatchHandler m_postLogDispatchHandler;
-    PostPerformanceTrackingHandler m_postPerformanceTrackingHandler;
+    PreRollOutCallback m_preRollOutCallback;
+    std::map<std::string, base::type::LogDispatchCallbackPtr> m_logDispatchCallbacks;
+    PerformanceTrackingCallback m_performanceTrackingCallback;
     std::vector<CustomFormatSpecifier> m_customFormatSpecifiers;
+    Level m_loggingLevel;
+    bool m_callingDispatchCallback;
 
     friend class el::Helpers;
     friend class el::base::LogDispatcher;
-    friend class el::api::LogBuilder;
+    friend class el::LogBuilder;
+    friend class el::base::MessageBuilder;
     friend class el::base::Writer;
+
+    inline bool callingDispatchCallback(void) const {
+        return m_callingDispatchCallback;
+    }
+    
+    inline void setCallingDispatchCallback(bool val) {
+        base::threading::ScopedLock scopedLock(lock());
+        m_callingDispatchCallback = val;
+    }
 
     void setApplicationArguments(int argc, char** argv) {
         m_commandLineArgs.setArgs(argc, argv);
@@ -3798,11 +3936,11 @@ private:
             }
         }
 #endif  // !defined(_ELPP_DISABLE_LOG_FILE_FROM_ARG)
-#if !defined(_ELPP_DISABLE_LOGGING_FLAGS_FROM_ARG)
+#if defined(_ELPP_LOGGING_FLAGS_FROM_ARG)
         if (m_commandLineArgs.hasParamWithValue(base::consts::kLoggingFlagsParam)) {
             m_flags = atoi(m_commandLineArgs.getParamValue(base::consts::kLoggingFlagsParam));
         }
-#endif  // !defined(_ELPP_DISABLE_LOGGING_FLAGS_FROM_ARG)
+#endif  // defined(_ELPP_LOGGING_FLAGS_FROM_ARG)
     }
 
     inline void setApplicationArguments(int argc, const char** argv) {
@@ -3811,7 +3949,9 @@ private:
 };
 extern _ELPP_EXPORT base::type::StoragePointer elStorage;
 #define ELPP el::base::elStorage
-class DefaultLogBuilder : public api::LogBuilder {
+}  // namespace base
+namespace base {
+class DefaultLogBuilder : public LogBuilder {
 public:
     base::type::string_t build(const LogMessage* logMessage, bool appendNewLine) const {
         base::TypedConfigurations* tc = logMessage->logger()->typedConfigurations();
@@ -3820,54 +3960,58 @@ public:
         char buff[base::consts::kSourceFilenameMaxLength + base::consts::kSourceLineMaxLength] = "";
         const char* bufLim = buff + sizeof(buff);
         if (logFormat->hasFlag(base::FormatFlags::AppName)) {
-            // App name
+           // App name
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kAppNameFormatSpecifier,
                     logMessage->logger()->parentApplicationName());
         }
         if (logFormat->hasFlag(base::FormatFlags::ThreadId)) {
-            // Thread ID
+           // Thread ID
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kThreadIdFormatSpecifier,
                     base::threading::getCurrentThreadId());
         }
         if (logFormat->hasFlag(base::FormatFlags::DateTime)) {
-            // DateTime
+           // DateTime
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kDateTimeFormatSpecifier,
-                    base::utils::DateTime::getDateTime(logFormat->dateTimeFormat().c_str(), &tc->millisecondsWidth(logMessage->level())));
+                    base::utils::DateTime::getDateTime(logFormat->dateTimeFormat().c_str(), 
+                        &tc->millisecondsWidth(logMessage->level())));
         }
         if (logFormat->hasFlag(base::FormatFlags::Function)) {
-            // Function
+           // Function
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kLogFunctionFormatSpecifier, logMessage->func());
         }
         if (logFormat->hasFlag(base::FormatFlags::File)) {
-            // File
+           // File
             char* buf = base::utils::Str::clearBuff(buff, base::consts::kSourceFilenameMaxLength);
             base::utils::File::buildStrippedFilename(logMessage->file().c_str(), buff);
             buf = base::utils::Str::addToBuff(buff, buf, bufLim);
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kLogFileFormatSpecifier, buff);
         }
         if (logFormat->hasFlag(base::FormatFlags::Line)) {
-            // Line
+           // Line
             char* buf = base::utils::Str::clearBuff(buff, base::consts::kSourceLineMaxLength);
-            buf = base::utils::Str::convertAndAddToBuff(logMessage->line(), base::consts::kSourceLineMaxLength, buf, bufLim, false);
+            buf = base::utils::Str::convertAndAddToBuff(logMessage->line(), 
+                base::consts::kSourceLineMaxLength, buf, bufLim, false);
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kLogLineFormatSpecifier, buff);
         }
         if (logFormat->hasFlag(base::FormatFlags::Location)) {
-            // Location
-            char* buf = base::utils::Str::clearBuff(buff, base::consts::kSourceFilenameMaxLength + base::consts::kSourceLineMaxLength);
+           // Location
+            char* buf = base::utils::Str::clearBuff(buff, 
+                base::consts::kSourceFilenameMaxLength + base::consts::kSourceLineMaxLength);
             base::utils::File::buildStrippedFilename(logMessage->file().c_str(), buff);
             buf = base::utils::Str::addToBuff(buff, buf, bufLim);
             buf = base::utils::Str::addToBuff(":", buf, bufLim);
-            buf = base::utils::Str::convertAndAddToBuff(logMessage->line(), base::consts::kSourceLineMaxLength, buf, bufLim, false);
+            buf = base::utils::Str::convertAndAddToBuff(logMessage->line(), 
+                base::consts::kSourceLineMaxLength, buf, bufLim, false);
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kLogLocationFormatSpecifier, buff);
         }
         if (logMessage->level() == Level::Verbose && logFormat->hasFlag(base::FormatFlags::VerboseLevel)) {
-            // Verbose level
+           // Verbose level
             char* buf = base::utils::Str::clearBuff(buff, 1);
             buf = base::utils::Str::convertAndAddToBuff(logMessage->verboseLevel(), 1, buf, bufLim, false);
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kVerboseLevelFormatSpecifier, buff);
         }
         if (logFormat->hasFlag(base::FormatFlags::LogMessage)) {
-            // Log message
+           // Log message
             base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kMessageFormatSpecifier, logMessage->message());
         }
 #if !defined(_ELPP_DISABLE_CUSTOM_FORMAT_SPECIFIERS)
@@ -3885,7 +4029,7 @@ public:
 /// @brief Dispatches log messages
 class LogDispatcher : base::NoCopy {
 public:
-    LogDispatcher(bool proceed, LogMessage&& logMessage, const base::DispatchAction& dispatchAction) :
+    LogDispatcher(bool proceed, LogMessage&& logMessage, base::DispatchAction dispatchAction) :
         m_proceed(proceed),
         m_logMessage(std::move(logMessage)),
         m_dispatchAction(std::move(dispatchAction)) {
@@ -3899,24 +4043,35 @@ public:
             return;
         }
         // We minimize the time of elStorage's lock - this lock is released after log is written
-        ELPP->lock();
+        ELPP->acquireLock();
         if (lockLogger) {
-            m_logMessage.logger()->lock();
+            m_logMessage.logger()->acquireLock();
         }
         base::TypedConfigurations* tc = m_logMessage.logger()->m_typedConfigurations;
         if (ELPP->hasFlag(LoggingFlag::StrictLogFileSizeCheck)) {
-            tc->validateFileRolling(m_logMessage.level(), ELPP->preRollOutHandler());
+            tc->validateFileRolling(m_logMessage.level(), ELPP->preRollOutCallback());
         }
-        dispatch(std::move(m_logMessage.logger()->logBuilder()->build(&m_logMessage, m_dispatchAction == base::DispatchAction::NormalLog)));
+        dispatch(std::move(m_logMessage.logger()->logBuilder()->build(&m_logMessage, 
+            m_dispatchAction == base::DispatchAction::NormalLog)));
         if (lockLogger) {
-            m_logMessage.logger()->unlock();
+            m_logMessage.logger()->releaseLock();
         }
-        ELPP->unlock();
-#if defined(_ELPP_HANDLE_POST_LOG_DISPATCH)
-        m_logMessage.logger()->stream().str(ELPP_LITERAL(""));
-        m_logMessage.logger()->unlock();
-        ELPP->postLogDispatchHandler()(&m_logMessage);
-#endif  // defined(_ELPP_HANDLE_POST_LOG_DISPATCH)
+        ELPP->releaseLock();
+        if (ELPP->hasFlag(LoggingFlag::EnableLogDispatchCallback)
+                && !ELPP->callingDispatchCallback()) {
+            m_logMessage.logger()->stream().str(ELPP_LITERAL(""));
+            m_logMessage.logger()->releaseLock();
+            LogDispatchCallback* callback = nullptr;
+            for (const std::pair<std::string, base::type::LogDispatchCallbackPtr>& h 
+                    : ELPP->m_logDispatchCallbacks) {
+                callback = h.second.get();
+                if (callback != nullptr && callback->enabled()) {
+                    ELPP->setCallingDispatchCallback(true);
+                    callback->handle(&m_logMessage);
+                    ELPP->setCallingDispatchCallback(false);
+                }
+            }
+        }
     }
 
 private:
@@ -3931,22 +4086,25 @@ private:
                 if (fs != nullptr) {
                     fs->write(logLine.c_str(), logLine.size());
                     if (fs->fail()) {
-                        ELPP_INTERNAL_ERROR("Unable to write log to file [" << m_logMessage.logger()->m_typedConfigurations->filename(m_logMessage.level()) << "].\n"
-                                << "Few possible reasons (could be something else):\n" << "      * Permission denied\n" << "      * Disk full\n" << "      * Disk is not writable"
-                                , true);
+                        ELPP_INTERNAL_ERROR("Unable to write log to file ["
+                            << m_logMessage.logger()->m_typedConfigurations->filename(m_logMessage.level()) << "].\n"
+                                << "Few possible reasons (could be something else):\n" << "      * Permission denied\n"
+                                << "      * Disk full\n" << "      * Disk is not writable", true);
                     } else {
                         if (ELPP->hasFlag(LoggingFlag::ImmediateFlush) || (m_logMessage.logger()->isFlushNeeded(m_logMessage.level()))) {
                             m_logMessage.logger()->flush(m_logMessage.level(), fs);
                         }
                     }
                 } else {
-                    ELPP_INTERNAL_ERROR("Log file has not been configured and TO_FILE is configured to TRUE.", false);
+                    ELPP_INTERNAL_ERROR("Log file for [" << LevelHelper::convertToString(m_logMessage.level()) << "] "
+                        << "has not been configured but [TO_FILE] is configured to TRUE. [Logger ID: " 
+                        << m_logMessage.logger()->id() << "]", false);
                 }
             }
             if (m_logMessage.logger()->m_typedConfigurations->toStandardOutput(m_logMessage.level())) {
                 if (ELPP->hasFlag(LoggingFlag::ColoredTerminalOutput))
                     m_logMessage.logger()->logBuilder()->convertToColoredOutput(&logLine, m_logMessage.level());
-                ELPP_COUT << logLine << std::flush;
+                ELPP_COUT << ELPP_COUT_LINE(logLine);
             }
         }
 #if defined(_ELPP_SYSLOG)
@@ -4047,183 +4205,85 @@ private:
 };
 }  // namespace workarounds
 #endif  // defined(_ELPP_STL_LOGGING)
-/// @brief Writes nothing - Used when certain log is disabled
-class NullWriter : base::NoCopy {
+// Log message builder
+class MessageBuilder {
 public:
-    NullWriter(void) {}
-
-    // Null manipulator 
-    inline NullWriter& operator<<(std::ostream& (*)(std::ostream&)) {
-      return *this;
+    MessageBuilder(void) : m_logger(nullptr), m_containerLogSeperator(ELPP_LITERAL("")) {}
+    void initialize(Logger* logger) {
+        m_logger = logger;
+        m_containerLogSeperator = ELPP->hasFlag(LoggingFlag::NewLineForContainer) ? 
+            ELPP_LITERAL("\n    ") : ELPP_LITERAL(", ");
     }
 
-    template <typename T>
-    inline NullWriter& operator<<(const T&) {
-        return *this;
-    }
-};
-/// @brief Main entry point of each logging
-class Writer : base::NoCopy {
-public:
-    Writer(const std::string& loggerId, const Level& level, const char* file, unsigned long int line,  // NOLINT
-               const char* func, const base::DispatchAction& dispatchAction = base::DispatchAction::NormalLog,
-               base::VRegistry::VLevel verboseLevel = 0) :
-                   m_level(level), m_file(file), m_line(line), m_func(func), m_verboseLevel(verboseLevel),
-                   m_proceed(true), m_dispatchAction(dispatchAction), m_containerLogSeperator(ELPP_LITERAL("")) {
-        m_logger = elStorage->registeredLoggers()->get(loggerId, false);
-        if (m_logger == nullptr) {
-            if (!elStorage->registeredLoggers()->has(std::string(base::consts::kDefaultLoggerId))) {
-                // Somehow default logger has been unregistered. Not good! Register again
-                elStorage->registeredLoggers()->get(std::string(base::consts::kDefaultLoggerId));
-            }
-            Writer(base::consts::kDefaultLoggerId, Level::Debug, file, line, func)
-                    << "Logger [" << loggerId << "] is not registered yet!";
-            m_proceed = false;
-        } else {
-            m_logger->lock();  // This should not be unlocked by checking m_proceed because
-                               // m_proceed can be changed by lines below
-            m_proceed = m_logger->m_typedConfigurations->enabled(level);
-            m_containerLogSeperator = ELPP->hasFlag(LoggingFlag::NewLineForContainer) ? ELPP_LITERAL("\n    ") : ELPP_LITERAL(", ");
-        }
+#   define ELPP_SIMPLE_LOG(LOG_TYPE)\
+    inline MessageBuilder& operator<<(LOG_TYPE msg) {\
+        m_logger->stream() << msg;\
+        return *this;\
     }
 
-    virtual ~Writer(void) {
-        if (m_proceed) {
-            triggerDispatch();
-        } else if (m_logger != nullptr) {
-            m_logger->stream().str(ELPP_LITERAL(""));
-            m_logger->unlock();
-        }
-    }
-
-    inline Writer& operator<<(const std::string& log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_.c_str();
+    inline MessageBuilder& operator<<(const std::string& msg) {
+        m_logger->stream() << msg.c_str();
         return *this;
     }
-    inline Writer& operator<<(char log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
+    ELPP_SIMPLE_LOG(char)
+    ELPP_SIMPLE_LOG(bool)
+    ELPP_SIMPLE_LOG(signed short) // NOLINT
+    ELPP_SIMPLE_LOG(unsigned short) // NOLINT
+    ELPP_SIMPLE_LOG(signed int)
+    ELPP_SIMPLE_LOG(unsigned int)
+    ELPP_SIMPLE_LOG(signed long)
+    ELPP_SIMPLE_LOG(unsigned long)
+    ELPP_SIMPLE_LOG(float)
+    ELPP_SIMPLE_LOG(double)
+    ELPP_SIMPLE_LOG(char*)
+    ELPP_SIMPLE_LOG(const char*)
+    ELPP_SIMPLE_LOG(const void*)
+    ELPP_SIMPLE_LOG(long double)
+    inline MessageBuilder& operator<<(const std::wstring& msg) {
+        return operator<<(msg.c_str());
     }
-    inline Writer& operator<<(bool log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(signed short log_) {  // NOLINT
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(unsigned short log_) {  // NOLINT
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(signed int log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(unsigned int log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(signed long log_) {  // NOLINT
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(unsigned long log_) {  // NOLINT
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(float log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(double log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(char* log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(const char* log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(const void* log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(long double log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_;
-        return *this;
-    }
-    inline Writer& operator<<(const std::wstring& log_) {
-        if (!m_proceed) { return *this; }
-        return operator<<(log_.c_str());
-    }
-    inline Writer& operator<<(const wchar_t* log_) {
-        if (!m_proceed) { return *this; }
-        if (log_ == nullptr) {
+    inline MessageBuilder& operator<<(const wchar_t* msg) {
+        if (msg == nullptr) {
             m_logger->stream() << base::consts::kNullPointer;
             return *this;
         }
 #   if defined(_ELPP_UNICODE)
-        m_logger->stream() << log_;
+        m_logger->stream() << msg;
 #   else
-        char* buff_ = base::utils::Str::wcharPtrToCharPtr(log_);
+        char* buff_ = base::utils::Str::wcharPtrToCharPtr(msg);
         m_logger->stream() << buff_;
         free(buff_);
 #   endif
         return *this;
     }
     // ostream manipulators
-    inline Writer& operator<<(std::ostream& (*OStreamMani)(std::ostream&)) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(std::ostream& (*OStreamMani)(std::ostream&)) {
         m_logger->stream() << OStreamMani;
         return *this;
     }
 #define ELPP_ITERATOR_CONTAINER_LOG_ONE_ARG(temp)                                                    \
     template <typename T>                                                                            \
-    inline Writer& operator<<(const temp<T>& template_inst) {                                        \
-        if (!m_proceed) { return *this; }                                                            \
+    inline MessageBuilder& operator<<(const temp<T>& template_inst) {                                \
         return writeIterator(template_inst.begin(), template_inst.end(), template_inst.size());      \
     }
 #define ELPP_ITERATOR_CONTAINER_LOG_TWO_ARG(temp)                                                    \
     template <typename T1, typename T2>                                                              \
-    inline Writer& operator<<(const temp<T1, T2>& template_inst) {                                   \
-        if (!m_proceed) { return *this; }                                                            \
+    inline MessageBuilder& operator<<(const temp<T1, T2>& template_inst) {                           \
         return writeIterator(template_inst.begin(), template_inst.end(), template_inst.size());      \
     }
 #define ELPP_ITERATOR_CONTAINER_LOG_THREE_ARG(temp)                                                  \
     template <typename T1, typename T2, typename T3>                                                 \
-    inline Writer& operator<<(const temp<T1, T2, T3>& template_inst) {                               \
-        if (!m_proceed) { return *this; }                                                            \
+    inline MessageBuilder& operator<<(const temp<T1, T2, T3>& template_inst) {                       \
         return writeIterator(template_inst.begin(), template_inst.end(), template_inst.size());      \
     }
 #define ELPP_ITERATOR_CONTAINER_LOG_FOUR_ARG(temp)                                                   \
     template <typename T1, typename T2, typename T3, typename T4>                                    \
-    inline Writer& operator<<(const temp<T1, T2, T3, T4>& template_inst) {                           \
-        if (!m_proceed) { return *this; }                                                            \
+    inline MessageBuilder& operator<<(const temp<T1, T2, T3, T4>& template_inst) {                   \
         return writeIterator(template_inst.begin(), template_inst.end(), template_inst.size());      \
     }
 #define ELPP_ITERATOR_CONTAINER_LOG_FIVE_ARG(temp)                                                   \
     template <typename T1, typename T2, typename T3, typename T4, typename T5>                       \
-    inline Writer& operator<<(const temp<T1, T2, T3, T4, T5>& template_inst) {                       \
-        if (!m_proceed) { return *this; }                                                            \
+    inline MessageBuilder& operator<<(const temp<T1, T2, T3, T4, T5>& template_inst) {               \
         return writeIterator(template_inst.begin(), template_inst.end(), template_inst.size());      \
     }
 
@@ -4236,48 +4296,42 @@ public:
     ELPP_ITERATOR_CONTAINER_LOG_FOUR_ARG(std::map)
     ELPP_ITERATOR_CONTAINER_LOG_FOUR_ARG(std::multimap)
     template <class T, class Container>
-    inline Writer& operator<<(const std::queue<T, Container>& queue_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const std::queue<T, Container>& queue_) {
         base::workarounds::IterableQueue<T, Container> iterableQueue_ =
                 static_cast<base::workarounds::IterableQueue<T, Container> >(queue_);
         return writeIterator(iterableQueue_.begin(), iterableQueue_.end(), iterableQueue_.size());
     }
     template <class T, class Container>
-    inline Writer& operator<<(const std::stack<T, Container>& stack_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const std::stack<T, Container>& stack_) {
         base::workarounds::IterableStack<T, Container> iterableStack_ =
                 static_cast<base::workarounds::IterableStack<T, Container> >(stack_);
         return writeIterator(iterableStack_.begin(), iterableStack_.end(), iterableStack_.size());
     }
     template <class T, class Container, class Comparator>
-    inline Writer& operator<<(const std::priority_queue<T, Container, Comparator>& priorityQueue_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const std::priority_queue<T, Container, Comparator>& priorityQueue_) {
         base::workarounds::IterablePriorityQueue<T, Container, Comparator> iterablePriorityQueue_ =
                 static_cast<base::workarounds::IterablePriorityQueue<T, Container, Comparator> >(priorityQueue_);
         return writeIterator(iterablePriorityQueue_.begin(), iterablePriorityQueue_.end(), iterablePriorityQueue_.size());
     }
     template <class First, class Second>
-    inline Writer& operator<<(const std::pair<First, Second>& pair_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << "(";
+    inline MessageBuilder& operator<<(const std::pair<First, Second>& pair_) {
+        m_logger->stream() << ELPP_LITERAL("(");
         operator << (static_cast<First>(pair_.first));
-        m_logger->stream() << ", ";
+        m_logger->stream() << ELPP_LITERAL(", ");
         operator << (static_cast<Second>(pair_.second));
-        m_logger->stream() << ")";
+        m_logger->stream() << ELPP_LITERAL(")");
         return *this;
     }
     template <std::size_t Size>
-    inline Writer& operator<<(const std::bitset<Size>& bitset_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << "[";
-        m_logger->stream() << bitset_.to_string();
-        m_logger->stream() << "]";
+    inline MessageBuilder& operator<<(const std::bitset<Size>& bitset_) {
+        m_logger->stream() << ELPP_LITERAL("[");
+        operator << (bitset_.to_string());
+        m_logger->stream() << ELPP_LITERAL("]");
         return *this;
     }
 #   if defined(_ELPP_LOG_STD_ARRAY)
     template <class T, std::size_t Size>
-    inline Writer& operator<<(const std::array<T, Size>& array) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const std::array<T, Size>& array) {
         return writeIterator(array.begin(), array.end(), array.size());
     }
 #   endif  // defined(_ELPP_LOG_STD_ARRAY)
@@ -4291,49 +4345,42 @@ public:
 #   endif  // defined(_ELPP_LOG_UNORDERED_SET)
 #endif  // defined(_ELPP_STL_LOGGING)
 #if defined(_ELPP_QT_LOGGING)
-    inline Writer& operator<<(const QString& log_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const QString& msg) {
 #   if defined(_ELPP_UNICODE)
-        m_logger->stream() << log_.toStdWString();
+        m_logger->stream() << msg.toStdWString();
 #   else
-        m_logger->stream() << log_.toStdString();
+        m_logger->stream() << msg.toStdString();
 #   endif  // defined(_ELPP_UNICODE)
         return *this;
     }
-    inline Writer& operator<<(const QByteArray& log_) {
-        if (!m_proceed) { return *this; }
-        return operator << (QString(log_));
+    inline MessageBuilder& operator<<(const QByteArray& msg) {
+        return operator << (QString(msg));
     }
-    inline Writer& operator<<(const QStringRef& log_) {
-        if (!m_proceed) { return *this; }
-        return operator<<(log_.toString());
+    inline MessageBuilder& operator<<(const QStringRef& msg) {
+        return operator<<(msg.toString());
     }
-    inline Writer& operator<<(qint64 log_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(qint64 msg) {
 #   if defined(_ELPP_UNICODE)
-        m_logger->stream() << QString::number(log_).toStdWString();
+        m_logger->stream() << QString::number(msg).toStdWString();
 #   else
-        m_logger->stream() << QString::number(log_).toStdString();
+        m_logger->stream() << QString::number(msg).toStdString();
 #   endif  // defined(_ELPP_UNICODE)
         return *this;
     }
-    inline Writer& operator<<(quint64 log_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(quint64 msg) {
 #   if defined(_ELPP_UNICODE)
-        m_logger->stream() << QString::number(log_).toStdWString();
+        m_logger->stream() << QString::number(msg).toStdWString();
 #   else
-        m_logger->stream() << QString::number(log_).toStdString();
+        m_logger->stream() << QString::number(msg).toStdString();
 #   endif  // defined(_ELPP_UNICODE)
         return *this;
     }
-    inline Writer& operator<<(QChar log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_.toLatin1();
+    inline MessageBuilder& operator<<(QChar msg) {
+        m_logger->stream() << msg.toLatin1();
         return *this;
     }
-    inline Writer& operator<<(const QLatin1String& log_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << log_.latin1();
+    inline MessageBuilder& operator<<(const QLatin1String& msg) {
+        m_logger->stream() << msg.latin1();
         return *this;
     }
     ELPP_ITERATOR_CONTAINER_LOG_ONE_ARG(QList)
@@ -4343,18 +4390,16 @@ public:
     ELPP_ITERATOR_CONTAINER_LOG_ONE_ARG(QLinkedList)
     ELPP_ITERATOR_CONTAINER_LOG_ONE_ARG(QStack)
     template <typename First, typename Second>
-    inline Writer& operator<<(const QPair<First, Second>& pair_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << "(";
+    inline MessageBuilder& operator<<(const QPair<First, Second>& pair_) {
+        m_logger->stream() << ELPP_LITERAL("(");
         operator << (static_cast<First>(pair_.first));
-        m_logger->stream() << ", ";
+        m_logger->stream() << ELPP_LITERAL(", ");
         operator << (static_cast<Second>(pair_.second));
-        m_logger->stream() << ")";
+        m_logger->stream() << ELPP_LITERAL(")");
         return *this;
     }
     template <typename K, typename V>
-    inline Writer& operator<<(const QMap<K, V>& map_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const QMap<K, V>& map_) {
         m_logger->stream() << ELPP_LITERAL("[");
         QList<K> keys = map_.keys();
         typename QList<K>::const_iterator begin = keys.begin();
@@ -4375,36 +4420,33 @@ public:
         return *this;
     }
     template <typename K, typename V>
-    inline Writer& operator<<(const QMultiMap<K, V>& map_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const QMultiMap<K, V>& map_) {
         operator << (static_cast<QMap<K, V>>(map_));
         return *this;
     }
     template <typename K, typename V>
-    inline Writer& operator<<(const QHash<K, V>& hash_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << "[";
+    inline MessageBuilder& operator<<(const QHash<K, V>& hash_) {
+        m_logger->stream() << ELPP_LITERAL("[");
         QList<K> keys = hash_.keys();
         typename QList<K>::const_iterator begin = keys.begin();
         typename QList<K>::const_iterator end = keys.end();
         int max_ = static_cast<int>(base::consts::kMaxLogPerContainer);  // prevent type warning
         for (int index_ = 0; begin != end && index_ < max_; ++index_, ++begin) {
-            m_logger->stream() << "(";
+            m_logger->stream() << ELPP_LITERAL("(");
             operator << (static_cast<K>(*begin));
-            m_logger->stream() << ", ";
+            m_logger->stream() << ELPP_LITERAL(", ");
             operator << (static_cast<V>(hash_.value(*begin)));
-            m_logger->stream() << ")";
+            m_logger->stream() << ELPP_LITERAL(")");
             m_logger->stream() << ((index_ < keys.size() -1) ? m_containerLogSeperator : ELPP_LITERAL(""));
         }
         if (begin != end) {
-            m_logger->stream() << "...";
+            m_logger->stream() << ELPP_LITERAL("...");
         }
-        m_logger->stream() << "]";
+        m_logger->stream() << ELPP_LITERAL("]");
         return *this;
     }
     template <typename K, typename V>
-    inline Writer& operator<<(const QMultiHash<K, V>& multiHash_) {
-        if (!m_proceed) { return *this; }
+    inline MessageBuilder& operator<<(const QMultiHash<K, V>& multiHash_) {
         operator << (static_cast<QHash<K, V>>(multiHash_));
         return *this;
     }
@@ -4430,12 +4472,13 @@ public:
 ///        for an example usage
 #define MAKE_CONTAINER_ELPP_FRIENDLY(ContainerType, SizeMethod, ElementInstance) \
     el::base::type::ostream_t& operator<<(el::base::type::ostream_t& ss, const ContainerType& container) {\
-        const el::base::type::char_t* sep = ELPP->hasFlag(el::LoggingFlag::NewLineForContainer) ? ELPP_LITERAL("\n    ") : ELPP_LITERAL(", ");\
+        const el::base::type::char_t* sep = ELPP->hasFlag(el::LoggingFlag::NewLineForContainer) ? \
+            ELPP_LITERAL("\n    ") : ELPP_LITERAL(", ");\
         ContainerType::const_iterator elem = container.begin();\
         ContainerType::const_iterator endElem = container.end();\
         std::size_t size_ = container.SizeMethod; \
         ss << ELPP_LITERAL("[");\
-        for (std::size_t i = 0; elem != endElem && i < el::base::consts::kMaxLogPerContainer; ++i, ++elem) {\
+        for (std::size_t i = 0; elem != endElem && i < el::base::consts::kMaxLogPerContainer; ++i, ++elem) { \
             ss << ElementInstance;\
             ss << ((i < size_ - 1) ? sep : ELPP_LITERAL(""));\
         }\
@@ -4450,38 +4493,27 @@ public:
 #   define ELPP_WX_PTR_ENABLED(ContainerType) MAKE_CONTAINER_ELPP_FRIENDLY(ContainerType, size(), *(*elem))
 #   define ELPP_WX_ENABLED(ContainerType) MAKE_CONTAINER_ELPP_FRIENDLY(ContainerType, size(), (*elem))
 #   define ELPP_WX_HASH_MAP_ENABLED(ContainerType) MAKE_CONTAINER_ELPP_FRIENDLY(ContainerType, size(), \
-        "(" << elem->first << ", " << elem->second << ")")
+        ELPP_LITERAL("(") << elem->first << ELPP_LITERAL(", ") << elem->second << ELPP_LITERAL(")")
 #else
 #   define ELPP_WX_PTR_ENABLED(ContainerType)
 #   define ELPP_WX_ENABLED(ContainerType)
 #   define ELPP_WX_HASH_MAP_ENABLED(ContainerType)
 #endif  // defined(_ELPP_WXWIDGETS_LOGGING)
+    // Other classes
     template <class Class>
-    inline Writer& operator<<(const Class& class_) {
-        if (!m_proceed) { return *this; }
-        m_logger->stream() << class_;
-        return *this;
-    }
+    ELPP_SIMPLE_LOG(const Class&)
+#undef ELPP_SIMPLE_LOG
 #undef ELPP_ITERATOR_CONTAINER_LOG_ONE_ARG
 #undef ELPP_ITERATOR_CONTAINER_LOG_TWO_ARG
 #undef ELPP_ITERATOR_CONTAINER_LOG_THREE_ARG
 #undef ELPP_ITERATOR_CONTAINER_LOG_FOUR_ARG
 #undef ELPP_ITERATOR_CONTAINER_LOG_FIVE_ARG
-
-protected:
-    Level m_level;
-    const char* m_file;
-    const unsigned long int m_line;  // NOLINT
-    const char* m_func;
-    base::VRegistry::VLevel m_verboseLevel;
+private:
     Logger* m_logger;
-    bool m_proceed;
-    base::DispatchAction m_dispatchAction;
     const base::type::char_t* m_containerLogSeperator;
-    friend class el::Helpers;
 
     template<class Iterator>
-    inline Writer& writeIterator(Iterator begin_, Iterator end_, std::size_t size_) {
+    inline MessageBuilder& writeIterator(Iterator begin_, Iterator end_, std::size_t size_) {
         m_logger->stream() << ELPP_LITERAL("[");
         for (std::size_t i = 0; begin_ != end_ && i < base::consts::kMaxLogPerContainer; ++i, ++begin_) {
             operator << (*begin_);
@@ -4493,28 +4525,182 @@ protected:
         m_logger->stream() << ELPP_LITERAL("]");
         return *this;
     }
+};
+/// @brief Writes nothing - Used when certain log is disabled
+class NullWriter : base::NoCopy {
+public:
+    NullWriter(void) {}
+
+    // Null manipulator
+    inline NullWriter& operator<<(std::ostream& (*)(std::ostream&)) {
+        return *this;
+    }
+
+    template <typename T>
+    inline NullWriter& operator<<(const T&) {
+        return *this;
+    }
+};
+/// @brief Main entry point of each logging
+class Writer : base::NoCopy {
+public:
+    Writer(Level level, const char* file, unsigned long int line,  // NOLINT
+               const char* func, base::DispatchAction dispatchAction = base::DispatchAction::NormalLog,
+               base::type::VerboseLevel verboseLevel = 0) :
+                   m_level(level), m_file(file), m_line(line), m_func(func), m_verboseLevel(verboseLevel),
+                   m_proceed(false), m_dispatchAction(dispatchAction) {
+    }
+
+    virtual ~Writer(void) {
+        processDispatch();
+    }
+
+    template <typename T>
+    inline Writer& operator<<(const T& log) {
+#if _ELPP_LOGGING_ENABLED
+        if (m_proceed) {
+            m_messageBuilder << log;
+        }
+#endif  // _ELPP_LOGGING_ENABLED
+        return *this;
+    }
+
+    inline Writer& operator<<(std::ostream& (*log)(std::ostream&)) {
+#if _ELPP_LOGGING_ENABLED
+        if (m_proceed) {
+            m_messageBuilder << log;
+        }
+#endif  // _ELPP_LOGGING_ENABLED
+        return *this;
+    }
+
+    Writer& construct(Logger* logger, bool needLock = true) {
+        m_logger = logger;
+        initializeLogger(logger->id(), false, needLock);
+        m_messageBuilder.initialize(m_logger);
+        return *this;
+    }
+
+    Writer& construct(int count, const char* loggerIds, ...) {
+        if (ELPP->hasFlag(LoggingFlag::MultiLoggerSupport)) {
+            va_list loggersList;
+            va_start(loggersList, loggerIds);
+            const char* id = loggerIds;
+            for (int i = 0; i < count; ++i) {
+                m_loggerIds.push_back(std::string(id));
+                id = va_arg(loggersList, const char*);
+            }
+            va_end(loggersList);
+            initializeLogger(m_loggerIds.at(0));
+        } else {
+            initializeLogger(loggerIds);
+        }
+        m_messageBuilder.initialize(m_logger);
+        return *this;
+    }
+protected:
+    Level m_level;
+    const char* m_file;
+    const unsigned long int m_line;  // NOLINT
+    const char* m_func;
+    base::type::VerboseLevel m_verboseLevel;
+    Logger* m_logger;
+    bool m_proceed;
+    base::MessageBuilder m_messageBuilder;
+    base::DispatchAction m_dispatchAction;
+    friend class el::Helpers;
+    std::vector<std::string> m_loggerIds;
+
+    void initializeLogger(const std::string& loggerId, bool lookup = true, bool needLock = true) {
+        if (lookup) {
+            m_logger = ELPP->registeredLoggers()->get(loggerId, ELPP->hasFlag(LoggingFlag::CreateLoggerAutomatically));
+        }
+        if (m_logger == nullptr) {
+            ELPP->acquireLock();
+            if (!ELPP->registeredLoggers()->has(std::string(base::consts::kDefaultLoggerId))) {
+                // Somehow default logger has been unregistered. Not good! Register again
+                ELPP->registeredLoggers()->get(std::string(base::consts::kDefaultLoggerId));
+            }
+            ELPP->releaseLock();  // Need to unlock it for next writer
+            Writer(Level::Debug, m_file, m_line, m_func).construct(1, base::consts::kDefaultLoggerId)
+                    << "Logger [" << loggerId << "] is not registered yet!";
+            m_proceed = false;
+        } else {
+            if (needLock) {
+                m_logger->acquireLock();  // This should not be unlocked by checking m_proceed because
+                                   // m_proceed can be changed by lines below
+            }
+            if (ELPP->hasFlag(LoggingFlag::HierarchicalLogging)) {
+                m_proceed = m_level == Level::Verbose ? m_logger->enabled(m_level) :
+                        LevelHelper::castToInt(m_level) >= LevelHelper::castToInt(ELPP->m_loggingLevel);
+            } else {
+                m_proceed = m_logger->enabled(m_level);
+            }
+        }
+    }
+    
+    void processDispatch() {
+#if _ELPP_LOGGING_ENABLED
+        if (ELPP->hasFlag(LoggingFlag::MultiLoggerSupport)) {
+            bool firstDispatched = false;
+            base::type::string_t logMessage;
+            std::size_t i = 0;
+            do {
+                if (m_proceed) {
+                    if (firstDispatched) {
+                        m_logger->stream() << logMessage;
+                    } else {
+                        firstDispatched = true;
+                        if (m_loggerIds.size() > 1) {
+                            logMessage = m_logger->stream().str();
+                        }
+                    }
+                    triggerDispatch();
+                } else if (m_logger != nullptr) {
+                    m_logger->stream().str(ELPP_LITERAL(""));
+                    m_logger->releaseLock();
+                }
+                if (i + 1 < m_loggerIds.size()) {
+                    initializeLogger(m_loggerIds.at(i + 1));
+                }
+            } while (++i < m_loggerIds.size());
+        } else {
+            if (m_proceed) {
+                triggerDispatch();
+            } else if (m_logger != nullptr) {
+                m_logger->stream().str(ELPP_LITERAL(""));
+                m_logger->releaseLock();
+            }
+        }
+#else
+        if (m_logger != nullptr) {
+            m_logger->stream().str(ELPP_LITERAL(""));
+            m_logger->releaseLock();
+        }
+#endif // _ELPP_LOGGING_ENABLED
+    }
 
     void triggerDispatch(void) {
         if (m_proceed) {
             base::LogDispatcher(m_proceed, LogMessage(m_level, m_file, m_line, m_func, m_verboseLevel,
                           m_logger), m_dispatchAction).dispatch(false);
         }
-#if !defined(_ELPP_HANDLE_POST_LOG_DISPATCH)
-        // If we don't handle post-log-dispatches, we need to unlock logger
-        // otherwise loggers do get unlocked before handler is triggered to prevent dead-locks
-        if (m_logger != nullptr) {
-            m_logger->stream().str(ELPP_LITERAL(""));
-            m_logger->unlock();
+        if (!ELPP->hasFlag(LoggingFlag::EnableLogDispatchCallback) || ELPP->callingDispatchCallback()) {
+            // If we don't handle post-log-dispatches, we need to unlock logger
+            // otherwise loggers do get unlocked before handler is triggered to prevent dead-locks
+            if (m_logger != nullptr) {
+                m_logger->stream().str(ELPP_LITERAL(""));
+                m_logger->releaseLock();
+            }
         }
-#endif  // !defined(_ELPP_HANDLE_POST_LOG_DISPATCH)
         if (m_proceed && m_level == Level::Fatal
                 && !ELPP->hasFlag(LoggingFlag::DisableApplicationAbortOnFatalLog)) {
-            base::Writer(base::consts::kDefaultLoggerId, Level::Warning, m_file, m_line, m_func)
+            base::Writer(Level::Warning, m_file, m_line, m_func).construct(1, base::consts::kDefaultLoggerId)
                     << "Aborting application. Reason: Fatal log at [" << m_file << ":" << m_line << "]";
             std::stringstream reasonStream;
             reasonStream << "Fatal log at [" << m_file << ":" << m_line << "]"
                 << " If you wish to disable 'abort on fatal log' please use "
-                << "el::Helpers::addFlag(el::LoggingFlag::DisableApplicationAbortOnFatalLog)";
+                    << "el::Helpers::addFlag(el::LoggingFlag::DisableApplicationAbortOnFatalLog)";
             base::utils::abort(1, reasonStream.str());
         }
         m_proceed = false;
@@ -4522,9 +4708,10 @@ protected:
 };
 class PErrorWriter : public base::Writer {
 public:
-    PErrorWriter(const std::string& loggerId, const Level& level, const char* file, unsigned long int line,  // NOLINT
-               const char* func, const base::DispatchAction& dispatchAction = base::DispatchAction::NormalLog,
-               base::VRegistry::VLevel verboseLevel = 0) : base::Writer(loggerId, level, file, line, func, dispatchAction, verboseLevel) {
+    PErrorWriter(Level level, const char* file, unsigned long int line,  // NOLINT
+               const char* func, base::DispatchAction dispatchAction = base::DispatchAction::NormalLog,
+               base::type::VerboseLevel verboseLevel = 0) :
+        base::Writer(level, file, line, func, dispatchAction, verboseLevel) {
     }
 
     virtual ~PErrorWriter(void) {
@@ -4536,20 +4723,155 @@ public:
 #else
             m_logger->stream() << ": " << strerror(errno) << " [" << errno << "]";
 #endif
-            triggerDispatch();
         }
     }
 };
-} // namespace base
-#define _ELPP_WRITE_LOG(writer, loggerId, level, dispatchAction) writer(loggerId, level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction)
-#define _ELPP_WRITE_LOG_IF(writer, condition, loggerId, level, dispatchAction) if (condition) \
-    writer(loggerId, level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction)
-#define _ELPP_WRITE_LOG_EVERY_N(writer, occasion, loggerId, level, dispatchAction) if (ELPP->validateEveryNCounter(__FILE__, __LINE__, occasion)) \
-    writer(loggerId, level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction)
-#define _ELPP_WRITE_LOG_AFTER_N(writer, n, loggerId, level, dispatchAction) if (ELPP->validateAfterNCounter(__FILE__, __LINE__, n)) \
-    writer(loggerId, level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction)
-#define _ELPP_WRITE_LOG_N_TIMES(writer, n, loggerId, level, dispatchAction) if (ELPP->validateNTimesCounter(__FILE__, __LINE__, n)) \
-    writer(loggerId, level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction)
+}  // namespace base
+// Logging from Logger class. Why this is here? Because we have Storage and Writer class available
+#if _ELPP_VARIADIC_TEMPLATES_SUPPORTED
+    template <typename T, typename... Args>
+    void Logger::log_(Level level, int vlevel, const char* s, const T& value, const Args&... args) {
+        base::MessageBuilder b;
+        b.initialize(this);
+        while (*s) {
+            if (*s == base::consts::kFormatSpecifierChar) {
+                if (*(s + 1) == base::consts::kFormatSpecifierChar) {
+                    ++s;
+                } else {
+                    if (*(s + 1) == base::consts::kFormatSpecifierCharValue) {
+                        ++s;
+                        b << value;
+                        log_(level, vlevel, ++s, args...);
+                        return;
+                    }
+                }
+            }
+            b << *s++;
+        }
+        ELPP_INTERNAL_ERROR("Too many arguments provided. Unable to handle. Please provide more format specifiers", false);
+    }
+    template <typename T> 
+    inline void Logger::log_(Level level, int vlevel, const T& log) {
+        if (level == Level::Verbose) {
+            if (ELPP->vRegistry()->allowed(vlevel, __FILE__)) {
+                base::Writer(Level::Verbose, "FILE", 0, "FUNCTION", 
+                    base::DispatchAction::NormalLog, vlevel).construct(this, false) << log;
+            } else {
+                stream().str(ELPP_LITERAL(""));
+            }
+        } else {
+            base::Writer(level, "FILE", 0, "FUNCTION").construct(this, false) << log;
+        }
+    }
+    template <typename T, typename... Args>
+    void Logger::log(Level level, const char* s, const T& value, const Args&... args) {
+        base::threading::ScopedLock scopedLock(lock());
+        log_(level, 0, s, value, args...);
+    }
+    template <typename T> 
+    inline void Logger::log(Level level, const T& log) { 
+        base::threading::ScopedLock scopedLock(lock());
+        log_(level, 0, log);
+    }
+#   if _ELPP_VERBOSE_LOG
+    template <typename T, typename... Args>
+    inline void Logger::verbose(int vlevel, const char* s, const T& value, const Args&... args) {
+        base::threading::ScopedLock scopedLock(lock());
+        log_(el::Level::Verbose, vlevel, s, value, args...);
+    }
+    template <typename T>
+    inline void Logger::verbose(int vlevel, const T& log) {
+        base::threading::ScopedLock scopedLock(lock());
+        log_(el::Level::Verbose, vlevel, log);
+    }
+#   else
+    template <typename T, typename... Args>
+    inline void Logger::verbose(int, const char*, const T&, const Args&...) {
+        return;
+    }
+    template <typename T>
+    inline void Logger::verbose(int, const T&) {
+        return;
+    }
+#   endif  // _ELPP_VERBOSE_LOG
+#   define LOGGER_LEVEL_WRITERS(FUNCTION_NAME, LOG_LEVEL)\
+    template <typename T, typename... Args>\
+    inline void Logger::FUNCTION_NAME(const char* s, const T& value, const Args&... args) {\
+        log(LOG_LEVEL, s, value, args...);\
+    }\
+    template <typename T>\
+    inline void Logger::FUNCTION_NAME(const T& value) {\
+        log(LOG_LEVEL, value);\
+    }
+#   define LOGGER_LEVEL_WRITERS_DISABLED(FUNCTION_NAME, LOG_LEVEL)\
+    template <typename T, typename... Args>\
+    inline void Logger::FUNCTION_NAME(const char*, const T&, const Args&...) {\
+        return;\
+    }\
+    template <typename T>\
+    inline void Logger::FUNCTION_NAME(const T&) {\
+        return;\
+    }
+
+#   if _ELPP_INFO_LOG
+    LOGGER_LEVEL_WRITERS(info, Level::Info)
+#   else
+    LOGGER_LEVEL_WRITERS_DISABLED(info, Level::Info)
+#   endif // _ELPP_INFO_LOG
+#   if _ELPP_DEBUG_LOG
+    LOGGER_LEVEL_WRITERS(debug, Level::Debug)
+#   else
+    LOGGER_LEVEL_WRITERS_DISABLED(debug, Level::Debug)
+#   endif // _ELPP_DEBUG_LOG
+#   if _ELPP_WARNING_LOG
+    LOGGER_LEVEL_WRITERS(warn, Level::Warning)
+#   else
+    LOGGER_LEVEL_WRITERS_DISABLED(warn, Level::Warning)
+#   endif // _ELPP_WARNING_LOG
+#   if _ELPP_ERROR_LOG
+    LOGGER_LEVEL_WRITERS(error, Level::Error)
+#   else
+    LOGGER_LEVEL_WRITERS_DISABLED(error, Level::Error)
+#   endif // _ELPP_ERROR_LOG
+#   if _ELPP_FATAL_LOG
+    LOGGER_LEVEL_WRITERS(fatal, Level::Fatal)
+#   else
+    LOGGER_LEVEL_WRITERS_DISABLED(fatal, Level::Fatal)
+#   endif // _ELPP_FATAL_LOG
+#   if _ELPP_TRACE_LOG
+    LOGGER_LEVEL_WRITERS(trace, Level::Trace)
+#   else
+    LOGGER_LEVEL_WRITERS_DISABLED(trace, Level::Trace)
+#   endif // _ELPP_TRACE_LOG
+#   undef LOGGER_LEVEL_WRITERS
+#   undef LOGGER_LEVEL_WRITERS_DISABLED
+#endif // _ELPP_VARIADIC_TEMPLATES_SUPPORTED
+#if _ELPP_COMPILER_MSVC
+#   define ELPP_VARIADIC_FUNC_MSVC(variadicFunction, variadicArgs) variadicFunction variadicArgs
+#   define ELPP_VARIADIC_FUNC_MSVC_RUN(variadicFunction, ...) ELPP_VARIADIC_FUNC_MSVC(variadicFunction, (__VA_ARGS__))
+#   define el_getVALength(...) ELPP_VARIADIC_FUNC_MSVC_RUN(el_resolveVALength, 0, ## __VA_ARGS__,\
+       10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#else
+#   if _ELPP_COMPILER_CLANG
+#      define el_getVALength(...) el_resolveVALength(0, __VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#   else
+#      define el_getVALength(...) el_resolveVALength(0, ## __VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#   endif // _ELPP_COMPILER_CLANG
+#endif // _ELPP_COMPILER_MSVC
+#define el_resolveVALength(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...) N
+#define _ELPP_WRITE_LOG(writer, level, dispatchAction, ...) \
+    writer(level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction).construct(el_getVALength(__VA_ARGS__), __VA_ARGS__)
+#define _ELPP_WRITE_LOG_IF(writer, condition, level, dispatchAction, ...) if (condition) \
+    writer(level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction).construct(el_getVALength(__VA_ARGS__), __VA_ARGS__)
+#define _ELPP_WRITE_LOG_EVERY_N(writer, occasion, level, dispatchAction, ...) \
+    if (ELPP->validateEveryNCounter(__FILE__, __LINE__, occasion)) \
+        writer(level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction).construct(el_getVALength(__VA_ARGS__), __VA_ARGS__)
+#define _ELPP_WRITE_LOG_AFTER_N(writer, n, level, dispatchAction, ...) \
+    if (ELPP->validateAfterNCounter(__FILE__, __LINE__, n)) \
+        writer(level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction).construct(el_getVALength(__VA_ARGS__), __VA_ARGS__)
+#define _ELPP_WRITE_LOG_N_TIMES(writer, n, level, dispatchAction, ...) \
+    if (ELPP->validateNTimesCounter(__FILE__, __LINE__, n)) \
+        writer(level, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction).construct(el_getVALength(__VA_ARGS__), __VA_ARGS__)
 #undef _CURRENT_FILE_PERFORMANCE_LOGGER_ID
 #if defined(_PERFORMANCE_LOGGER)
 #   define _CURRENT_FILE_PERFORMANCE_LOGGER_ID _PERFORMANCE_LOGGER
@@ -4558,113 +4880,140 @@ public:
 #endif
 class PerformanceTrackingData {
 public:
-    // Do not use constructor, will run into multiple definition error, use init(Trackable*)
-    explicit PerformanceTrackingData() : m_trackable(nullptr) {}
-    inline const std::string* blockName() const;
-    inline const struct timeval* startTime() const;
-    inline const struct timeval* endTime() const;
-    inline const base::type::string_t* formattedTimeTaken() const;
+    enum class DataType : base::type::EnumType {
+        Checkpoint = 1, Complete = 2
+    };
+    // Do not use constructor, will run into multiple definition error, use init(PerformanceTracker*)
+    explicit PerformanceTrackingData(DataType dataType) : m_performanceTracker(nullptr), m_dataType(dataType) {}
+    inline const std::string* blockName(void) const;
+    inline const struct timeval* startTime(void) const;
+    inline const struct timeval* endTime(void) const;
+    inline const struct timeval* lastCheckpointTime(void) const;
+    inline const base::type::string_t* formattedTimeTaken(void) const;
+    inline PerformanceTrackingData::DataType dataType(void) const;
+    inline const std::string& loggerId(void) const;
+    inline bool firstCheckpoint(void) const;
 private:
-    base::Trackable* m_trackable;
+    base::PerformanceTracker* m_performanceTracker;
     base::type::string_t m_formattedTimeTaken;
-    inline void init(base::Trackable*);
+    PerformanceTrackingData::DataType m_dataType;
+    bool m_firstCheckpoint;
+    inline void init(base::PerformanceTracker*, bool firstCheckpoint = false);
 
-    friend class el::base::Trackable;
+    friend class el::base::PerformanceTracker;
 };
 namespace base {
-/// @brief Represents trackable block of code that conditionally adds performance status to log
+/// @brief Represents performanceTracker block of code that conditionally adds performance status to log
 ///        either when goes outside the scope of when checkpoint() is called
-class Trackable : public base::threading::ThreadSafe {
+class PerformanceTracker : public base::threading::ThreadSafe, public Loggable {
 public:
-    Trackable(const std::string& blockName,
-            const base::TimestampUnit& timestampUnit = base::TimestampUnit::Millisecond,
-            const std::string& loggerId = _CURRENT_FILE_PERFORMANCE_LOGGER_ID, bool scopedLog = true, const Level& level = Level::Info) :
+    PerformanceTracker(const std::string& blockName,
+            base::TimestampUnit timestampUnit = base::TimestampUnit::Millisecond,
+            const std::string& loggerId = _CURRENT_FILE_PERFORMANCE_LOGGER_ID, 
+            bool scopedLog = true, Level level = base::consts::kPerformanceTrackerDefaultLevel) :
         m_blockName(blockName), m_timestampUnit(timestampUnit), m_loggerId(loggerId), m_scopedLog(scopedLog),
-        m_level(level), m_hasChecked(false), m_lastCheckpointId(nullptr), m_enabled(false) {
-#if !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING)
+        m_level(level), m_hasChecked(false), m_lastCheckpointId(std::string()), m_enabled(false) {
+#if !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING) && _ELPP_LOGGING_ENABLED
         // We store it locally so that if user happen to change configuration by the end of scope
         // or before calling checkpoint, we still depend on state of configuraton at time of construction
-        el::Logger* loggerPtr = elStorage->registeredLoggers()->get(loggerId, false);
+        el::Logger* loggerPtr = ELPP->registeredLoggers()->get(loggerId, false);
         m_enabled = loggerPtr != nullptr && loggerPtr->m_typedConfigurations->performanceTracking(m_level);
         if (m_enabled) {
             base::utils::DateTime::gettimeofday(&m_startTime);
         }
-#endif  // !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING)
+#endif  // !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING) && _ELPP_LOGGING_ENABLED
     }
     /// @brief Copy constructor
-    Trackable(const Trackable& t) :
+    PerformanceTracker(const PerformanceTracker& t) :
         m_blockName(t.m_blockName), m_timestampUnit(t.m_timestampUnit), m_loggerId(t.m_loggerId), m_scopedLog(t.m_scopedLog),
-        m_level(t.m_level), 
-        m_startTime(t.m_startTime), m_endTime(t.m_endTime), m_lastCheckpointTime(t.m_lastCheckpointTime),m_hasChecked(t.m_hasChecked), m_lastCheckpointId(t.m_lastCheckpointId), m_enabled(t.m_enabled) {
+        m_level(t.m_level), m_hasChecked(t.m_hasChecked), m_lastCheckpointId(t.m_lastCheckpointId), m_enabled(t.m_enabled),
+        m_startTime(t.m_startTime), m_endTime(t.m_endTime), m_lastCheckpointTime(t.m_lastCheckpointTime) {
     }
-    virtual ~Trackable(void) {
-#if !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING)
+    virtual ~PerformanceTracker(void) {
+#if !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING) && _ELPP_LOGGING_ENABLED
         if (m_enabled) {
-            base::threading::lock_guard lock(mutex());
+            base::threading::ScopedLock scopedLock(lock());
             if (m_scopedLog) {
                 base::utils::DateTime::gettimeofday(&m_endTime);
-                _ELPP_WRITE_LOG(el::base::Writer, m_loggerId, m_level, base::DispatchAction::NormalLog) << "Executed [" << m_blockName << "] in [" << *this << "]";
-#   if defined(_ELPP_HANDLE_POST_PERFORMANCE_TRACKING)
-                PerformanceTrackingData data;
-                data.init(this);
-                ELPP->postPerformanceTrackingHandler()(&data);
-#   endif // defined(_ELPP_HANDLE_POST_PERFORMANCE_TRACKING)
+                base::type::string_t formattedTime = getFormattedTimeTaken();
+                if (!ELPP->hasFlag(LoggingFlag::DisablePerformanceTrackingDispatch)) {
+                    _ELPP_WRITE_LOG(el::base::Writer, m_level, base::DispatchAction::NormalLog, m_loggerId.c_str()) 
+                        << ELPP_LITERAL("Executed [") << m_blockName << ELPP_LITERAL("] in [") << formattedTime << ELPP_LITERAL("]");
+                }
+                if (ELPP->hasFlag(LoggingFlag::PerformanceTrackingCallback)) {
+                    PerformanceTrackingData data(PerformanceTrackingData::DataType::Complete);
+                    data.init(this);
+                    data.m_formattedTimeTaken = formattedTime;
+                    ELPP->performanceTrackingCallback()(&data);
+                }
             }
         }
 #endif  // !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING)
     }
-    /// @brief A checkpoint for current trackable block.
-    void checkpoint(const char* id = nullptr, const char* file = __FILE__, unsigned long int line = __LINE__, const char* func = "") {  // NOLINT
-#if !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING)
+    /// @brief A checkpoint for current performanceTracker block.
+    void checkpoint(const std::string& id = std::string(), const char* file = __FILE__, unsigned long int line = __LINE__, const char* func = "") {  // NOLINT
+#if !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING) && _ELPP_LOGGING_ENABLED
         if (m_enabled) {
-            base::threading::lock_guard lock(mutex());
-            base::utils::DateTime::gettimeofday(&m_endTime);
-            base::type::stringstream_t ss;
-            ss << "Performance checkpoint";
-            if (id != nullptr) {
-                ss << " [" << id << "]";
-            }
-            ss << " for block [" << m_blockName.c_str() << "] : [" << *this;
-#   if !defined(_ELPP_PERFORMANCE_DISABLE_COMPARE_CHECKPOINTS)
-            if (m_hasChecked) {
-                ss << " (["
-                   << base::utils::DateTime::formatTime(base::utils::DateTime::getTimeDifference(m_endTime, m_lastCheckpointTime,
-                                  m_timestampUnit), m_timestampUnit)
-                   << "] from ";
-                if (m_lastCheckpointId == nullptr) {
-                    ss << "last checkpoint";
-                } else {
-                    ss << "checkpoint '" << m_lastCheckpointId << "'";
+            base::threading::ScopedLock scopedLock(lock());
+            base::utils::DateTime::gettimeofday(&m_endTime);            
+            base::type::string_t formattedTime;
+            if (!ELPP->hasFlag(LoggingFlag::DisablePerformanceTrackingDispatch)) {
+                base::type::stringstream_t ss;
+                ss << ELPP_LITERAL("Performance checkpoint");
+                if (!id.empty()) {
+                    ss << ELPP_LITERAL(" [") << id.c_str() << ELPP_LITERAL("]");
                 }
-                ss << ")]";
+                ss << ELPP_LITERAL(" for block [") << m_blockName.c_str() << ELPP_LITERAL("] : [") << *this;
+                if (!ELPP->hasFlag(LoggingFlag::DisablePerformanceTrackingCheckpointComparison) && m_hasChecked) {
+                    formattedTime = base::utils::DateTime::formatTime(
+                        base::utils::DateTime::getTimeDifference(m_endTime, m_lastCheckpointTime, m_timestampUnit), 
+                            m_timestampUnit);
+                    ss << ELPP_LITERAL(" ([") << formattedTime << ELPP_LITERAL("] from ");
+                    if (m_lastCheckpointId.empty()) {
+                        ss << ELPP_LITERAL("last checkpoint");
+                    } else {
+                        ss << ELPP_LITERAL("checkpoint '") << m_lastCheckpointId.c_str() << ELPP_LITERAL("'");
+                    }
+                    ss << ELPP_LITERAL(")]");
+                } else {
+                    ss << ELPP_LITERAL("]");
+                }
+                el::base::Writer(m_level, file, line, func).construct(1, m_loggerId.c_str()) << ss.str();
             } else {
-                ss << "]";
+                formattedTime = m_hasChecked ? base::utils::DateTime::formatTime(
+                    base::utils::DateTime::getTimeDifference(m_endTime, m_lastCheckpointTime, m_timestampUnit), 
+                    m_timestampUnit) : ELPP_LITERAL("");
             }
-#   else
-         ss << "]";
-#   endif  // defined(_ELPP_PERFORMANCE_DISABLE_COMPARE_CHECKPOINTS)
+            if (ELPP->hasFlag(LoggingFlag::PerformanceTrackingCallback)) {
+                PerformanceTrackingData data(PerformanceTrackingData::DataType::Checkpoint);
+                data.init(this, !m_hasChecked);
+                if (!ELPP->hasFlag(LoggingFlag::DisablePerformanceTrackingCheckpointComparison)) {
+                    data.m_formattedTimeTaken = formattedTime;
+                }
+                ELPP->performanceTrackingCallback()(&data);
+            }
             base::utils::DateTime::gettimeofday(&m_lastCheckpointTime);
             m_hasChecked = true;
             m_lastCheckpointId = id;
-            el::base::Writer(m_loggerId, m_level, file, line, func) << ss.str();
         }
-#else
-        _ELPP_UNUSED(id)
-#endif  // !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING)
+#endif  // !defined(_ELPP_DISABLE_PERFORMANCE_TRACKING) && _ELPP_LOGGING_ENABLED
+        _ELPP_UNUSED(id);
+        _ELPP_UNUSED(file);
+        _ELPP_UNUSED(line);
+        _ELPP_UNUSED(func);
     }
-
 private:
     std::string m_blockName;
     base::TimestampUnit m_timestampUnit;
     std::string m_loggerId;
     bool m_scopedLog;
     el::Level m_level;
-    struct timeval m_startTime, m_endTime, m_lastCheckpointTime;
     bool m_hasChecked;
-    const char* m_lastCheckpointId;
+    std::string m_lastCheckpointId;
     bool m_enabled;
+    struct timeval m_startTime, m_endTime, m_lastCheckpointTime;
 
-    Trackable(void);
+    PerformanceTracker(void);
 
     friend class el::PerformanceTrackingData;
 
@@ -4673,17 +5022,39 @@ private:
                 m_startTime, m_timestampUnit), m_timestampUnit);
     }
 
-    friend base::type::ostream_t& operator<<(base::type::ostream_t& os, const Trackable& trackable) {
-        os << trackable.getFormattedTimeTaken();
-        return os;
+    virtual inline void log(el::base::type::ostream_t& os) const {
+        os << getFormattedTimeTaken();
     }
 };
-} // namespace base
-inline const std::string* PerformanceTrackingData::blockName() const { return const_cast<const std::string*>(&m_trackable->m_blockName); }
-inline const struct timeval* PerformanceTrackingData::startTime() const { return const_cast<const struct timeval*>(&m_trackable->m_startTime); }
-inline const struct timeval* PerformanceTrackingData::endTime() const { return const_cast<const struct timeval*>(&m_trackable->m_endTime); }
-inline const base::type::string_t* PerformanceTrackingData::formattedTimeTaken() const { return &m_formattedTimeTaken; }
-inline void PerformanceTrackingData::init(base::Trackable* trackable) { m_trackable = trackable; m_formattedTimeTaken = m_trackable->getFormattedTimeTaken(); }
+}  // namespace base
+inline const std::string* PerformanceTrackingData::blockName() const {
+    return const_cast<const std::string*>(&m_performanceTracker->m_blockName);
+}
+inline const struct timeval* PerformanceTrackingData::startTime() const {
+    return const_cast<const struct timeval*>(&m_performanceTracker->m_startTime);
+}
+inline const struct timeval* PerformanceTrackingData::endTime() const {
+    return const_cast<const struct timeval*>(&m_performanceTracker->m_endTime);
+}
+inline const struct timeval* PerformanceTrackingData::lastCheckpointTime() const {
+    return const_cast<const struct timeval*>(&m_performanceTracker->m_lastCheckpointTime);
+}
+inline const base::type::string_t* PerformanceTrackingData::formattedTimeTaken() const {
+    return &m_formattedTimeTaken;
+}
+inline void PerformanceTrackingData::init(base::PerformanceTracker* performanceTracker, bool firstCheckpoint) {
+    m_performanceTracker = performanceTracker;
+    m_firstCheckpoint = firstCheckpoint;
+}
+inline PerformanceTrackingData::DataType PerformanceTrackingData::dataType(void) const {
+    return m_dataType;
+}
+inline const std::string& PerformanceTrackingData::loggerId(void) const {
+    return m_performanceTracker->m_loggerId;
+}
+inline bool PerformanceTrackingData::firstCheckpoint(void) const {
+    return m_firstCheckpoint;
+}
 namespace base {
 /// @brief Contains some internal debugging tools like crash handler and stack tracer
 namespace debug {
@@ -4798,7 +5169,7 @@ private:
 static std::string crashReason(int sig) {
     std::stringstream ss;
     bool foundReason = false;
-    for (int i = 0; i < base::consts::kMaxCrashSignals; ++i) {
+    for (int i = 0; i < base::consts::kCrashSignalsCount; ++i) {
         if (base::consts::kCrashSignals[i].numb == sig) {
             ss << "Application has crashed due to [" <<
                   base::consts::kCrashSignals[i].name <<
@@ -4817,7 +5188,7 @@ static std::string crashReason(int sig) {
     return ss.str();
 }
 /// @brief Logs reason of crash from sig
-static void logCrashReason(int sig, bool stackTraceIfAvailable, const Level& level, const char* logger) {
+static void logCrashReason(int sig, bool stackTraceIfAvailable, Level level, const char* logger) {
     std::stringstream ss;
     ss << "CRASH HANDLED; ";
     ss << crashReason(sig);
@@ -4826,9 +5197,9 @@ static void logCrashReason(int sig, bool stackTraceIfAvailable, const Level& lev
         ss << std::endl << "    ======= Backtrace: =========" << std::endl << base::debug::StackTrace();
     }
 #else
-    _ELPP_UNUSED(stackTraceIfAvailable)
+    _ELPP_UNUSED(stackTraceIfAvailable);
 #endif  // _ELPP_STACKTRACE
-    _ELPP_WRITE_LOG(el::base::Writer, logger, level, base::DispatchAction::NormalLog) << ss.str();
+    _ELPP_WRITE_LOG(el::base::Writer, level, base::DispatchAction::NormalLog, logger) << ss.str();
 }
 static inline void crashAbort(int sig) {
     base::utils::abort(sig);
@@ -4860,7 +5231,7 @@ public:
 #else
             int i = 1;
 #endif  // defined(_ELPP_HANDLE_SIGABRT)
-        for (; i < base::consts::kMaxCrashSignals; ++i) {
+        for (; i < base::consts::kCrashSignalsCount; ++i) {
             m_handler = signal(base::consts::kCrashSignals[i].numb, cHandler);
         }
     }
@@ -4892,19 +5263,6 @@ public:
     }
 };
 #define _INIT_SYSLOG(id, opt, fac) el::SysLogInitializer elSyslogInit(id, opt, fac)
-/// @brief Base of Easylogging++ friendly class
-///
-/// @detail After inheriting this class publicly, implement pure-virtual function `void log(std::ostream&) const`
-class Loggable {
-public:
-    virtual void log(el::base::type::ostream_t&) const = 0;
-
-private:
-    friend inline el::base::type::ostream_t& operator<<(el::base::type::ostream_t& os, const Loggable& loggable) {
-        loggable.log(os);
-        return os;
-    }
-};
 /// @brief Static helpers for developers
 class Helpers : base::StaticClass {
 public:
@@ -4923,21 +5281,6 @@ public:
     /// @copydoc setArgs(int argc, char** argv)
     static inline void setArgs(int argc, const char** argv) {
         ELPP->setApplicationArguments(argc, const_cast<char**>(argv));
-    }
-    /// @brief Adds logging flag used internally.
-    /// @see el::LoggingFlag
-    static inline void addFlag(const el::LoggingFlag& flag) {
-        ELPP->addFlag(flag);
-    }
-    /// @brief Removes logging flag used internally.
-    /// @see el::LoggingFlag
-    static inline void removeFlag(const el::LoggingFlag& flag) {
-        ELPP->removeFlag(flag);
-    }
-    /// @brief Determines whether or not certain flag is active
-    /// @see el::LoggingFlag
-    static inline bool hasFlag(const el::LoggingFlag& flag) {
-        return ELPP->hasFlag(flag);
     }
     /// @brief Overrides default crash handler and installs custom handler.
     /// @param crashHandler A functor with no return type that takes single int argument.
@@ -4965,44 +5308,69 @@ public:
     /// @param stackTraceIfAvailable Includes stack trace if available
     /// @param level Logging level
     /// @param logger Logger to use for logging
-    static inline void logCrashReason(int sig, bool stackTraceIfAvailable = false, const Level& level = Level::Fatal, const char* logger = base::consts::kDefaultLoggerId) {
+    static inline void logCrashReason(int sig, bool stackTraceIfAvailable = false,
+            Level level = Level::Fatal, const char* logger = base::consts::kDefaultLoggerId) {
         el::base::debug::logCrashReason(sig, stackTraceIfAvailable, level, logger);
     }
-    /// @brief Installs pre rollout handler, this handler is triggered when log file is about to be rolled out (can be useful for backing up)
-    static inline void installPreRollOutHandler(const PreRollOutHandler& handler) {
-        ELPP->setPreRollOutHandler(handler);
+    /// @brief Installs pre rollout callback, this callback is triggered when log file is about to be rolled out
+    ///        (can be useful for backing up)
+    static inline void installPreRollOutCallback(const PreRollOutCallback& callback) {
+        ELPP->setPreRollOutCallback(callback);
     }
-    /// @brief Uninstalls pre rollout handler
-    static inline void uninstallPreRollOutHandler(void) {
-        ELPP->unsetPreRollOutHandler();
+    /// @brief Uninstalls pre rollout callback
+    static inline void uninstallPreRollOutCallback(void) {
+        ELPP->unsetPreRollOutCallback();
     }
-    /// @brief Installs post log dispatch handler, this handler is triggered when log is dispatched
-    static inline void installPostLogDispatchHandler(const PostLogDispatchHandler& handler) {
-        ELPP->setPostLogDispatchHandler(handler);
+    /// @brief Installs post log dispatch callback, this callback is triggered when log is dispatched
+    template <typename T>
+    static inline bool installLogDispatchCallback(const std::string& id, bool addFlag = true) {
+        if (addFlag) {
+            ELPP->addFlag(LoggingFlag::EnableLogDispatchCallback);
+        }
+        return ELPP->installLogDispatchCallback<T>(id);
     }
-    /// @brief Uninstalls post log dispatch
-    static inline void uninstallPostLogDispatchHandler(void) {
-        ELPP->unsetPostLogDispatchHandler();
+    /// @brief Uninstalls log dispatch callback
+    template <typename T>
+    static inline void uninstallLogDispatchCallback(const std::string& id, bool removeFlag = true) {
+        if (removeFlag) {
+            ELPP->removeFlag(LoggingFlag::EnableLogDispatchCallback);
+        }
+        ELPP->uninstallLogDispatchCallback<T>(id);
     }
-    /// @brief Installs post performance tracking handler, this handler is triggered when performance tracking is finished
-    static inline void installPostPerformanceTrackingHandler(const PostPerformanceTrackingHandler& handler) {
-        ELPP->setPostPerformanceTrackingHandler(handler);
+    template <typename T>
+    static inline T* logDispatchCallback(const std::string& id) {
+        return ELPP->logDispatchCallback<T>(id);
+    }
+    /// @brief Installs post performance tracking callback, this callback is triggered when performance tracking is finished
+    static inline void installPerformanceTrackingCallback(const PerformanceTrackingCallback& callback) {
+        ELPP->addFlag(LoggingFlag::PerformanceTrackingCallback);
+        ELPP->setPerformanceTrackingCallback(callback);
     }
     /// @brief Uninstalls post performance tracking handler
-    static inline void uninstallPostPerformanceTrackingHandler(void) {
-        ELPP->unsetPostPerformanceTrackingHandler();
+    static inline void uninstallPerformanceTrackingCallback(void) {
+        ELPP->removeFlag(LoggingFlag::PerformanceTrackingCallback);
+        ELPP->unsetPerformanceTrackingCallback();
     }
     /// @brief Converts template to std::string - useful for loggable classes to log containers within log(std::ostream&) const
     template <typename T>
-    static inline std::string convertTemplateToStdString(const T& templ) {
-        ELPP->registeredLoggers()->get(el::base::consts::kInternalHelperLoggerId, true);
-        el::base::Writer w(el::base::consts::kInternalHelperLoggerId, el::Level::Unknown, "", 0, "", el::base::DispatchAction::None, 0);
-        w << templ;
+    static std::string convertTemplateToStdString(const T& templ) {
+        el::Logger* logger = 
+            ELPP->registeredLoggers()->get(el::base::consts::kDefaultLoggerId);
+        if (logger == nullptr) {
+            return std::string();
+        }
+        base::MessageBuilder b;
+        b.initialize(logger);
+        logger->acquireLock();
+        b << templ;
 #if defined(_ELPP_UNICODE)
-        return std::string(w.m_logger->stream().str().begin(), w.m_logger->stream().str().end());
+        std::string s = std::string(logger->stream().str().begin(), logger->stream().str().end());
 #else
-        return w.m_logger->stream().str();
+        std::string s = logger->stream().str();
 #endif  // defined(_ELPP_UNICODE)
+        logger->stream().str(ELPP_LITERAL(""));
+        logger->releaseLock();
+        return s;
     }
     /// @brief Returns command line arguments (pointer) provided to easylogging++
     static inline const el::base::utils::CommandLineArgs* commandLineArgs(void) {
@@ -5020,9 +5388,9 @@ public:
     static inline bool hasCustomFormatSpecifier(const char* formatSpecifier) {
         return ELPP->hasCustomFormatSpecifier(formatSpecifier);
     }
-    static inline void validateFileRolling(Logger* logger, const Level& level) {
+    static inline void validateFileRolling(Logger* logger, Level level) {
         if (logger == nullptr) return;
-        logger->m_typedConfigurations->validateFileRolling(level, ELPP->preRollOutHandler());
+        logger->m_typedConfigurations->validateFileRolling(level, ELPP->preRollOutCallback());
     }
 };
 /// @brief Static helpers to deal with loggers and their configurations
@@ -5030,15 +5398,18 @@ class Loggers : base::StaticClass {
 public:
     /// @brief Gets existing or registers new logger
     static inline Logger* getLogger(const std::string& identity, bool registerIfNotAvailable = true) {
+        base::threading::ScopedLock scopedLock(ELPP->lock());
         return ELPP->registeredLoggers()->get(identity, registerIfNotAvailable);
     }
     /// @brief Unregisters logger - use it only when you know what you are doing, you may unregister
     ///        loggers initialized / used by third-party libs.
     static inline bool unregisterLogger(const std::string& identity) {
+        base::threading::ScopedLock scopedLock(ELPP->lock());
         return ELPP->registeredLoggers()->remove(identity);
     }
     /// @brief Whether or not logger with id is registered
     static inline bool hasLogger(const std::string& identity) {
+        base::threading::ScopedLock scopedLock(ELPP->lock());
         return ELPP->registeredLoggers()->has(identity);
     }
     /// @brief Reconfigures specified logger with new configurations
@@ -5052,7 +5423,7 @@ public:
         return Loggers::reconfigureLogger(Loggers::getLogger(identity), configurations);
     }
     /// @brief Reconfigures logger's single configuration
-    static inline Logger* reconfigureLogger(const std::string& identity, const ConfigurationType& configurationType,
+    static inline Logger* reconfigureLogger(const std::string& identity, ConfigurationType configurationType,
             const std::string& value) {
         Logger* logger = Loggers::getLogger(identity);
         if (logger == nullptr) {
@@ -5070,11 +5441,12 @@ public:
         }
     }
     /// @brief Reconfigures single configuration for all the loggers
-    static inline void reconfigureAllLoggers(const ConfigurationType& configurationType, const std::string& value) {
+    static inline void reconfigureAllLoggers(ConfigurationType configurationType, const std::string& value) {
         reconfigureAllLoggers(Level::Global, configurationType, value);
     }
     /// @brief Reconfigures single configuration for all the loggers for specified level
-    static inline void reconfigureAllLoggers(const Level& level, const ConfigurationType& configurationType, const std::string& value) {
+    static inline void reconfigureAllLoggers(Level level, ConfigurationType configurationType, 
+            const std::string& value) {
         for (base::RegisteredLoggers::iterator it = ELPP->registeredLoggers()->begin();
                 it != ELPP->registeredLoggers()->end(); ++it) {
             Logger* logger = it->second;
@@ -5116,12 +5488,14 @@ public:
     /// @brief Sets configurations from global configuration file.
     static void configureFromGlobal(const char* globalConfigurationFilePath) {
         std::ifstream gcfStream(globalConfigurationFilePath, std::ifstream::in);
-        ELPP_ASSERT(gcfStream.is_open(), "Unable to open global configuration file [" << globalConfigurationFilePath << "] for parsing.");
+        ELPP_ASSERT(gcfStream.is_open(), "Unable to open global configuration file [" << globalConfigurationFilePath 
+            << "] for parsing.");
         std::string line = std::string();
         std::stringstream ss;
         Logger* logger = nullptr;
         auto configure = [&](void) {
-            ELPP_INTERNAL_INFO(8, "Configuring logger: '" << logger->id() << "' with configurations \n" << ss.str() << "\n--------------");
+            ELPP_INTERNAL_INFO(8, "Configuring logger: '" << logger->id() << "' with configurations \n" << ss.str() 
+                << "\n--------------");
             Configurations c;
             c.parseFromText(ss.str());
             logger->configure(c);
@@ -5152,10 +5526,10 @@ public:
             configure();
         }
     }
-    /// @brief Configures loggers using command line arg. Ensure you have already set command line args, see Helpers::setArgs(..)
-    /// @return False if invalid argument or argument with no value provided, true if attempted to configure logger. If true is returned
-    ///         that does not mean it has been configured successfully, it only means that it has attempeted to configure logger using configuration
-    ///         file provided in argument
+    /// @brief Configures loggers using command line arg. Ensure you have already set command line args, 
+    /// @return False if invalid argument or argument with no value provided, true if attempted to configure logger.
+    ///         If true is returned that does not mean it has been configured successfully, it only means that it
+    ///         has attempeted to configure logger using configuration file provided in argument
     static inline bool configureFromArg(const char* argKey) {
 #if defined(_ELPP_DISABLE_CONFIGURATION_FROM_PROGRAM_ARGS)
         _ELPP_UNUSED(argKey);
@@ -5171,18 +5545,50 @@ public:
     static inline void flushAll(void) {
         ELPP->registeredLoggers()->flushAll();
     }
+    /// @brief Adds logging flag used internally.
+    static inline void addFlag(LoggingFlag flag) {
+        ELPP->addFlag(flag);
+    }
+    /// @brief Removes logging flag used internally.
+    static inline void removeFlag(LoggingFlag flag) {
+        ELPP->removeFlag(flag);
+    }
+    /// @brief Determines whether or not certain flag is active
+    static inline bool hasFlag(LoggingFlag flag) {
+        return ELPP->hasFlag(flag);
+    }
+    /// @brief Adds flag and removes it when scope goes out
+    class ScopedAddFlag {
+    public:
+        ScopedAddFlag(LoggingFlag flag) : m_flag(flag) { Loggers::addFlag(m_flag); }
+        ~ScopedAddFlag(void) { Loggers::removeFlag(m_flag); }
+    private:
+        LoggingFlag m_flag;
+    };
+    /// @brief Removes flag and add it when scope goes out
+    class ScopedRemoveFlag {
+    public:
+        ScopedRemoveFlag(LoggingFlag flag) : m_flag(flag) { Loggers::removeFlag(m_flag); }
+        ~ScopedRemoveFlag(void) { Loggers::addFlag(m_flag); }
+    private:
+        LoggingFlag m_flag;
+    };
+    /// @brief Sets hierarchy for logging. Needs to enable logging flag (HierarchicalLogging)
+    static inline void setLoggingLevel(Level level) {
+        ELPP->setLoggingLevel(level);
+    }
 };
 class VersionInfo : base::StaticClass {
 public:
-    /// @brief Current version number
-    static inline const std::string version(void) { return std::string("9.58"); }
-    /// @brief Release date of current version
-    static inline const std::string releaseDate(void) { return std::string("14-03-2014 0950hrs"); }
+   /// @brief Current version number
+    static inline const std::string version(void) { return std::string("9.69"); }
+   /// @brief Release date of current version
+    static inline const std::string releaseDate(void) { return std::string("16-04-2014 1943hrs"); }
 };
 }  // namespace el
 #undef VLOG_IS_ON
 /// @brief Determines whether verbose logging is on for specified level current file.
-#define VLOG_IS_ON(verboseLevel) (ELPP->vRegistry()->allowed(verboseLevel, __FILE__, ELPP->flags()))
+#define VLOG_IS_ON(verboseLevel) (ELPP->vRegistry()->allowed(verboseLevel, __FILE__))
 #undef TIMED_BLOCK
 #undef TIMED_SCOPE
 #undef TIMED_FUNC
@@ -5196,17 +5602,18 @@ public:
 ///        'performance' logger.
 ///
 /// @detail Please note in order to check the performance at a certain time you can use obj.checkpoint();
-/// @see el::base::Trackable
-/// @see el::base::Trackable::checkpoint
+/// @see el::base::PerformanceTracker
+/// @see el::base::PerformanceTracker::checkpoint
 // Note: Do not surround this definition with null macro because of obj instance
-#define TIMED_SCOPE(obj, blockname) el::base::Trackable obj(blockname, _ELPP_MIN_UNIT)
-#define TIMED_BLOCK(obj, blockName) for (struct { int i; el::base::Trackable timer; } obj = { 0, el::base::Trackable(blockName, _ELPP_MIN_UNIT) }; obj.i < 1; ++obj.i)
+#define TIMED_SCOPE(obj, blockname) el::base::PerformanceTracker obj(blockname, _ELPP_MIN_UNIT)
+#define TIMED_BLOCK(obj, blockName) for (struct { int i; el::base::PerformanceTracker timer; } obj = { 0, \
+    el::base::PerformanceTracker(blockName, _ELPP_MIN_UNIT) }; obj.i < 1; ++obj.i)
 /// @brief Performance tracked function. Performance gets written when goes out of scope using
 ///        'performance' logger.
 ///
 /// @detail Please note in order to check the performance at a certain time you can use obj.checkpoint();
-/// @see el::base::Trackable
-/// @see el::base::Trackable::checkpoint
+/// @see el::base::PerformanceTracker
+/// @see el::base::PerformanceTracker::checkpoint
 #define TIMED_FUNC(obj) TIMED_SCOPE(obj, _ELPP_FUNC)
 #undef PERFORMANCE_CHECKPOINT
 #undef PERFORMANCE_CHECKPOINT_WITH_ID
@@ -5264,188 +5671,215 @@ public:
 #undef CVERBOSE_N_TIMES
 // Normal logs
 #if _ELPP_INFO_LOG
-#   define CINFO(writer, loggerId, dispatchAction) _ELPP_WRITE_LOG(writer, loggerId, el::Level::Info, dispatchAction)
+#   define CINFO(writer, dispatchAction, ...) _ELPP_WRITE_LOG(writer, el::Level::Info, dispatchAction, __VA_ARGS__)
 #else
-#   define CINFO(writer, loggerId, dispatchAction) el::base::NullWriter()
+#   define CINFO(writer, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_INFO_LOG
 #if _ELPP_WARNING_LOG
-#   define CWARNING(writer, loggerId, dispatchAction) _ELPP_WRITE_LOG(writer, loggerId, el::Level::Warning, dispatchAction)
+#   define CWARNING(writer, dispatchAction, ...) _ELPP_WRITE_LOG(writer, el::Level::Warning, dispatchAction, __VA_ARGS__)
 #else
-#   define CWARNING(writer, loggerId, dispatchAction) el::base::NullWriter()
+#   define CWARNING(writer, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_WARNING_LOG
 #if _ELPP_DEBUG_LOG
-#   define CDEBUG(writer, loggerId, dispatchAction) _ELPP_WRITE_LOG(writer, loggerId, el::Level::Debug, dispatchAction)
+#   define CDEBUG(writer, dispatchAction, ...) _ELPP_WRITE_LOG(writer, el::Level::Debug, dispatchAction, __VA_ARGS__)
 #else
-#   define CDEBUG(writer, loggerId, dispatchAction) el::base::NullWriter()
+#   define CDEBUG(writer, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_DEBUG_LOG
 #if _ELPP_ERROR_LOG
-#   define CERROR(writer, loggerId, dispatchAction) _ELPP_WRITE_LOG(writer, loggerId, el::Level::Error, dispatchAction)
+#   define CERROR(writer, dispatchAction, ...) _ELPP_WRITE_LOG(writer, el::Level::Error, dispatchAction, __VA_ARGS__)
 #else
-#   define CERROR(writer, loggerId, dispatchAction) el::base::NullWriter()
+#   define CERROR(writer, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_ERROR_LOG
 #if _ELPP_FATAL_LOG
-#   define CFATAL(writer, loggerId, dispatchAction) _ELPP_WRITE_LOG(writer, loggerId, el::Level::Fatal, dispatchAction)
+#   define CFATAL(writer, dispatchAction, ...) _ELPP_WRITE_LOG(writer, el::Level::Fatal, dispatchAction, __VA_ARGS__)
 #else
-#   define CFATAL(writer, loggerId, dispatchAction) el::base::NullWriter()
+#   define CFATAL(writer, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_FATAL_LOG
 #if _ELPP_TRACE_LOG
-#   define CTRACE(writer, loggerId, dispatchAction) _ELPP_WRITE_LOG(writer, loggerId, el::Level::Trace, dispatchAction)
+#   define CTRACE(writer, dispatchAction, ...) _ELPP_WRITE_LOG(writer, el::Level::Trace, dispatchAction, __VA_ARGS__)
 #else
-#   define CTRACE(writer, loggerId, dispatchAction) el::base::NullWriter()
+#   define CTRACE(writer, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_TRACE_LOG
 #if _ELPP_VERBOSE_LOG
-#   define CVERBOSE(writer, vlevel, loggerId, dispatchAction) if (VLOG_IS_ON(vlevel)) writer(loggerId, \
-       el::Level::Verbose, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction, vlevel)
+#   define CVERBOSE(writer, vlevel, dispatchAction, ...) if (VLOG_IS_ON(vlevel)) writer(\
+       el::Level::Verbose, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction, vlevel).construct(el_getVALength(__VA_ARGS__), __VA_ARGS__)
 #else
-#   define CVERBOSE(writer, vlevel, loggerId, dispatchAction) el::base::NullWriter()
+#   define CVERBOSE(writer, vlevel, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_VERBOSE_LOG
 // Conditional logs
 #if _ELPP_INFO_LOG
-#   define CINFO_IF(writer, condition_, loggerId, dispatchAction) _ELPP_WRITE_LOG_IF(writer, (condition_), loggerId, el::Level::Info, dispatchAction)
+#   define CINFO_IF(writer, condition_, dispatchAction, ...) \
+        _ELPP_WRITE_LOG_IF(writer, (condition_), el::Level::Info, dispatchAction, __VA_ARGS__)
 #else
-#   define CINFO_IF(writer, condition_, loggerId, dispatchAction) el::base::NullWriter()
+#   define CINFO_IF(writer, condition_, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_INFO_LOG
 #if _ELPP_WARNING_LOG
-#   define CWARNING_IF(writer, condition_, loggerId, dispatchAction) _ELPP_WRITE_LOG_IF(writer, (condition_), loggerId, el::Level::Warning, dispatchAction)
+#   define CWARNING_IF(writer, condition_, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_IF(writer, (condition_), el::Level::Warning, dispatchAction, __VA_ARGS__)
 #else
-#   define CWARNING_IF(writer, condition_, loggerId, dispatchAction) el::base::NullWriter()
+#   define CWARNING_IF(writer, condition_, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_WARNING_LOG
 #if _ELPP_DEBUG_LOG
-#   define CDEBUG_IF(writer, condition_, loggerId, dispatchAction) _ELPP_WRITE_LOG_IF(writer, (condition_), loggerId, el::Level::Debug, dispatchAction)
+#   define CDEBUG_IF(writer, condition_, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_IF(writer, (condition_), el::Level::Debug, dispatchAction, __VA_ARGS__)
 #else
-#   define CDEBUG_IF(writer, condition_, loggerId, dispatchAction) el::base::NullWriter()
+#   define CDEBUG_IF(writer, condition_, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_DEBUG_LOG
 #if _ELPP_ERROR_LOG
-#   define CERROR_IF(writer, condition_, loggerId, dispatchAction) _ELPP_WRITE_LOG_IF(writer, (condition_), loggerId, el::Level::Error, dispatchAction)
+#   define CERROR_IF(writer, condition_, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_IF(writer, (condition_), el::Level::Error, dispatchAction, __VA_ARGS__)
 #else
-#   define CERROR_IF(writer, condition_, loggerId, dispatchAction) el::base::NullWriter()
+#   define CERROR_IF(writer, condition_, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_ERROR_LOG
 #if _ELPP_FATAL_LOG
-#   define CFATAL_IF(writer, condition_, loggerId, dispatchAction) _ELPP_WRITE_LOG_IF(writer, (condition_), loggerId, el::Level::Fatal, dispatchAction)
+#   define CFATAL_IF(writer, condition_, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_IF(writer, (condition_), el::Level::Fatal, dispatchAction, __VA_ARGS__)
 #else
-#   define CFATAL_IF(writer, condition_, loggerId, dispatchAction) el::base::NullWriter()
+#   define CFATAL_IF(writer, condition_, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_FATAL_LOG
 #if _ELPP_TRACE_LOG
-#   define CTRACE_IF(writer, condition_, loggerId, dispatchAction) _ELPP_WRITE_LOG_IF(writer, (condition_), loggerId, el::Level::Trace, dispatchAction)
+#   define CTRACE_IF(writer, condition_, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_IF(writer, (condition_), el::Level::Trace, dispatchAction, __VA_ARGS__)
 #else
-#   define CTRACE_IF(writer, condition_, loggerId, dispatchAction) el::base::NullWriter()
+#   define CTRACE_IF(writer, condition_, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_TRACE_LOG
 #if _ELPP_VERBOSE_LOG
-#   define CVERBOSE_IF(writer, condition_, vlevel, loggerId, dispatchAction) if (VLOG_IS_ON(vlevel) && (condition_)) writer(loggerId, \
-       el::Level::Verbose, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction, vlevel)
+#   define CVERBOSE_IF(writer, condition_, vlevel, dispatchAction, ...) if (VLOG_IS_ON(vlevel) && (condition_)) writer( \
+       el::Level::Verbose, __FILE__, __LINE__, _ELPP_FUNC, dispatchAction, vlevel).construct(el_getVALength(__VA_ARGS__), __VA_ARGS__)
 #else
-#   define CVERBOSE_IF(writer, condition_, vlevel, loggerId) el::base::NullWriter()
+#   define CVERBOSE_IF(writer, condition_, vlevel, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_VERBOSE_LOG
 // Occasional logs
 #if _ELPP_INFO_LOG
-#   define CINFO_EVERY_N(writer, occasion, loggerId, dispatchAction) _ELPP_WRITE_LOG_EVERY_N(writer, occasion, loggerId, el::Level::Info, dispatchAction)
+#   define CINFO_EVERY_N(writer, occasion, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_EVERY_N(writer, occasion, el::Level::Info, dispatchAction, __VA_ARGS__)
 #else
-#   define CINFO_EVERY_N(writer, occasion, loggerId, dispatchAction) el::base::NullWriter()
+#   define CINFO_EVERY_N(writer, occasion, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_INFO_LOG
 #if _ELPP_WARNING_LOG
-#   define CWARNING_EVERY_N(writer, occasion, loggerId, dispatchAction) _ELPP_WRITE_LOG_EVERY_N(writer, occasion, loggerId, el::Level::Warning, dispatchAction)
+#   define CWARNING_EVERY_N(writer, occasion, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_EVERY_N(writer, occasion, el::Level::Warning, dispatchAction, __VA_ARGS__)
 #else
-#   define CWARNING_EVERY_N(writer, occasion, loggerId, dispatchAction) el::base::NullWriter()
+#   define CWARNING_EVERY_N(writer, occasion, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_WARNING_LOG
 #if _ELPP_DEBUG_LOG
-#   define CDEBUG_EVERY_N(writer, occasion, loggerId, dispatchAction) _ELPP_WRITE_LOG_EVERY_N(writer, occasion, loggerId, el::Level::Debug, dispatchAction)
+#   define CDEBUG_EVERY_N(writer, occasion, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_EVERY_N(writer, occasion, el::Level::Debug, dispatchAction, __VA_ARGS__)
 #else
-#   define CDEBUG_EVERY_N(writer, occasion, loggerId, dispatchAction) el::base::NullWriter()
+#   define CDEBUG_EVERY_N(writer, occasion, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_DEBUG_LOG
 #if _ELPP_ERROR_LOG
-#   define CERROR_EVERY_N(writer, occasion, loggerId, dispatchAction) _ELPP_WRITE_LOG_EVERY_N(writer, occasion, loggerId, el::Level::Error, dispatchAction)
+#   define CERROR_EVERY_N(writer, occasion, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_EVERY_N(writer, occasion, el::Level::Error, dispatchAction, __VA_ARGS__)
 #else
-#   define CERROR_EVERY_N(writer, occasion, loggerId, dispatchAction) el::base::NullWriter()
+#   define CERROR_EVERY_N(writer, occasion, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_ERROR_LOG
 #if _ELPP_FATAL_LOG
-#   define CFATAL_EVERY_N(writer, occasion, loggerId, dispatchAction) _ELPP_WRITE_LOG_EVERY_N(writer, occasion, loggerId, el::Level::Fatal, dispatchAction)
+#   define CFATAL_EVERY_N(writer, occasion, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_EVERY_N(writer, occasion, el::Level::Fatal, dispatchAction, __VA_ARGS__)
 #else
-#   define CFATAL_EVERY_N(writer, occasion, loggerId, dispatchAction) el::base::NullWriter()
+#   define CFATAL_EVERY_N(writer, occasion, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_FATAL_LOG
 #if _ELPP_TRACE_LOG
-#   define CTRACE_EVERY_N(writer, occasion, loggerId, dispatchAction) _ELPP_WRITE_LOG_EVERY_N(writer, occasion, loggerId, el::Level::Trace, dispatchAction)
+#   define CTRACE_EVERY_N(writer, occasion, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_EVERY_N(writer, occasion, el::Level::Trace, dispatchAction, __VA_ARGS__)
 #else
-#   define CTRACE_EVERY_N(writer, occasion, loggerId, dispatchAction) el::base::NullWriter()
+#   define CTRACE_EVERY_N(writer, occasion, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_TRACE_LOG
 #if _ELPP_VERBOSE_LOG
-#   define CVERBOSE_EVERY_N(writer, occasion, vlevel, loggerId, dispatchAction) CVERBOSE_IF(writer, ELPP->validateEveryNCounter(__FILE__, __LINE__, occasion), vlevel, loggerId, dispatchAction)
+#   define CVERBOSE_EVERY_N(writer, occasion, vlevel, dispatchAction, ...)\
+        CVERBOSE_IF(writer, ELPP->validateEveryNCounter(__FILE__, __LINE__, occasion), vlevel, dispatchAction, __VA_ARGS__)
 #else
-#   define CVERBOSE_EVERY_N(writer, occasion, vlevel, loggerId, dispatchAction) el::base::NullWriter()
+#   define CVERBOSE_EVERY_N(writer, occasion, vlevel, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_VERBOSE_LOG
 // After N logs
 #if _ELPP_INFO_LOG
-#   define CINFO_AFTER_N(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_AFTER_N(writer, n, loggerId, el::Level::Info, dispatchAction)
+#   define CINFO_AFTER_N(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_AFTER_N(writer, n, el::Level::Info, dispatchAction, __VA_ARGS__)
 #else
-#   define CINFO_AFTER_N(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CINFO_AFTER_N(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_INFO_LOG
 #if _ELPP_WARNING_LOG
-#   define CWARNING_AFTER_N(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_AFTER_N(writer, n, loggerId, el::Level::Warning, dispatchAction)
+#   define CWARNING_AFTER_N(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_AFTER_N(writer, n, el::Level::Warning, dispatchAction, __VA_ARGS__)
 #else
-#   define CWARNING_AFTER_N(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CWARNING_AFTER_N(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_WARNING_LOG
 #if _ELPP_DEBUG_LOG
-#   define CDEBUG_AFTER_N(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_AFTER_N(writer, n, loggerId, el::Level::Debug, dispatchAction)
+#   define CDEBUG_AFTER_N(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_AFTER_N(writer, n, el::Level::Debug, dispatchAction, __VA_ARGS__)
 #else
-#   define CDEBUG_AFTER_N(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CDEBUG_AFTER_N(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_DEBUG_LOG
 #if _ELPP_ERROR_LOG
-#   define CERROR_AFTER_N(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_AFTER_N(writer, n, loggerId, el::Level::Error, dispatchAction)
+#   define CERROR_AFTER_N(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_AFTER_N(writer, n, el::Level::Error, dispatchAction, __VA_ARGS__)
 #else
-#   define CERROR_AFTER_N(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CERROR_AFTER_N(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_ERROR_LOG
 #if _ELPP_FATAL_LOG
-#   define CFATAL_AFTER_N(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_AFTER_N(writer, n, loggerId, el::Level::Fatal, dispatchAction)
+#   define CFATAL_AFTER_N(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_AFTER_N(writer, n, el::Level::Fatal, dispatchAction, __VA_ARGS__)
 #else
-#   define CFATAL_AFTER_N(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CFATAL_AFTER_N(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_FATAL_LOG
 #if _ELPP_TRACE_LOG
-#   define CTRACE_AFTER_N(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_AFTER_N(writer, n, loggerId, el::Level::Trace, dispatchAction)
+#   define CTRACE_AFTER_N(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_AFTER_N(writer, n, el::Level::Trace, dispatchAction, __VA_ARGS__)
 #else
-#   define CTRACE_AFTER_N(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CTRACE_AFTER_N(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_TRACE_LOG
 #if _ELPP_VERBOSE_LOG
-#   define CVERBOSE_AFTER_N(writer, n, vlevel, loggerId, dispatchAction) CVERBOSE_IF(writer, ELPP->validateAfterNCounter(__FILE__, __LINE__, n), vlevel, loggerId, dispatchAction)
+#   define CVERBOSE_AFTER_N(writer, n, vlevel, dispatchAction, ...)\
+        CVERBOSE_IF(writer, ELPP->validateAfterNCounter(__FILE__, __LINE__, n), vlevel, dispatchAction, __VA_ARGS__)
 #else
-#   define CVERBOSE_AFTER_N(writer, n, vlevel, loggerId, dispatchAction) el::base::NullWriter()
+#   define CVERBOSE_AFTER_N(writer, n, vlevel, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_VERBOSE_LOG
 // N Times logs
 #if _ELPP_INFO_LOG
-#   define CINFO_N_TIMES(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_N_TIMES(writer, n, loggerId, el::Level::Info, dispatchAction)
+#   define CINFO_N_TIMES(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_N_TIMES(writer, n, el::Level::Info, dispatchAction, __VA_ARGS__)
 #else
-#   define CINFO_N_TIMES(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CINFO_N_TIMES(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_INFO_LOG
 #if _ELPP_WARNING_LOG
-#   define CWARNING_N_TIMES(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_N_TIMES(writer, n, loggerId, el::Level::Warning, dispatchAction)
+#   define CWARNING_N_TIMES(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_N_TIMES(writer, n, el::Level::Warning, dispatchAction, __VA_ARGS__)
 #else
-#   define CWARNING_N_TIMES(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CWARNING_N_TIMES(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_WARNING_LOG
 #if _ELPP_DEBUG_LOG
-#   define CDEBUG_N_TIMES(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_N_TIMES(writer, n, loggerId, el::Level::Debug, dispatchAction)
+#   define CDEBUG_N_TIMES(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_N_TIMES(writer, n, el::Level::Debug, dispatchAction, __VA_ARGS__)
 #else
-#   define CDEBUG_N_TIMES(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CDEBUG_N_TIMES(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_DEBUG_LOG
 #if _ELPP_ERROR_LOG
-#   define CERROR_N_TIMES(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_N_TIMES(writer, n, loggerId, el::Level::Error, dispatchAction)
+#   define CERROR_N_TIMES(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_N_TIMES(writer, n, el::Level::Error, dispatchAction, __VA_ARGS__)
 #else
-#   define CERROR_N_TIMES(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CERROR_N_TIMES(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_ERROR_LOG
 #if _ELPP_FATAL_LOG
-#   define CFATAL_N_TIMES(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_N_TIMES(writer, n, loggerId, el::Level::Fatal, dispatchAction)
+#   define CFATAL_N_TIMES(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_N_TIMES(writer, n, el::Level::Fatal, dispatchAction, __VA_ARGS__)
 #else
-#   define CFATAL_N_TIMES(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CFATAL_N_TIMES(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_FATAL_LOG
 #if _ELPP_TRACE_LOG
-#   define CTRACE_N_TIMES(writer, n, loggerId, dispatchAction) _ELPP_WRITE_LOG_N_TIMES(writer, n, loggerId, el::Level::Trace, dispatchAction)
+#   define CTRACE_N_TIMES(writer, n, dispatchAction, ...)\
+        _ELPP_WRITE_LOG_N_TIMES(writer, n, el::Level::Trace, dispatchAction, __VA_ARGS__)
 #else
-#   define CTRACE_N_TIMES(writer, n, loggerId, dispatchAction) el::base::NullWriter()
+#   define CTRACE_N_TIMES(writer, n, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_TRACE_LOG
 #if _ELPP_VERBOSE_LOG
-#   define CVERBOSE_N_TIMES(writer, n, vlevel, loggerId, dispatchAction) CVERBOSE_IF(writer, ELPP->validateNTimesCounter(__FILE__, __LINE__, n), vlevel, loggerId, dispatchAction)
+#   define CVERBOSE_N_TIMES(writer, n, vlevel, dispatchAction, ...)\
+        CVERBOSE_IF(writer, ELPP->validateNTimesCounter(__FILE__, __LINE__, n), vlevel, dispatchAction, __VA_ARGS__)
 #else
-#   define CVERBOSE_N_TIMES(writer, n, vlevel, loggerId, dispatchAction) el::base::NullWriter()
+#   define CVERBOSE_N_TIMES(writer, n, vlevel, dispatchAction, ...) el::base::NullWriter()
 #endif  // _ELPP_VERBOSE_LOG
 //
-// Custom Loggers - Requires (level, loggerId, dispatchAction)
+// Custom Loggers - Requires (level, dispatchAction, loggerId/s)
 //
 // undef existing
 #undef CLOG
@@ -5461,18 +5895,27 @@ public:
 #undef CLOG_N_TIMES
 #undef CVLOG_N_TIMES
 // Normal logs
-#define CLOG(LEVEL, loggerId) C##LEVEL(el::base::Writer, loggerId, el::base::DispatchAction::NormalLog)
-#define CVLOG(vlevel, loggerId) CVERBOSE(el::base::Writer, vlevel, loggerId, el::base::DispatchAction::NormalLog)
+#define CLOG(LEVEL, ...)\
+    C##LEVEL(el::base::Writer, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CVLOG(vlevel, ...) CVERBOSE(el::base::Writer, vlevel, el::base::DispatchAction::NormalLog, __VA_ARGS__)
 // Conditional logs
-#define CLOG_IF(condition, LEVEL, loggerId) C##LEVEL##_IF(el::base::Writer, condition, loggerId, el::base::DispatchAction::NormalLog)
-#define CVLOG_IF(condition, vlevel, loggerId) CVERBOSE_IF(el::base::Writer, condition, vlevel, loggerId, el::base::DispatchAction::NormalLog)
+#define CLOG_IF(condition, LEVEL, ...)\
+    C##LEVEL##_IF(el::base::Writer, condition, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CVLOG_IF(condition, vlevel, ...)\
+    CVERBOSE_IF(el::base::Writer, condition, vlevel, el::base::DispatchAction::NormalLog, __VA_ARGS__)
 // Hit counts based logs
-#define CLOG_EVERY_N(n, LEVEL, loggerId) C##LEVEL##_EVERY_N(el::base::Writer, n, loggerId, el::base::DispatchAction::NormalLog)
-#define CVLOG_EVERY_N(n, vlevel, loggerId) CVERBOSE_EVERY_N(el::base::Writer, n, vlevel, loggerId, el::base::DispatchAction::NormalLog)
-#define CLOG_AFTER_N(n, LEVEL, loggerId) C##LEVEL##_AFTER_N(el::base::Writer, n, loggerId, el::base::DispatchAction::NormalLog)
-#define CVLOG_AFTER_N(n, vlevel, loggerId) CVERBOSE_AFTER_N(el::base::Writer, n, vlevel, loggerId, el::base::DispatchAction::NormalLog)
-#define CLOG_N_TIMES(n, LEVEL, loggerId) C##LEVEL##_N_TIMES(el::base::Writer, n, loggerId, el::base::DispatchAction::NormalLog)
-#define CVLOG_N_TIMES(n, vlevel, loggerId) CVERBOSE_N_TIMES(el::base::Writer, n, vlevel, loggerId, el::base::DispatchAction::NormalLog)
+#define CLOG_EVERY_N(n, LEVEL, ...)\
+    C##LEVEL##_EVERY_N(el::base::Writer, n, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CVLOG_EVERY_N(n, vlevel, ...)\
+    CVERBOSE_EVERY_N(el::base::Writer, n, vlevel, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CLOG_AFTER_N(n, LEVEL, ...)\
+    C##LEVEL##_AFTER_N(el::base::Writer, n, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CVLOG_AFTER_N(n, vlevel, ...)\
+    CVERBOSE_AFTER_N(el::base::Writer, n, vlevel, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CLOG_N_TIMES(n, LEVEL, ...)\
+    C##LEVEL##_N_TIMES(el::base::Writer, n, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CVLOG_N_TIMES(n, vlevel, ...)\
+    CVERBOSE_N_TIMES(el::base::Writer, n, vlevel, el::base::DispatchAction::NormalLog, __VA_ARGS__)
 //
 // Default Loggers macro using CLOG(), CLOG_VERBOSE() and CVLOG() macros
 //
@@ -5517,10 +5960,14 @@ public:
 #undef DCPLOG_IF
 #undef DPLOG
 #undef DPLOG_IF
-#define CPLOG(LEVEL, loggerId) C##LEVEL(el::base::PErrorWriter, loggerId, el::base::DispatchAction::NormalLog)
-#define CPLOG_IF(condition, LEVEL, loggerId) C##LEVEL##_IF(el::base::PErrorWriter, condition, loggerId, el::base::DispatchAction::NormalLog)
-#define DCPLOG(LEVEL, loggerId) if (_ELPP_DEBUG_LOG) C##LEVEL(el::base::PErrorWriter, loggerId, el::base::DispatchAction::NormalLog)
-#define DCPLOG_IF(condition, LEVEL, loggerId) C##LEVEL##_IF(el::base::PErrorWriter, (_ELPP_DEBUG_LOG) && (condition), loggerId, el::base::DispatchAction::NormalLog)
+#define CPLOG(LEVEL, ...)\
+    C##LEVEL(el::base::PErrorWriter, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define CPLOG_IF(condition, LEVEL, ...)\
+    C##LEVEL##_IF(el::base::PErrorWriter, condition, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define DCPLOG(LEVEL, ...)\
+    if (_ELPP_DEBUG_LOG) C##LEVEL(el::base::PErrorWriter, el::base::DispatchAction::NormalLog, __VA_ARGS__)
+#define DCPLOG_IF(condition, LEVEL, ...)\
+    C##LEVEL##_IF(el::base::PErrorWriter, (_ELPP_DEBUG_LOG) && (condition), el::base::DispatchAction::NormalLog, __VA_ARGS__)
 #define PLOG(LEVEL) CPLOG(LEVEL, _CURRENT_FILE_LOGGER_ID)
 #define PLOG_IF(condition, LEVEL) CPLOG_IF(condition, LEVEL, _CURRENT_FILE_LOGGER_ID)
 #define DPLOG(LEVEL) DCPLOG(LEVEL, _CURRENT_FILE_LOGGER_ID)
@@ -5547,50 +5994,56 @@ public:
 #undef DSYSLOG_AFTER_N
 #undef DSYSLOG_N_TIMES
 #if defined(_ELPP_SYSLOG)
-#   define CSYSLOG(LEVEL, loggerId) C##LEVEL(el::base::Writer, loggerId, el::base::DispatchAction::SysLog)
-#   define CSYSLOG_IF(condition, LEVEL, loggerId) C##LEVEL##_IF(el::base::Writer, condition, loggerId, el::base::DispatchAction::SysLog)
-#   define CSYSLOG_EVERY_N(n, LEVEL, loggerId) C##LEVEL##_EVERY_N(el::base::Writer, n, loggerId, el::base::DispatchAction::SysLog)
-#   define CSYSLOG_AFTER_N(n, LEVEL, loggerId) C##LEVEL##_AFTER_N(el::base::Writer, n, loggerId, el::base::DispatchAction::SysLog)
-#   define CSYSLOG_N_TIMES(n, LEVEL, loggerId) C##LEVEL##_N_TIMES(el::base::Writer, n, loggerId, el::base::DispatchAction::SysLog)
+#   define CSYSLOG(LEVEL, ...)\
+        C##LEVEL(el::base::Writer, el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define CSYSLOG_IF(condition, LEVEL, ...)\
+        C##LEVEL##_IF(el::base::Writer, condition, el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define CSYSLOG_EVERY_N(n, LEVEL, ...) C##LEVEL##_EVERY_N(el::base::Writer, n, el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define CSYSLOG_AFTER_N(n, LEVEL, ...) C##LEVEL##_AFTER_N(el::base::Writer, n, el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define CSYSLOG_N_TIMES(n, LEVEL, ...) C##LEVEL##_N_TIMES(el::base::Writer, n, el::base::DispatchAction::SysLog, __VA_ARGS__)
 #   define SYSLOG(LEVEL) CSYSLOG(LEVEL, el::base::consts::kSysLogLoggerId)
 #   define SYSLOG_IF(condition, LEVEL) CSYSLOG_IF(condition, LEVEL, el::base::consts::kSysLogLoggerId)
 #   define SYSLOG_EVERY_N(n, LEVEL) CSYSLOG_EVERY_N(n, LEVEL, el::base::consts::kSysLogLoggerId)
 #   define SYSLOG_AFTER_N(n, LEVEL) CSYSLOG_AFTER_N(n, LEVEL, el::base::consts::kSysLogLoggerId)
 #   define SYSLOG_N_TIMES(n, LEVEL) CSYSLOG_N_TIMES(n, LEVEL, el::base::consts::kSysLogLoggerId)
-#   define DCSYSLOG(LEVEL, loggerId) if (_ELPP_DEBUG_LOG) C##LEVEL(el::base::Writer, loggerId, el::base::DispatchAction::SysLog)
-#   define DCSYSLOG_IF(condition, LEVEL, loggerId) C##LEVEL##_IF(el::base::Writer, (_ELPP_DEBUG_LOG) && (condition), loggerId, el::base::DispatchAction::SysLog)
-#   define DCSYSLOG_EVERY_N(n, LEVEL, loggerId) if (_ELPP_DEBUG_LOG) C##LEVEL##_EVERY_N(el::base::Writer, n, loggerId, el::base::DispatchAction::SysLog)
-#   define DCSYSLOG_AFTER_N(n, LEVEL, loggerId) if (_ELPP_DEBUG_LOG) C##LEVEL##_AFTER_N(el::base::Writer, n, loggerId, el::base::DispatchAction::SysLog)
-#   define DCSYSLOG_N_TIMES(n, LEVEL, loggerId) if (_ELPP_DEBUG_LOG) C##LEVEL##_EVERY_N(el::base::Writer, n, loggerId, el::base::DispatchAction::SysLog)
+#   define DCSYSLOG(LEVEL, ...) if (_ELPP_DEBUG_LOG) C##LEVEL(el::base::Writer, el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define DCSYSLOG_IF(condition, LEVEL, ...)\
+        C##LEVEL##_IF(el::base::Writer, (_ELPP_DEBUG_LOG) && (condition), el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define DCSYSLOG_EVERY_N(n, LEVEL, ...)\
+        if (_ELPP_DEBUG_LOG) C##LEVEL##_EVERY_N(el::base::Writer, n, el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define DCSYSLOG_AFTER_N(n, LEVEL, ...)\
+        if (_ELPP_DEBUG_LOG) C##LEVEL##_AFTER_N(el::base::Writer, n, el::base::DispatchAction::SysLog, __VA_ARGS__)
+#   define DCSYSLOG_N_TIMES(n, LEVEL, ...)\
+        if (_ELPP_DEBUG_LOG) C##LEVEL##_EVERY_N(el::base::Writer, n, el::base::DispatchAction::SysLog, __VA_ARGS__)
 #   define DSYSLOG(LEVEL) DCSYSLOG(LEVEL, el::base::consts::kSysLogLoggerId)
 #   define DSYSLOG_IF(condition, LEVEL) DCSYSLOG_IF(condition, LEVEL, el::base::consts::kSysLogLoggerId)
 #   define DSYSLOG_EVERY_N(n, LEVEL) DCSYSLOG_EVERY_N(n, LEVEL, el::base::consts::kSysLogLoggerId)
 #   define DSYSLOG_AFTER_N(n, LEVEL) DCSYSLOG_AFTER_N(n, LEVEL, el::base::consts::kSysLogLoggerId)
 #   define DSYSLOG_N_TIMES(n, LEVEL) DCSYSLOG_N_TIMES(n, LEVEL, el::base::consts::kSysLogLoggerId)
 #else
-#   define CSYSLOG(LEVEL, loggerId) el::base::NullWriter()
-#   define CSYSLOG_IF(condition, LEVEL, loggerId) el::base::NullWriter()
-#   define CSYSLOG_EVERY_N(n, LEVEL, loggerId) el::base::NullWriter()
-#   define CSYSLOG_AFTER_N(n, LEVEL, loggerId) el::base::NullWriter()
-#   define CSYSLOG_N_TIMES(n, LEVEL, loggerId) el::base::NullWriter()
+#   define CSYSLOG(LEVEL, ...) el::base::NullWriter()
+#   define CSYSLOG_IF(condition, LEVEL, ...) el::base::NullWriter()
+#   define CSYSLOG_EVERY_N(n, LEVEL, ...) el::base::NullWriter()
+#   define CSYSLOG_AFTER_N(n, LEVEL, ...) el::base::NullWriter()
+#   define CSYSLOG_N_TIMES(n, LEVEL, ...) el::base::NullWriter()
 #   define SYSLOG(LEVEL) el::base::NullWriter()
 #   define SYSLOG_IF(condition, LEVEL) el::base::NullWriter()
 #   define SYSLOG_EVERY_N(n, LEVEL) el::base::NullWriter()
 #   define SYSLOG_AFTER_N(n, LEVEL) el::base::NullWriter()
 #   define SYSLOG_N_TIMES(n, LEVEL) el::base::NullWriter()
-#   define DCSYSLOG(LEVEL, loggerId) el::base::NullWriter()
-#   define DCSYSLOG_IF(condition, LEVEL, loggerId) el::base::NullWriter()
-#   define DCSYSLOG_EVERY_N(n, LEVEL, loggerId) el::base::NullWriter()
-#   define DCSYSLOG_AFTER_N(n, LEVEL, loggerId) el::base::NullWriter()
-#   define DCSYSLOG_N_TIMES(n, LEVEL, loggerId) el::base::NullWriter()
+#   define DCSYSLOG(LEVEL, ...) el::base::NullWriter()
+#   define DCSYSLOG_IF(condition, LEVEL, ...) el::base::NullWriter()
+#   define DCSYSLOG_EVERY_N(n, LEVEL, ...) el::base::NullWriter()
+#   define DCSYSLOG_AFTER_N(n, LEVEL, ...) el::base::NullWriter()
+#   define DCSYSLOG_N_TIMES(n, LEVEL, ...) el::base::NullWriter()
 #   define DSYSLOG(LEVEL) el::base::NullWriter()
 #   define DSYSLOG_IF(condition, LEVEL) el::base::NullWriter()
 #   define DSYSLOG_EVERY_N(n, LEVEL) el::base::NullWriter()
 #   define DSYSLOG_AFTER_N(n, LEVEL) el::base::NullWriter()
 #   define DSYSLOG_N_TIMES(n, LEVEL) el::base::NullWriter()
-#endif // defined(_ELPP_SYSLOG)
+#endif  // defined(_ELPP_SYSLOG)
 //
-// Custom Debug Only Loggers - Requires (level, loggerId)
+// Custom Debug Only Loggers - Requires (level, loggerId/s)
 //
 // undef existing
 #undef DCLOG
@@ -5604,19 +6057,19 @@ public:
 #undef DCLOG_N_TIMES
 #undef DCVLOG_N_TIMES
 // Normal logs
-#define DCLOG(LEVEL, loggerId) if (_ELPP_DEBUG_LOG) CLOG(LEVEL, loggerId)
-#define DCLOG_VERBOSE(vlevel, loggerId) if (_ELPP_DEBUG_LOG) CLOG_VERBOSE(vlevel, loggerId)
-#define DCVLOG(vlevel, loggerId) if (_ELPP_DEBUG_LOG) CVLOG(vlevel, loggerId)
+#define DCLOG(LEVEL, ...) if (_ELPP_DEBUG_LOG) CLOG(LEVEL, __VA_ARGS__)
+#define DCLOG_VERBOSE(vlevel, ...) if (_ELPP_DEBUG_LOG) CLOG_VERBOSE(vlevel, __VA_ARGS__)
+#define DCVLOG(vlevel, ...) if (_ELPP_DEBUG_LOG) CVLOG(vlevel, __VA_ARGS__)
 // Conditional logs
-#define DCLOG_IF(condition, LEVEL, loggerId) if (_ELPP_DEBUG_LOG) CLOG_IF(condition, LEVEL, loggerId)
-#define DCVLOG_IF(condition, vlevel, loggerId) if (_ELPP_DEBUG_LOG) CVLOG_IF(condition, vlevel, loggerId)
+#define DCLOG_IF(condition, LEVEL, ...) if (_ELPP_DEBUG_LOG) CLOG_IF(condition, LEVEL, __VA_ARGS__)
+#define DCVLOG_IF(condition, vlevel, ...) if (_ELPP_DEBUG_LOG) CVLOG_IF(condition, vlevel, __VA_ARGS__)
 // Hit counts based logs
-#define DCLOG_EVERY_N(n, LEVEL, loggerId) if (_ELPP_DEBUG_LOG) CLOG_EVERY_N(n, LEVEL, loggerId)
-#define DCVLOG_EVERY_N(n, vlevel, loggerId) if (_ELPP_DEBUG_LOG) CVLOG_EVERY_N(n, vlevel, loggerId)
-#define DCLOG_AFTER_N(n, LEVEL, loggerId) if (_ELPP_DEBUG_LOG) CLOG_AFTER_N(n, LEVEL, loggerId)
-#define DCVLOG_AFTER_N(n, vlevel, loggerId) if (_ELPP_DEBUG_LOG) CVLOG_AFTER_N(n, vlevel, loggerId)
-#define DCLOG_N_TIMES(n, LEVEL, loggerId) if (_ELPP_DEBUG_LOG) CLOG_N_TIMES(n, LEVEL, loggerId)
-#define DCVLOG_N_TIMES(n, vlevel, loggerId) if (_ELPP_DEBUG_LOG) CVLOG_N_TIMES(n, vlevel, loggerId)
+#define DCLOG_EVERY_N(n, LEVEL, ...) if (_ELPP_DEBUG_LOG) CLOG_EVERY_N(n, LEVEL, __VA_ARGS__)
+#define DCVLOG_EVERY_N(n, vlevel, ...) if (_ELPP_DEBUG_LOG) CVLOG_EVERY_N(n, vlevel, __VA_ARGS__)
+#define DCLOG_AFTER_N(n, LEVEL, ...) if (_ELPP_DEBUG_LOG) CLOG_AFTER_N(n, LEVEL, __VA_ARGS__)
+#define DCVLOG_AFTER_N(n, vlevel, ...) if (_ELPP_DEBUG_LOG) CVLOG_AFTER_N(n, vlevel, __VA_ARGS__)
+#define DCLOG_N_TIMES(n, LEVEL, ...) if (_ELPP_DEBUG_LOG) CLOG_N_TIMES(n, LEVEL, __VA_ARGS__)
+#define DCVLOG_N_TIMES(n, vlevel, ...) if (_ELPP_DEBUG_LOG) CVLOG_N_TIMES(n, vlevel, __VA_ARGS__)
 //
 // Default Debug Only Loggers macro using CLOG(), CLOG_VERBOSE() and CVLOG() macros
 //
@@ -5667,16 +6120,16 @@ public:
 #undef CHECK_NOTNULL
 #undef CHECK_STRCASEEQ
 #undef CHECK_STRCASENE
-#define CCHECK(condition, loggerId) CLOG_IF(!(condition), FATAL, loggerId) << "Check failed: [" << #condition << "] "
-#define CPCHECK(condition, loggerId) CPLOG_IF(!(condition), FATAL, loggerId) << "Check failed: [" << #condition << "] "
+#define CCHECK(condition, ...) CLOG_IF(!(condition), FATAL, __VA_ARGS__) << "Check failed: [" << #condition << "] "
+#define CPCHECK(condition, ...) CPLOG_IF(!(condition), FATAL, __VA_ARGS__) << "Check failed: [" << #condition << "] "
 #define CHECK(condition) CCHECK(condition, _CURRENT_FILE_LOGGER_ID)
 #define PCHECK(condition) CPCHECK(condition, _CURRENT_FILE_LOGGER_ID)
-#define CCHECK_EQ(a, b, loggerId) CCHECK(a == b, loggerId)
-#define CCHECK_NE(a, b, loggerId) CCHECK(a != b, loggerId)
-#define CCHECK_LT(a, b, loggerId) CCHECK(a < b, loggerId)
-#define CCHECK_GT(a, b, loggerId) CCHECK(a > b, loggerId)
-#define CCHECK_LE(a, b, loggerId) CCHECK(a <= b, loggerId)
-#define CCHECK_GE(a, b, loggerId) CCHECK(a >= b, loggerId)
+#define CCHECK_EQ(a, b, ...) CCHECK(a == b, __VA_ARGS__)
+#define CCHECK_NE(a, b, ...) CCHECK(a != b, __VA_ARGS__)
+#define CCHECK_LT(a, b, ...) CCHECK(a < b, __VA_ARGS__)
+#define CCHECK_GT(a, b, ...) CCHECK(a > b, __VA_ARGS__)
+#define CCHECK_LE(a, b, ...) CCHECK(a <= b, __VA_ARGS__)
+#define CCHECK_GE(a, b, ...) CCHECK(a >= b, __VA_ARGS__)
 #define CHECK_EQ(a, b) CCHECK_EQ(a, b, _CURRENT_FILE_LOGGER_ID)
 #define CHECK_NE(a, b) CCHECK_NE(a, b, _CURRENT_FILE_LOGGER_ID)
 #define CHECK_LT(a, b) CCHECK_LT(a, b, _CURRENT_FILE_LOGGER_ID)
@@ -5687,21 +6140,21 @@ namespace el {
 namespace base {
 namespace utils {
 template <typename T>
-static T* checkNotNull(T* ptr, const char* name, const char* loggerId = _CURRENT_FILE_LOGGER_ID) {
-    CLOG_IF(ptr == nullptr, FATAL, loggerId) << "Check failed: [" << name << " != nullptr]";
+static T* checkNotNull(T* ptr, const char* name, const char* loggers, ...) {
+    CLOG_IF(ptr == nullptr, FATAL, loggers) << "Check failed: [" << name << " != nullptr]";
     return ptr;
 }
 }  // namespace utils
 }  // namespace base
 }  // namespace el
-#define CCHECK_NOTNULL(ptr, loggerId) el::base::utils::checkNotNull(ptr, #ptr, loggerId)
-#define CCHECK_STREQ(str1, str2, loggerId) CLOG_IF(!el::base::utils::Str::cStringEq(str1, str2), FATAL, loggerId) \
+#define CCHECK_NOTNULL(ptr, ...) el::base::utils::checkNotNull(ptr, #ptr, __VA_ARGS__)
+#define CCHECK_STREQ(str1, str2, ...) CLOG_IF(!el::base::utils::Str::cStringEq(str1, str2), FATAL, __VA_ARGS__) \
                         << "Check failed: [" << #str1 << " == " << #str2 << "] "
-#define CCHECK_STRNE(str1, str2, loggerId) CLOG_IF(el::base::utils::Str::cStringEq(str1, str2), FATAL, loggerId) \
+#define CCHECK_STRNE(str1, str2, ...) CLOG_IF(el::base::utils::Str::cStringEq(str1, str2), FATAL, __VA_ARGS__) \
                         << "Check failed: [" << #str1 << " != " << #str2 << "] "
-#define CCHECK_STRCASEEQ(str1, str2, loggerId) CLOG_IF(!el::base::utils::Str::cStringCaseEq(str1, str2), FATAL, loggerId) \
+#define CCHECK_STRCASEEQ(str1, str2, ...) CLOG_IF(!el::base::utils::Str::cStringCaseEq(str1, str2), FATAL, __VA_ARGS__) \
                         << "Check failed: [" << #str1 << " == " << #str2 << "] "
-#define CCHECK_STRCASENE(str1, str2, loggerId) CLOG_IF(el::base::utils::Str::cStringCaseEq(str1, str2), FATAL, loggerId) \
+#define CCHECK_STRCASENE(str1, str2, ...) CLOG_IF(el::base::utils::Str::cStringCaseEq(str1, str2), FATAL, __VA_ARGS__) \
                         << "Check failed: [" << #str1 << " != " << #str2 << "] "
 #define CHECK_NOTNULL(ptr) CCHECK_NOTNULL(ptr, _CURRENT_FILE_LOGGER_ID)
 #define CHECK_STREQ(str1, str2) CCHECK_STREQ(str1, str2, _CURRENT_FILE_LOGGER_ID)
@@ -5730,19 +6183,19 @@ static T* checkNotNull(T* ptr, const char* name, const char* loggerId = _CURRENT
 #undef DCHECK_STRCASEEQ
 #undef DCHECK_STRCASENE
 #undef DPCHECK
-#define DCCHECK(condition, loggerId) if (_ELPP_DEBUG_LOG) CCHECK(condition, loggerId)
-#define DCCHECK_EQ(a, b, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_EQ(a, b, loggerId)
-#define DCCHECK_NE(a, b, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_NE(a, b, loggerId)
-#define DCCHECK_LT(a, b, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_LT(a, b, loggerId)
-#define DCCHECK_GT(a, b, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_GT(a, b, loggerId)
-#define DCCHECK_LE(a, b, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_LE(a, b, loggerId)
-#define DCCHECK_GE(a, b, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_GE(a, b, loggerId)
-#define DCCHECK_NOTNULL(ptr, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_NOTNULL(ptr, loggerId)
-#define DCCHECK_STREQ(str1, str2, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_STREQ(str1, str2, loggerId)
-#define DCCHECK_STRNE(str1, str2, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_STRNE(str1, str2, loggerId)
-#define DCCHECK_STRCASEEQ(str1, str2, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_STRCASEEQ(str1, str2, loggerId)
-#define DCCHECK_STRCASENE(str1, str2, loggerId) if (_ELPP_DEBUG_LOG) CCHECK_STRCASENE(str1, str2, loggerId)
-#define DCPCHECK(condition, loggerId) if (_ELPP_DEBUG_LOG) CPCHECK(condition, loggerId)
+#define DCCHECK(condition, ...) if (_ELPP_DEBUG_LOG) CCHECK(condition, __VA_ARGS__)
+#define DCCHECK_EQ(a, b, ...) if (_ELPP_DEBUG_LOG) CCHECK_EQ(a, b, __VA_ARGS__)
+#define DCCHECK_NE(a, b, ...) if (_ELPP_DEBUG_LOG) CCHECK_NE(a, b, __VA_ARGS__)
+#define DCCHECK_LT(a, b, ...) if (_ELPP_DEBUG_LOG) CCHECK_LT(a, b, __VA_ARGS__)
+#define DCCHECK_GT(a, b, ...) if (_ELPP_DEBUG_LOG) CCHECK_GT(a, b, __VA_ARGS__)
+#define DCCHECK_LE(a, b, ...) if (_ELPP_DEBUG_LOG) CCHECK_LE(a, b, __VA_ARGS__)
+#define DCCHECK_GE(a, b, ...) if (_ELPP_DEBUG_LOG) CCHECK_GE(a, b, __VA_ARGS__)
+#define DCCHECK_NOTNULL(ptr, ...) if (_ELPP_DEBUG_LOG) CCHECK_NOTNULL(ptr, __VA_ARGS__)
+#define DCCHECK_STREQ(str1, str2, ...) if (_ELPP_DEBUG_LOG) CCHECK_STREQ(str1, str2, __VA_ARGS__)
+#define DCCHECK_STRNE(str1, str2, ...) if (_ELPP_DEBUG_LOG) CCHECK_STRNE(str1, str2, __VA_ARGS__)
+#define DCCHECK_STRCASEEQ(str1, str2, ...) if (_ELPP_DEBUG_LOG) CCHECK_STRCASEEQ(str1, str2, __VA_ARGS__)
+#define DCCHECK_STRCASENE(str1, str2, ...) if (_ELPP_DEBUG_LOG) CCHECK_STRCASENE(str1, str2, __VA_ARGS__)
+#define DCPCHECK(condition, ...) if (_ELPP_DEBUG_LOG) CPCHECK(condition, __VA_ARGS__)
 #define DCHECK(condition) DCCHECK(condition, _CURRENT_FILE_LOGGER_ID)
 #define DCHECK_EQ(a, b) DCCHECK_EQ(a, b, _CURRENT_FILE_LOGGER_ID)
 #define DCHECK_NE(a, b) DCCHECK_NE(a, b, _CURRENT_FILE_LOGGER_ID)
@@ -5761,24 +6214,35 @@ static T* checkNotNull(T* ptr, const char* name, const char* loggerId = _CURRENT
 #else
 #   define _ELPP_USE_DEF_CRASH_HANDLER true
 #endif  // defined(_ELPP_DISABLE_DEFAULT_CRASH_HANDLING)
-#define _ELPP_CRASH_HANDLER_INIT 
-#define _ELPP_INIT_EASYLOGGINGPP(val) \
-    namespace el {                \
-        namespace base {          \
-            base::type::StoragePointer elStorage(val);       \
-        }                                                                        \
-        base::debug::CrashHandler elCrashHandler(_ELPP_USE_DEF_CRASH_HANDLER);   \
+#define _ELPP_CRASH_HANDLER_INIT
+#define _ELPP_INIT_EASYLOGGINGPP(val)\
+    _ELPP_INITI_BASIC_DECLR\
+    namespace el {\
+        namespace base {\
+            el::base::type::StoragePointer elStorage(val);\
+        }\
+        el::base::debug::CrashHandler elCrashHandler(_ELPP_USE_DEF_CRASH_HANDLER);\
     }
-#define _INITIALIZE_EASYLOGGINGPP \
-    _ELPP_INIT_EASYLOGGINGPP(new base::Storage(api::LogBuilderPtr(new base::DefaultLogBuilder())))
-#define _INITIALIZE_NULL_EASYLOGGINGPP  \
-    namespace el {                \
-        namespace base {          \
-            base::type::StoragePointer elStorage;       \
-        }                                                                        \
-        base::debug::CrashHandler elCrashHandler(_ELPP_USE_DEF_CRASH_HANDLER);   \
+
+#define _INITIALIZE_EASYLOGGINGPP\
+    _ELPP_INIT_EASYLOGGINGPP(new el::base::Storage(el::LogBuilderPtr(new el::base::DefaultLogBuilder())))
+#define _INITIALIZE_NULL_EASYLOGGINGPP\
+    _ELPP_INITI_BASIC_DECLR\
+    namespace el {\
+        namespace base {\
+            el::base::type::StoragePointer elStorage;\
+        }\
+        el::base::debug::CrashHandler elCrashHandler(_ELPP_USE_DEF_CRASH_HANDLER);\
     }
-#define _SHARE_EASYLOGGINGPP(initializedStorage) _ELPP_INIT_EASYLOGGINGPP(initializedStorage)
+// NOTE: no _ELPP_INITI_BASIC_DECLR when sharing - causes double free corruption on external symbols
+#define _SHARE_EASYLOGGINGPP(initializedStorage)\
+    namespace el {\
+        namespace base {\
+            el::base::type::StoragePointer elStorage(initializedStorage);\
+        }\
+        el::base::debug::CrashHandler elCrashHandler(_ELPP_USE_DEF_CRASH_HANDLER);\
+    }
+
 #if defined(_ELPP_UNICODE)
 #   define _START_EASYLOGGINGPP(argc, argv) el::Helpers::setArgs(argc, argv); std::locale::global(std::locale(""))
 #else
@@ -5786,4 +6250,4 @@ static T* checkNotNull(T* ptr, const char* name, const char* loggerId = _CURRENT
 #endif  // defined(_ELPP_UNICODE)
 // For minimal backward compatibility
 namespace easyloggingpp = el;
-#endif  // EASYLOGGINGPP_H  // NOLINT
+#endif // EASYLOGGINGPP_H  // NOLINT
