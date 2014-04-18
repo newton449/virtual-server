@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <displayName>Json Tester</displayName>
+  <description>A module which can send texts to a server URL. For test only.</description>
+
+  <!-- Configure client menu which will be should in all client pages. -->
+  <clientMenu>
+    <item>
+      <name>Json Tester</name>
+      <url>/json_tester/</url>
+      <orderNumber>94</orderNumber>
+    </item>
+  </clientMenu>
+
+  <!-- Map static resources. -->
+  <staticResources>
+    <staticResource>
+      <directory>web/</directory>
+      <contextPath>/json_tester</contextPath>
+    </staticResource>
+  </staticResources>
+</module>

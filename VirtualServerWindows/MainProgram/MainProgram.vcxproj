@@ -45,6 +45,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\..\FinalTarget\$(ProjectName)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -57,6 +58,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>wsock32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile>$(SolutionDir)$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -86,13 +88,13 @@ xcopy style "$(OutDir)\style\" /E /I /H /Y /F</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>wsock32.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile>$(SolutionDir)$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(TargetPath)" "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /H /Y /F
-xcopy Module.xml "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /H /Y /F
-xcopy _config "$(LocalDebuggerWorkingDirectory)\_config\" /E /I /H /Y /F
-xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
-</Command>
+      <Command>xcopy run.bat "$(LocalDebuggerWorkingDirectory)" /I /H /Y /F
+xcopy Module.xml "$(OutDir)" /I /H /Y /F
+xcopy _config "$(OutDir)\_config\" /E /I /H /Y /F
+xcopy style "$(OutDir)\style\" /E /I /H /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

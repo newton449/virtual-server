@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <displayName>Main Program</displayName>
+  <description>The main server program.</description>
+  
+  <!-- properties -->
+  <properties>
+    <!-- HTTP server's port. Default value is 8080. -->
+    <MainProgram.httpServerPort>8080</MainProgram.httpServerPort>
+    
+    <!-- min count of theads for HTTP server -->
+    <MainProgram.httpThreadMinCount>10</MainProgram.httpThreadMinCount>
+    
+    <!-- max count of theads for HTTP server (NOT SUPPORT) -->
+    <MainProgram.httpThreadMaxCount>25</MainProgram.httpThreadMaxCount>
+    
+    <!-- milliseconds of timeout when waiting for receiving the first byte of a HTTP request -->
+    <MainProgram.httpRecieveTimeoutInitial>5000</MainProgram.httpRecieveTimeoutInitial>
+    
+    <!-- milliseconds of timeout when receiving headers of a HTTP request -->
+    <MainProgram.httpReceiveTimeoutHeader>10000</MainProgram.httpReceiveTimeoutHeader>
+    
+    <!-- milliseconds of timeout when receiving body of a HTTP request -->
+    <MainProgram.httpReceiveTimeoutBody>20000</MainProgram.httpReceiveTimeoutBody>
+  </properties>
+
+  <!-- Configure dynamic libraries. (they are runnable programs actually) -->
+  <dynamicLibraries>
+    <dynamicLibrary>
+      <path>MainProgram.exe</path>
+      <platform>Windows</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+    <dynamicLibrary>
+      <path>MainProgram_Linux_x64</path>
+      <platform>Linux x64</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
+  </dynamicLibraries>
+
+  <!-- Map static resources. -->
+  <staticResources>
+    <staticResource>
+      <directory>../_web</directory>
+      <contextPath></contextPath>
+    </staticResource>
+    <staticResource>
+      <directory>style</directory>
+      <contextPath>/style</contextPath>
+    </staticResource>
+  </staticResources>
+</module>

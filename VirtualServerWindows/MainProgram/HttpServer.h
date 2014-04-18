@@ -38,8 +38,8 @@ server.start();
 server.stop();
 server.join();
 
-==============
 Required files (all)
+====================
 - BlockingQueue.h, BlockingQueue.cpp
 - Communicator.h, Communicator.cpp
 - FileSystem.h, FileSystem.cpp
@@ -79,13 +79,14 @@ public:
     typedef std::string String;
     typedef std::vector<String> Vector;
 
-    // Constructor with the socket queue, the url-socket mapping and the id of the thread.
+    // Constructor with the socket queue, the url-socket mapping and the id of
+    // the thread.
     RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping);
     virtual ~RequestHandlerThread(){}
     // Returns the socket handled by the thread.
     void closeCurrentSocket();
-    // Set timeouts when waiting for initial request, request header and request body in
-    // milliseconds. Use 0 to disable timeouts.
+    // Set timeouts when waiting for initial request, request header and request
+    // body in milliseconds. Use 0 to disable timeouts.
     void setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout);
 private:
     BlockingQueue<Socket*>& queue;
