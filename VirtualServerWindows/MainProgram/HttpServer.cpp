@@ -24,7 +24,7 @@
 
 RequestHandlerThread::RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping)
 : queue(queue), mapping(mapping), pSocket(NULL), pInput(NULL), pOutput(NULL), pRequest(NULL), pResponse(NULL),
-needCloseConnection(true),initialTimeout(0), headerTimeout(0), bodyTimeout(0) {
+needCloseConnection(true), initialTimeout(0), headerTimeout(0), bodyTimeout(0) {
 }
 
 // Returns the socket handled by the thread.
@@ -356,6 +356,10 @@ void RequestHandlerThread::executeServlet() {
         String method = pRequest->getMethod();
         try {
             pServlet->doMethod(*pRequest, *pResponse);
+            // check error duing doMethod()
+            if (!pInput){
+                LOG(WARNING) << "Detected socket error after executing servlet: " + pInput->getLastSocketError();
+            }
             pResponse->notifyOutputFinished();
         }
         catch (IllegalOperationException& ex) {

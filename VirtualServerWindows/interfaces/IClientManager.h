@@ -4,7 +4,7 @@
 //  Language:      Visual C++ 2013 & gcc 4.7.2                               //
 //  Platform:      Windows 8       & Linux Debian 3.2 x86_x64                //
 //  Application:   CSE775 Final Project, Spring 2014                         //
-//  Author:                                                                  //
+//  Author:        Sheng Wang, Qiuyong Yang, Bei Li                          //
 ///////////////////////////////////////////////////////////////////////////////
 /*
 Module Operations:
@@ -44,19 +44,17 @@ ver 0.9 : 4/18/2013
 #include <string>
 #include <vector>
 
-using namespace std;
-
 // A data struct to store a menu item. It will be used by user to navigate
 // between client pages.
 struct ClientMenuItem{
     // the name, showed in the body of "a" tag. No HTML.
-    string name;
+    std::string name;
 
     // the description, showed in "title" attribute of "a" tag. No HTML.
-    string description;
+    std::string description;
 
     // the URL, used in "href" attribute of "a" tag. It may contain "#".
-    string url;
+    std::string url;
 
     // the number to decide order of items. The smaller, the fronter.
     float orderNumber;
@@ -64,6 +62,7 @@ struct ClientMenuItem{
 
 // An interface to manage data for clients. Callers can add menu items or
 // retreive a list of whole menu items.
+//
 // It shall be thread-safe.
 class IClientManager{
 public:
@@ -77,5 +76,5 @@ public:
     // Returns a list of all menu items. The items are already in their order
     // decided by their orderNumbers. They are returned "by value" so that it
     // is safe to change it without affecting original ones.
-    virtual vector<ClientMenuItem> getMenuItems() = 0;
+    virtual std::vector<ClientMenuItem> getMenuItems() = 0;
 };

@@ -117,9 +117,6 @@ xcopy Module.xml "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /F /H /Y<
     <None Include="D:\Temp\test.bin" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="D:\Temp\New Text Document.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="D:\Classified Documents\My Pictures\Icons\icon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

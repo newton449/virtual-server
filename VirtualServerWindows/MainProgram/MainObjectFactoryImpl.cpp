@@ -48,7 +48,7 @@ MainObjectFactoryImpl::~MainObjectFactoryImpl(){
 
 void* MainObjectFactoryImpl::getObject(const string& key) {
     std::lock_guard<std::mutex> guard(lock);
-    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    unordered_map<string, void*>::const_iterator it = objectMap.find(key);
     if (it == objectMap.end()) {
         return NULL;
     }
@@ -57,7 +57,7 @@ void* MainObjectFactoryImpl::getObject(const string& key) {
 
 void MainObjectFactoryImpl::setObject(const string& key, void* object) {
     std::lock_guard<std::mutex> guard(lock);
-    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    unordered_map<string, void*>::const_iterator it = objectMap.find(key);
     if (it == objectMap.end()) {
         objectMap[key] = object;
     }
@@ -67,6 +67,36 @@ void MainObjectFactoryImpl::setObject(const string& key, void* object) {
         throw std::logic_error("A object of the key \"" + key + "\" has been set.");
     }
 }
+
+void* MainObjectFactoryImpl::replaceObject(const string& key, void* object) {
+    std::lock_guard<std::mutex> guard(lock);
+    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    if (it == objectMap.end()) {
+        objectMap[key] = object;
+        return NULL;
+    }
+    else {
+        // set new object and return old one
+        void* ret = it->second;
+        it->second = object;
+        return ret;
+    }
+}
+
+void* MainObjectFactoryImpl::removeObject(const string& key) {
+    std::lock_guard<std::mutex> guard(lock);
+    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    if (it == objectMap.end()) {
+        return NULL;
+    }
+    else {
+        // set new object and return old one
+        void* ret = it->second;
+        objectMap.erase(it);
+        return ret;
+    }
+}
+
 
 IModuleManager* MainObjectFactoryImpl::getModuleManager() {
     return (IModuleManager*)getObject("IModuleManager");

@@ -1,6 +1,3 @@
-#ifndef HTTPSERVERSUPPORT_H
-#define HTTPSERVERSUPPORT_H
-
 /////////////////////////////////////////////////////////////////////
 //  HttpServerSupport.h - provides some classes for HttpServer.    //
 //  ver 1.0                                                        //
@@ -10,21 +7,23 @@
 //  Author:        Sheng Wang                                      //
 /////////////////////////////////////////////////////////////////////
 /*
-Module Operations: 
+Module Operations:
 ==================
 This module provides some classes for HttpServer. It provides
 IHttpServletRequest for servlets to get requests and provides
-IHttpServletResponse for servlets to get responses. The server will 
+IHttpServletResponse for servlets to get responses. The server will
 create them and pass them to the servlets.
 
 Main Class:
- - IHttpServletRequest : An interface for servlets to handle request.
- - IHttpServletResponse : An interface for servlets to handle response.
+==============
+- IHttpServletRequest : An interface for servlets to handle request.
+- IHttpServletResponse : An interface for servlets to handle response.
 
 Other Class:
- - HttpServletRequestImpl : A class to store information of requests.
- - HttpServletResponseImpl : A class to store information of responses.
- - IllegalOperationException : thrown if the functions should not be called.
+==============
+- HttpServletRequestImpl : A class to store information of requests.
+- HttpServletResponseImpl : A class to store information of responses.
+- IllegalOperationException : thrown if the functions should not be called.
 
 Public Interface:
 =================
@@ -38,8 +37,8 @@ request.addParameter("p1", "v1");
 IHttpServlet* pServlet=...
 pServlet->doGet(request, resposne);
 
-==============
 Required files (all)
+==============
 - HttpServerSupport.h, HttpServerSupport.cpp
 
 Build commands
@@ -51,6 +50,7 @@ ver 1.0 : 4/15/2013
 - first release
 
 */
+#pragma once
 
 #include <string>
 #include <vector>
@@ -65,177 +65,213 @@ ver 1.0 : 4/15/2013
 class HttpServletRequestImpl : public IHttpServletRequest{
 public:
     /********************* new functions *******************************/
+
     // Constructor with the istream.
     explicit HttpServletRequestImpl(std::istream& input);
+
     // Add a header with the name and the value.
-    void addHeader(String name, String value);
+    void addHeader(const String& name, const String& value);
+
     // Set HTTP method.
-    void setMethod(String method);
+    void setMethod(const String& method);
+
     // Add a parameter with the name and value.
-    void addParameter(String name, String value);
+    void addParameter(const String& name, const String& value);
+
     // Set a header with the name and the value.
-    void setHeader(String name, String value);
+    void setHeader(const String& name, const String& value);
+
     // Set the query string.
-    void setQueryString(String str);
+    void setQueryString(const String& str);
+
     // Set the request url.
-    void setRequestUrl(String url);
-    /********************* overrided functions *************************/
-    // Returns character encoding in the "Content-Type" header such as
-    // "iso-8859-1" and "utf-8".
-    String getCharacterEncoding();
-    // Returns the length of request body excluding headers. Returns -1 
-    // if not exists.
-    int getContentLength();
-    // Returns the header value of the name. Returns an empty string if 
-    // no such header. Returns the first value if it has more than one 
-    // values.
-    String getHeader(String name);
+    void setRequestUrl(const String& url);
+
+    /********** overrided functions (see comments of super functions)*********/
+
+    // Returns character encoding in the "Content-Type" header.
+    String getCharacterEncoding() const;
+
+    // Returns the length of request body excluding headers.
+    int getContentLength() const;
+
+    // Returns the header value of the name.
+    String getHeader(const String& name) const;
+
     // Returns all header names in the request.
-    Vector getHeaderNames();
+    Vector getHeaderNames() const;
+
     // Returns an istream for reading the request body.
-    std::istream& getInputStream();
-    // Returns the integer value of the specific name. Returns -1 if the
-    // header does not exist. Return 0 if the value is zero or not a 
-    // number.
-    int getIntHeader(String name);
+    std::istream& getInputStream() const;
+
+    // Returns the integer value of the specific name.
+    int getIntHeader(const String& name) const;
+
     // Returns HTTP method of the request such as "GET" and "POST".
-    String getMethod();
-    // Returns the parameter of the name. For "GET" method, parameters
-    // are in the first line of HTTP request after the token "?". For
-    // "POST" method, parameters are in the request body.
-    String getParameter(String name);
-    // Returns the parameter map. For "GET" method, parameters are in the
-    // first line of HTTP request after the token "?". For "POST" method,
-    // parameters are in the request body.
-    Map getParameterMap();
-    // Returns the parameter names. For "GET" method, parameters are in
-    // the first line of HTTP request after the token "?". For "POST"
-    // method, parameters are in the request body.
-    Vector getParameterNames();
+    String getMethod() const;
+
+    // Returns the parameter of the name.
+    String getParameter(const String& name) const;
+
+    // Returns the parameter map.
+    Map getParameterMap() const;
+
+    // Returns the parameter names.
+    Vector getParameterNames() const;
+
     // Returns the query string in first line of HTTP request after the
-    // token "?". It is like "n1=v1&n2=v2&t3".
-    String getQueryString();
+    // token "?".
+    String getQueryString() const;
+
     // Returns the request url in first line of HTTP request before the
-    // token "?". Returns "/" at least.
-    String getRequestUrl();
+    // token "?".
+    String getRequestUrl() const;
 private:
+    // inputStream
     std::istream& input;
+
+    // http method
     String httpMethod;
+
+    // request url such as "/index.html"
     String requestUrl;
+
+    // query string such as "h1=v1&h2=v2"
     String queryString;
+
+    // header map
     Map headerMap;
+
+    // parameter map
     Map paramMap;
 };
 
-/////////////////////////////////////////////////////////////////////////
 // A class to store information of responses.
 class HttpServletResponseImpl : public IHttpServletResponse{
 public:
     // Constructor.
     explicit HttpServletResponseImpl(std::ostream& socketOutput);
-    // Returns true if the socketOutput can keep alive. It is meanless 
-    // until the response is committed.
+
+    // Returns true if the socketOutput can keep alive. It is meanless until the
+    // response is committed.
     bool isKeepAliveAllowed();
+
     // Tells that all headers and body contents are all set. The response
     // will try to set Content-Length if possible.
     void notifyOutputFinished();
+
     // Returns true if the client supports keep-alive.
     void setKeepAliveSupported(bool supported);
+
     /******************** overrided functions **************************/
+
     // Adds a header with the name and the value.
-    void addHeader(String name, String value);
+    void addHeader(const String& name, const String& value);
+
     // Adds an integer value of the name.
-    void addIntHeader(String name, int value);
+    void addIntHeader(const String& name, const int& value);
+
     // Returns true if the response contains the header.
-    bool containsHeader(String name);
-    // Writes the data in the buffer to the client. This will make
-    // response committed.
+    bool containsHeader(const String& name) const;
+
+    // Writes the data in the buffer to the client. This will make response
+    // committed.
     void flushBuffer();
+
     // Returns the buffer size.
-    int getBufferSize();
+    int getBufferSize() const;
+
     // Returns the character encoding in "Content-Type" header.
-    String getCharacterEncoding();
+    String getCharacterEncoding() const;
+
     // Returns the value of the "Content-Type" header.
-    String getContentType();
+    String getContentType() const;
+
     // Returns the value of the specific header name.
-    String getHeader(String name);
+    String getHeader(const String& name) const;
+
     // Returns all header names.
-    Vector getHeaderNames();
+    Vector getHeaderNames() const;
+
     // Returns all values of the specific header.
-    Vector getHeaders(String name);
+    Vector getHeaders(const String& name) const;
+
     // Returns an ostream to write data to the client.
-    std::ostream& getOutputStream();
+    std::ostream& getOutputStream() const;
+
     // Returns the HTTP response status code.
-    int getStatus();
+    int getStatus() const;
+
     // Returns true if the headers has been written to the client.
-    bool isCommitted();
+    bool isCommitted() const;
+
     // Resets status, all headers and buffer. It must be called before
     // committed.
     void reset();
+
     // Resets buffer. It must be called before committed.
     void resetBuffer();
-    // Sends the response error with the specific statusCode. It will be 
+
+    // Sends the response error with the specific statusCode. It will be
     // committed after using this function.
-    void sendError(int statusCode);
+    void sendError(const int& statusCode);
+
     // Sends the response error with the specific statusCode and message.
     // It will be committed after using this function.
-    void sendErrorWithMessage(int statusCode, String message);
-    // Sets the preferred buffer size. 
-    void setBufferSize(int size);
+    void sendErrorWithMessage(const int& statusCode, const String& message);
+
+    // Sets the preferred buffer size.
+    void setBufferSize(const int& size);
+
     // Sets the character encoding in the "Content-Type" header.
-    void setCharacterEncoding(String charset);
+    void setCharacterEncoding(const String& charset);
+
     // Sets the Content-Length header.
-    void setContentLength(long len);
+    void setContentLength(const long& len);
+
     // Sets the ContentType header.
-    void setContentType(String type);
+    void setContentType(const String& type);
+
     // Sets the header with the name and its value.
-    void setHeader(String name, String value);
+    void setHeader(const String& name, const String& value);
+
     // Sets the integer header with the name and its value.
-    void setIntHeader(String name, int value);
+    void setIntHeader(const String& name, const int& value);
+
     // Sets the response status code.
-    void setStatus(int sc);
+    void setStatus(const int& sc);
 private:
+    // header map
     Map headerMap;
+
+    // a ostream to write data to socket
     std::ostream& socketOutput;
+
+    // a ostringstream for caching response body
     std::ostringstream bufOutput;
-    // The expected length of bytes to be sent.
+
+    // The expected length of bytes to be sent, i.e. content length of response
+    // body.
     long expectedBytesLength;
+
+    // buffer size for caching response body
     int bufferSize;
-    int status; // defaut 200
-    bool committed; // true if headers has been written
+
+    // response status code. default value is 200.
+    int status;
+
+    // true if headers has been written
+    bool committed;
+
+    // true if the socketOutput can keep alive
     bool keepAliveAllowed;
+
+    // true if the servlet has finished output.
     bool outputFinished;
-    // Writes headers.
+
+    // Writes headers to socket.
     void writeHeaders();
+
     // Returns the status explaination.
     String getStatusExplaination();
 };
-
-// In the ISO C++11 Standard, the noexcept operator is introduced, but support
-// for this feature is not yet present in Visual C++.
-#ifndef NOEXCEPT
-#ifdef WIN32
-#define NOEXCEPT throw()
-#else
-#define NOEXCEPT noexcept(true)
-#endif
-#endif
-
-/////////////////////////////////////////////////////////////////////////
-// An exception which is thrown when illegal arguments are passed to 
-// request/resposne or functions are called in illegal status.
-class IllegalOperationException : public std::logic_error{
-public:
-    // Constructor with message.
-    explicit IllegalOperationException (const std::string& what_arg)
-        : std::logic_error(what_arg){
-    }
-    // Constructor with message.
-    explicit IllegalOperationException (const char* what_arg)
-        : std::logic_error(what_arg){
-    }
-    // Destructor.
-    virtual ~IllegalOperationException() NOEXCEPT{}
-};
-
-#endif

@@ -19,40 +19,40 @@ HttpServletRequestImpl::HttpServletRequestImpl(std::istream& input)
 }
 
 // Add a header with the name and the value.
-void HttpServletRequestImpl::addHeader(String name, String value){
+void HttpServletRequestImpl::addHeader(const String& name, const String& value){
 	headerMap[name].push_back(value);
 }
 
 // Set HTTP method.
-void HttpServletRequestImpl::setMethod(String method){
+void HttpServletRequestImpl::setMethod(const String& method){
 	httpMethod = method;
 }
 
 // Add a parameter with the name and value.
-void HttpServletRequestImpl::addParameter(String name, String value){
+void HttpServletRequestImpl::addParameter(const String& name, const String& value){
 	paramMap[name].push_back(value);
 }
 
 // Set a header with the name and the value.
-void HttpServletRequestImpl::setHeader(String name, String value){
+void HttpServletRequestImpl::setHeader(const String& name, const String& value){
 	Vector& vec = headerMap[name];
 	vec.clear();
 	vec.push_back(value);
 }
 
 // Set the query string.
-void HttpServletRequestImpl::setQueryString(String str){
+void HttpServletRequestImpl::setQueryString(const String& str){
 	queryString = str;
 }
 
 // Set the request url.
-void HttpServletRequestImpl::setRequestUrl(String url){
+void HttpServletRequestImpl::setRequestUrl(const String& url){
 	requestUrl = url;
 }
 
 // Returns character encoding in the "Content-Type" header such as
 // "iso-8859-1" and "utf-8".
-HttpServletRequestImpl::String HttpServletRequestImpl::getCharacterEncoding(){
+HttpServletRequestImpl::String HttpServletRequestImpl::getCharacterEncoding() const{
 	String type = getHeader("Content-Type");
 	if (type.empty()){
 		return "";
@@ -68,15 +68,15 @@ HttpServletRequestImpl::String HttpServletRequestImpl::getCharacterEncoding(){
 
 // Returns the length of request body excluding headers. Returns -1 
 // if not exists.
-int HttpServletRequestImpl::getContentLength(){
+int HttpServletRequestImpl::getContentLength() const{
 	return getIntHeader("Content-Length");
 }
 
 // Returns the header value of the name. Returns an empty string if 
 // no such header. Returns the first value if it has more than one 
 // values.
-HttpServletRequestImpl::String HttpServletRequestImpl::getHeader(String name){
-	Map::iterator itr = headerMap.find(name);
+HttpServletRequestImpl::String HttpServletRequestImpl::getHeader(const String& name) const{
+	Map::const_iterator itr = headerMap.find(name);
 	if (itr == headerMap.end()){
 		return "";
 	}
@@ -87,7 +87,7 @@ HttpServletRequestImpl::String HttpServletRequestImpl::getHeader(String name){
 }
 
 // Returns all header names in the request.
-HttpServletRequestImpl::Vector HttpServletRequestImpl::getHeaderNames(){
+HttpServletRequestImpl::Vector HttpServletRequestImpl::getHeaderNames() const{
 	Vector ret;
 	for (auto& pair : headerMap){
 		ret.push_back(pair.first);
@@ -96,14 +96,14 @@ HttpServletRequestImpl::Vector HttpServletRequestImpl::getHeaderNames(){
 }
 
 // Returns an istream for reading the request body.
-std::istream& HttpServletRequestImpl::getInputStream(){
+std::istream& HttpServletRequestImpl::getInputStream() const{
 	return input;
 }
 
 // Returns the integer value of the specific name. Returns -1 if the
 // header does not exist. Return 0 if the value is zero or not a 
 // number.
-int HttpServletRequestImpl::getIntHeader(String name){
+int HttpServletRequestImpl::getIntHeader(const String& name) const{
 	String str = getHeader(name);
 	if (str.empty()){
 		return -1;
@@ -113,15 +113,15 @@ int HttpServletRequestImpl::getIntHeader(String name){
 }
 
 // Returns HTTP method of the request such as "GET" and "POST".
-HttpServletRequestImpl::String HttpServletRequestImpl::getMethod(){
+HttpServletRequestImpl::String HttpServletRequestImpl::getMethod() const{
 	return httpMethod;
 }
 
 // Returns the parameter of the name. For "GET" method, parameters
 // are in the first line of HTTP request after the token "?". For
 // "POST" method, parameters are in the request body.
-HttpServletRequestImpl::String HttpServletRequestImpl::getParameter(String name){
-	Map::iterator itr = paramMap.find(name);
+HttpServletRequestImpl::String HttpServletRequestImpl::getParameter(const String& name) const{
+	Map::const_iterator itr = paramMap.find(name);
 	if (itr == paramMap.end()){
 		return "";
 	}
@@ -134,14 +134,14 @@ HttpServletRequestImpl::String HttpServletRequestImpl::getParameter(String name)
 // Returns the parameter map. For "GET" method, parameters are in the
 // firsr line of HTTP request after the token "?". For "POST" method,
 // parameters are in the request body.
-HttpServletRequestImpl::Map HttpServletRequestImpl::getParameterMap(){
+HttpServletRequestImpl::Map HttpServletRequestImpl::getParameterMap() const{
 	return paramMap;
 }
 
 // Returns the parameter names. For "GET" method, parameters are in
 // the first line of HTTP request after the token "?". For "POST"
 // method, parameters are in the request body.
-HttpServletRequestImpl::Vector HttpServletRequestImpl::getParameterNames(){
+HttpServletRequestImpl::Vector HttpServletRequestImpl::getParameterNames() const{
 	Vector ret;
 	for (auto& pair : paramMap){
 		ret.push_back(pair.first);
@@ -151,13 +151,13 @@ HttpServletRequestImpl::Vector HttpServletRequestImpl::getParameterNames(){
 
 // Returns the query string in first line of HTTP request after the
 // token "?". It is like "n1=v1&n2=v2&t3".
-HttpServletRequestImpl::String HttpServletRequestImpl::getQueryString(){
+HttpServletRequestImpl::String HttpServletRequestImpl::getQueryString() const{
 	return queryString;
 }
 
 // Returns the request url in first line of HTTP request before the
 // token "?". Returns "/" at least.
-HttpServletRequestImpl::String HttpServletRequestImpl::getRequestUrl(){
+HttpServletRequestImpl::String HttpServletRequestImpl::getRequestUrl() const{
 	return requestUrl;
 }
 
@@ -218,7 +218,7 @@ void HttpServletResponseImpl::setKeepAliveSupported(bool supported){
 }
 
 // Adds a header with the name and the value.
-void HttpServletResponseImpl::addHeader(String name, String value){
+void HttpServletResponseImpl::addHeader(const String& name, const String& value){
 	if (committed){
 		throw IllegalOperationException("The response has been committed.");
 	}
@@ -231,12 +231,12 @@ void HttpServletResponseImpl::addHeader(String name, String value){
 }
 
 // Adds an integer value of the name.
-void HttpServletResponseImpl::addIntHeader(String name, int value){
+void HttpServletResponseImpl::addIntHeader(const String& name, const int& value){
 	addHeader(name, std::to_string(value));
 }
 
 // Returns true if the response contains the header.
-bool HttpServletResponseImpl::containsHeader(String name){
+bool HttpServletResponseImpl::containsHeader(const String& name) const{
 	return headerMap.find(name) != headerMap.end();
 }
 
@@ -272,13 +272,13 @@ void HttpServletResponseImpl::flushBuffer(){
 }
 
 // Returns the buffer size.
-int HttpServletResponseImpl::getBufferSize(){
+int HttpServletResponseImpl::getBufferSize() const{
 	// TODO bufferSize does not work now.
 	return bufferSize;
 }
 
 // Returns the character encoding in "Content-Type" header.
-HttpServletResponseImpl::String HttpServletResponseImpl::getCharacterEncoding(){
+HttpServletResponseImpl::String HttpServletResponseImpl::getCharacterEncoding() const{
 	String contentType = getContentType();
 	if (contentType.empty()){
 		return "";
@@ -292,13 +292,13 @@ HttpServletResponseImpl::String HttpServletResponseImpl::getCharacterEncoding(){
 }
 
 // Returns the value of the "Content-Type" header.
-HttpServletResponseImpl::String HttpServletResponseImpl::getContentType(){
+HttpServletResponseImpl::String HttpServletResponseImpl::getContentType() const{
 	return getHeader("Content-Type");
 }
 
 // Returns the value of the specific header name.
-HttpServletResponseImpl::String HttpServletResponseImpl::getHeader(String name){
-	Map::iterator itr = headerMap.find(name);
+HttpServletResponseImpl::String HttpServletResponseImpl::getHeader(const String& name) const{
+	Map::const_iterator itr = headerMap.find(name);
 	if (itr == headerMap.end()){
 		return "";
 	}
@@ -309,7 +309,7 @@ HttpServletResponseImpl::String HttpServletResponseImpl::getHeader(String name){
 }
 
 // Returns all header names.
-HttpServletResponseImpl::Vector HttpServletResponseImpl::getHeaderNames(){
+HttpServletResponseImpl::Vector HttpServletResponseImpl::getHeaderNames() const{
 	Vector ret;
 	for (auto& pair : headerMap){
 		ret.push_back(pair.first);
@@ -318,8 +318,8 @@ HttpServletResponseImpl::Vector HttpServletResponseImpl::getHeaderNames(){
 }
 
 // Returns all values of the specific header.
-HttpServletResponseImpl::Vector HttpServletResponseImpl::getHeaders(String name){
-	Map::iterator itr = headerMap.find(name);
+HttpServletResponseImpl::Vector HttpServletResponseImpl::getHeaders(const String& name) const{
+	Map::const_iterator itr = headerMap.find(name);
 	if (itr == headerMap.end()){
 		return Vector();
 	}
@@ -327,17 +327,17 @@ HttpServletResponseImpl::Vector HttpServletResponseImpl::getHeaders(String name)
 }
 
 // Returns an ostream to write data to the client.
-std::ostream& HttpServletResponseImpl::getOutputStream(){
-	return bufOutput;
+std::ostream& HttpServletResponseImpl::getOutputStream() const{
+	return (std::ostream&) bufOutput;
 }
 
 // Returns the HTTP response status code.
-int HttpServletResponseImpl::getStatus(){
+int HttpServletResponseImpl::getStatus() const{
 	return status;
 }
 
 // Returns true if the headers has been written to the client.
-bool HttpServletResponseImpl::isCommitted(){
+bool HttpServletResponseImpl::isCommitted() const{
 	return committed;
 }
 
@@ -360,13 +360,13 @@ void HttpServletResponseImpl::resetBuffer(){
 
 // Sends the response error with the specific statusCode. It will be 
 // committed after using this function.
-void HttpServletResponseImpl::sendError(int statusCode){
+void HttpServletResponseImpl::sendError(const int& statusCode){
 	sendErrorWithMessage(statusCode, "");
 }
 
 // Sends the response error with the specific statusCode and message.
 // It will be committed after using this function.
-void HttpServletResponseImpl::sendErrorWithMessage(int statusCode, String message){
+void HttpServletResponseImpl::sendErrorWithMessage(const int& statusCode, const String& message){
 	if (committed){
 		throw IllegalOperationException("The response has been committed.");
 	}
@@ -391,13 +391,13 @@ void HttpServletResponseImpl::sendErrorWithMessage(int statusCode, String messag
 }
 
 // Sets the preferred buffer size. 
-void HttpServletResponseImpl::setBufferSize(int size){
+void HttpServletResponseImpl::setBufferSize(const int& size){
 	// TODO need more researchs.
 	throw IllegalOperationException("Not supported.");
 }
 
 // Sets the character encoding in the "Content-Type" header.
-void HttpServletResponseImpl::setCharacterEncoding(String charset){
+void HttpServletResponseImpl::setCharacterEncoding(const String& charset){
 	if (committed){
 		throw IllegalOperationException("The response has been committed.");
 	}
@@ -421,7 +421,7 @@ void HttpServletResponseImpl::setCharacterEncoding(String charset){
 }
 
 // Sets the Content-Length header.
-void HttpServletResponseImpl::setContentLength(long len){
+void HttpServletResponseImpl::setContentLength(const long& len){
 	if (committed){
 		throw IllegalOperationException("The response has been committed.");
 	}
@@ -440,12 +440,12 @@ void HttpServletResponseImpl::setContentLength(long len){
 }
 
 // Sets the ContentType header.
-void HttpServletResponseImpl::setContentType(String type){
+void HttpServletResponseImpl::setContentType(const String& type){
 	setHeader("Content-Type", type);
 }
 
 // Sets the header with the name and its value.
-void HttpServletResponseImpl::setHeader(String name, String value){
+void HttpServletResponseImpl::setHeader(const String& name, const String& value){
 	if (committed){
 		throw IllegalOperationException("The response has been committed.");
 	}
@@ -460,12 +460,12 @@ void HttpServletResponseImpl::setHeader(String name, String value){
 }
 
 // Sets the integer header with the name and its value.
-void HttpServletResponseImpl::setIntHeader(String name, int value){
+void HttpServletResponseImpl::setIntHeader(const String& name, const int& value){
 	setHeader(name, std::to_string(value));
 }
 
 // Sets the response status code.
-void HttpServletResponseImpl::setStatus(int sc){
+void HttpServletResponseImpl::setStatus(const int& sc){
 	if (committed){
 		throw IllegalOperationException("The response has been committed.");
 	}

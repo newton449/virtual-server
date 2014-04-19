@@ -30,6 +30,10 @@ int SocketBuffer::getExpectedBytesLength(){
     return expectedBytesLength;
 }
 
+std::string SocketBuffer::getLastSocketError(){
+    return lastError;
+}
+
 // Set buffer.
 std::streambuf* SocketBuffer::setbuf(char_type* s, std::streamsize n)
 {
@@ -52,8 +56,9 @@ SocketBuffer::int_type SocketBuffer::overflow(int_type c)
         try{
             pSocket->sendAll(&ch, 1);
         }
-        catch (std::exception&){
-            return traits_type::eof();
+        catch (std::exception& ex){
+            lastError = ex.what();
+            throw ex;
         }
         return traits_type::not_eof(c);
     }
@@ -66,8 +71,9 @@ std::streamsize SocketBuffer::xsputn(const char* s, std::streamsize n){
             pSocket->sendAll(s, (size_t)n);
             return n;
         }
-        catch (std::exception&){
-            return 0;
+        catch (std::exception& ex){
+            lastError = ex.what();
+            throw ex;
         }
     }
     return 0;
@@ -112,6 +118,7 @@ SocketBuffer::int_type SocketBuffer::underflow()
         catch (std::exception& ex){
             // clear before throw exception
             setg(inputBuffer_, inputBuffer_, inputBuffer_);
+            lastError = ex.what();
             throw ex;
         }
         // cannot read more bytes. EOF
@@ -181,6 +188,10 @@ std::streamsize SocketBuffer::xsgetn(char* s, std::streamsize n){
     return 0;
 }
 
+std::string SocketInputStream::getLastSocketError(){
+    return SocketBuffer::getLastSocketError();
+}
+
 ////////////////////////////////////////////////////////////////////////
 // Function implementations of SocketInputStream
 
@@ -194,7 +205,7 @@ SocketInputStream::SocketInputStream(Socket* pSocket)
 void SocketInputStream::setExpectedBytesLength(int length){
     SocketBuffer::setExpectedBytesLength(length);
     // Reset state if EOF reached
-    if (eof()){
+    if (eof() && !bad()){
         clear();
     }
 }

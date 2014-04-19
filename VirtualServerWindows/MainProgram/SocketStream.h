@@ -55,6 +55,7 @@ ver 1.1 : 3/15/2014
 
 #include <istream>
 #include <ostream>
+#include <string>
 #include "Sockets.h"
 
 /////////////////////////////////////////////////////////////////////////
@@ -64,17 +65,21 @@ class SocketBuffer : public std::streambuf
 public:
     // Constructor with the socket.
     explicit SocketBuffer(Socket* pSocket);
-    // Set length of expected bytes to be read from the socket. Set -1 to
-    // keep reading until socket errors occurs. Default value is -1. When
-	// reading, this value will decrease. Once it became zero, the buffer
-	// will always return EOF, and then its state can be reset by this 
-	// function.
+
+    // Set length of expected bytes to be read from the socket. Set -1 to keep
+    // reading until socket errors occurs. Default value is -1. When reading,
+    // this value will decrease. Once it became zero, the buffer will always
+    // return EOF, and then its state can be reset by this function.
     void setExpectedBytesLength(int length);
+
 	// Returns length of expected bytes to be read from the socket. If
-	// setExpectedBytesLength() has not been called, it will return -1.
-	// If setExpectedBytesLength() has been called, it will return 
-	// length ranged from the set value to zero. 
+    // setExpectedBytesLength() has not been called, it will return -1. If
+    // setExpectedBytesLength() has been called, it will return length ranged
+    // from the set value to zero.
 	int getExpectedBytesLength();
+
+    // Returns the last socket error.
+    std::string getLastSocketError();
 protected:
     /********************** overrided functions ************************/
     // Set buffer.
@@ -98,6 +103,8 @@ private:
     // "Content-Length", or stores -1 if no "Content-Length".
     int expectedBytesLength;
     int readSize;
+
+    std::string lastError;
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -107,17 +114,22 @@ class SocketInputStream : private SocketBuffer, public std::istream
 public:
     // Constructor with the socket.
     explicit SocketInputStream(Socket* pSocket);
+
 	// Set length of expected bytes to be read from the socket. Set -1 to
 	// keep reading until socket errors occurs. Default value is -1. When
 	// reading, this value will decrease. Once it became zero, the stream
 	// will always return EOF, and then its state can be reset by this 
 	// function.
 	void setExpectedBytesLength(int length);
+
 	// Returns length of expected bytes to be read from the socket. If
 	// setExpectedBytesLength() has not been called, it will return -1.
 	// If setExpectedBytesLength() has been called, it will return 
 	// length ranged from the set value to zero. 
 	int getExpectedBytesLength();
+
+    // Returns the last socket error.
+    std::string getLastSocketError();
 };
 
 /////////////////////////////////////////////////////////////////////////
