@@ -34,6 +34,12 @@ std::string SocketBuffer::getLastSocketError(){
     return lastError;
 }
 
+void SocketBuffer::skipCurrentInput(){
+    setg(inputBuffer_, inputBuffer_, inputBuffer_);
+
+}
+
+
 // Set buffer.
 std::streambuf* SocketBuffer::setbuf(char_type* s, std::streamsize n)
 {
@@ -190,6 +196,10 @@ std::streamsize SocketBuffer::xsgetn(char* s, std::streamsize n){
 
 std::string SocketInputStream::getLastSocketError(){
     return SocketBuffer::getLastSocketError();
+}
+
+void SocketInputStream::skipCurrentInput(){
+    SocketBuffer::skipCurrentInput();
 }
 
 ////////////////////////////////////////////////////////////////////////

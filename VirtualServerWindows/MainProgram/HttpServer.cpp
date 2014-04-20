@@ -124,6 +124,7 @@ void RequestHandlerThread::handleOneRequest() {
                             pResponse->sendError(405);
                         }
                         // clear request body if the servlet did not use all of them
+                        pInput->skipCurrentInput();
                         if (pInput->getExpectedBytesLength() > 0) {
                             LOG(TRACE) << "Clearing unused request body.";
                             pInput->ignore(pInput->getExpectedBytesLength());

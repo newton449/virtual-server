@@ -80,6 +80,9 @@ public:
 
     // Returns the last socket error.
     std::string getLastSocketError();
+
+    void skipCurrentInput();
+
 protected:
     /********************** overrided functions ************************/
     // Set buffer.
@@ -130,6 +133,8 @@ public:
 
     // Returns the last socket error.
     std::string getLastSocketError();
+
+    void skipCurrentInput();
 };
 
 /////////////////////////////////////////////////////////////////////////
