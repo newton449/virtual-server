@@ -98,7 +98,7 @@ void RequestHandlerThread::handleOneRequest() {
                 // get headers
                 headerContents = getHeaderContents();
                 if (headerContents == NULL || headerContents->empty()) {
-                    LOG(TRACE) << "Got bad headers from client.";
+                    LOG(WARNING) << "Got bad headers from client.";
                     needCloseConnection = true;
                 }
                 else {
@@ -131,7 +131,7 @@ void RequestHandlerThread::handleOneRequest() {
                         }
                     }
                     else {
-                        LOG(DEBUG) << "Skipped handling a request because of bad request.";
+                        LOG(WARNING) << "Skipped handling a request because of bad request.";
                         needCloseConnection = true;
                         pResponse->notifyOutputFinished();
                     }

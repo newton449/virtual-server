@@ -59,6 +59,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(SolutionDir)$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;chilkat-9.5.0-x86-vc12\libs\ChilkatDbgDll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>xcopy Module.xml "$(OutDir)" /I /H /Y /F</Command>
@@ -97,15 +98,28 @@ xcopy Module.xml "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /F /H /Y<
     <ClInclude Include="..\interfaces\IModuleManager.h" />
     <ClInclude Include="..\interfaces\IModuleObjectFactory.h" />
     <ClInclude Include="..\interfaces\IServletFactory.h" />
+    <ClInclude Include="FileMng.h" />
+    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="HttpServletsImpl.h" />
+    <ClInclude Include="JsonReader.h" />
     <ClInclude Include="ModuleObjectFactoryImpl.h" />
+    <ClInclude Include="pf_data.h" />
+    <ClInclude Include="PkgCreater.h" />
     <ClInclude Include="ServletFactoryImpl.h" />
+    <ClInclude Include="XmlHelper.h" />
+    <ClInclude Include="XmlReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\interfaces\ILogger.cpp" />
+    <ClCompile Include="FileMng.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="HttpServletsImpl.cpp" />
+    <ClCompile Include="JsonReader.cpp" />
     <ClCompile Include="ModuleObjectFactoryImpl.cpp" />
+    <ClCompile Include="PkgCreater.cpp" />
     <ClCompile Include="ServletFactoryImpl.cpp" />
+    <ClCompile Include="XmlHelper.cpp" />
+    <ClCompile Include="XmlReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Module.xml">
