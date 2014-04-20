@@ -54,6 +54,27 @@
     <ClInclude Include="ModuleObjectFactoryImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileMng.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pf_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PkgCreater.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServletFactoryImpl.cpp">
@@ -66,6 +87,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\interfaces\ILogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileMng.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PkgCreater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
