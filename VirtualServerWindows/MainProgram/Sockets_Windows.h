@@ -118,7 +118,8 @@
 
 #include <string>
 #include <winsock2.h>
-
+#include <ws2tcpip.h>
+#pragma comment(lib,"Ws2_32.lib")
 
 // In the ISO C++11 Standard, the noexcept operator is introduced, but support
 // for this feature is not yet present in Visual C++.
@@ -148,9 +149,15 @@ public:
     std::string getHostName();
     std::string getNameFromIp(const std::string& ip);
     std::string getIpFromName(const std::string& name);
-    std::string getLastErrorMessage(bool WantSocketMsg = true);
 private:
+    std::string getLastErrorMessage();
+
+    std::string getErrorMessage(int errorCode);
+
     static long count;
+
+    friend class Socket;
+    friend class SocketListener;
 };
 
 /////////////////////////////////////////////////////////////////////
@@ -161,11 +168,12 @@ class Socket
 public:
     Socket();
     ~Socket();
-    //Socket(const Socket& sock);
+    // Default copy constructor.
+    // Socket(const Socket& sock);
     // Connect to a url and port. The url can be a domain or an IP. Use maxTries to assign max tries.
     // Throw SocketException if it fails to connect.
     void connect(std::string url, int port, size_t maxTries = 50);
-    // Close the socket. Before calling this function, stream operations should be shutdowned.
+    // Close the socket. Before calling this function, shutdown streams for integrated data.
     void close() NOEXCEPT;
     // Shutdown the receive operation. It cannot be read anymore.
     void shutdownReceive();
@@ -183,8 +191,11 @@ public:
     int getLeftBytesSize();
     // Send a block data with its length. It will try many times.
     void sendAll(const char* block, size_t len, size_t maxTries = 50);
-    // Receive a block data with its length. It will try many times.
-    void receiveAll(char* block, size_t len, size_t maxTries = 50);
+    // Receive a block data with its length, and return the actually received size. It will try many
+    // times to receive full size data. If the local socket shutdown receive operation or the remote
+    // socket shutdown send operation, it will return the actuall received size. If errors occur, 
+    // it will throw SocketException.
+    int receiveAll(char* block, size_t len, size_t maxTries = 50);
     // Write a line to socket. It will apppend a '\n' if the string is not end with '\n' or '\r'.
     void writeLine(const std::string& str);
     // Read a line from socket. It will remove last '\n' or '\r' in the line.
@@ -199,16 +210,17 @@ public:
     std::string getLocalIP();
     // Return the local port.
     int getLocalPort();
-    HANDLE getHandle() { return (HANDLE)s_; }
-    SocketSystem& System() { return ss_; }
 
 private:
+    SOCKET s_;
+    SocketSystem ss_;
+    
     explicit Socket(SOCKET s);
     operator SOCKET () { return s_; };
     Socket& operator=(const Socket& sock);
     Socket& operator=(SOCKET sock);
-    SOCKET s_;
-    SocketSystem ss_;
+    HANDLE getHandle() { return (HANDLE)s_; }
+    SocketSystem& System() { return ss_; }
 
     friend class SocketListener;
 };
@@ -228,29 +240,15 @@ public:
     Socket waitForConnection();
     // Stop listener.
     void stop();
-    // Return
+
     long getInvalidSocketCount();
 private:
+    bool _stopRequested;
     SOCKADDR_IN tcpAddr;
     Socket s_;
     SocketSystem ss_;
     volatile long invalidSocketCount;
 };
-
-inline long SocketListener::getInvalidSocketCount()
-{
-    return invalidSocketCount;
-}
-
-// In the ISO C++11 Standard, the noexcept operator is introduced, but support
-// for this feature is not yet present in Visual C++.
-#ifndef NOEXCEPT
-#ifdef WIN32
-#define NOEXCEPT throw()
-#else
-#define NOEXCEPT noexcept(true)
-#endif
-#endif
 
 /////////////////////////////////////////////////////////////////////////
 // An exception which is thrown when any socket error occurs.
@@ -267,5 +265,11 @@ public:
     // Destructor.
     virtual ~SocketException() NOEXCEPT{}
 };
+
+
+inline long SocketListener::getInvalidSocketCount()
+{
+    return invalidSocketCount;
+}
 
 #endif

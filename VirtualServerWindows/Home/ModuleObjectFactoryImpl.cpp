@@ -28,7 +28,9 @@ void ModuleObjectFactoryImpl::setMainObjectFactory(IMainObjectFactory* factory){
 }
 
 DLLEXPORT IModuleObjectFactory* loadModuleAndReturnFactory(IMainObjectFactory* mainFactory) {
+#ifdef ENABLE_LOGGING
     el::Helpers::setStorage(*((el::base::type::StoragePointer*)mainFactory->getObject("LoggingStorage")));
+#endif
     ModuleObjectFactoryImpl* ret= ModuleObjectFactoryImpl::getInstance();
     ret->setMainObjectFactory(mainFactory);
     return ret;

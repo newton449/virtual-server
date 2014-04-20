@@ -22,15 +22,30 @@
 
 // Constructor with the socket queue, the url-socket mapping and the id of the thread.
 
-RequestHandlerThread::RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping, int id)
+RequestHandlerThread::RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping)
 : queue(queue), mapping(mapping), pSocket(NULL), pInput(NULL), pOutput(NULL), pRequest(NULL), pResponse(NULL),
-needCloseConnection(true), id(id) {
+needCloseConnection(true), initialTimeout(0), headerTimeout(0), bodyTimeout(0) {
 }
 
 // Returns the socket handled by the thread.
 
-Socket* RequestHandlerThread::getSocket() {
-    return pSocket;
+void RequestHandlerThread::closeCurrentSocket() {
+    if (pSocket != NULL && pSocket->isValid()) {
+        try{
+            pSocket->shutdownBoth();
+            pSocket->close();
+        }
+        catch (std::exception&){
+
+        }
+    }
+}
+
+
+void RequestHandlerThread::setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout){
+    this->initialTimeout = initialTimeout;
+    this->headerTimeout = headerTimeout;
+    this->bodyTimeout = bodyTimeout;
 }
 
 // Run the thread.
@@ -40,7 +55,6 @@ void RequestHandlerThread::run() {
     pSocket = queue.deQ();
     while (pSocket != NULL) {
         LOG(DEBUG) << "Got a socket from " << pSocket->getRemoteIP();
-
         // Get a socket from the queue
         pInput = new SocketInputStream(pSocket);
         pOutput = new SocketOutputStream(pSocket);
@@ -65,48 +79,67 @@ void RequestHandlerThread::handleOneRequest() {
             pRequest = new HttpServletRequestImpl(*pInput);
             pResponse = new HttpServletResponseImpl(*pOutput);
             needCloseConnection = false;
-            // TODO Read body for POST parameters
-            headerContents = getHeaderContents();
-            if (headerContents == NULL || headerContents->empty()) {
-                LOG(TRACE) << "Got nothing from client socket.";
+            // set timeout for initial data
+            pSocket->setReceiveTimeout(initialTimeout);
+            int iRet = pInput->peek();
+            if (pInput->bad()){
+                LOG(TRACE) << "Failure or timeout occured when waiting for client's initial data.";
                 needCloseConnection = true;
             }
-            else {
-                if (buildRequest(*headerContents)) {
-                    if (pRequest->getMethod() == "GET"){
-                        pInput->setExpectedBytesLength(0);
-                        // Call services to handle the request
-                        executeServlet();
-                    }
-                    else if (pRequest->getMethod() == "POST"){
-                        // Set the length of readable bytes
-                        if (!pRequest->getHeader("Content-Length").empty()) {
-                            pInput->setExpectedBytesLength(std::atoi(pRequest->getHeader("Content-Length").c_str()));
-                        }
-                        // Call services to handle the request
-                        executeServlet();
-                    }
-                    else{
-                        LOG(WARNING) << "Unsupported HTTP method \"" << pRequest->getMethod() << "\".";
-                        // 405 Method Not Allowed
-                        pResponse->sendError(405);
-                    }
-                    // clear request body if the servlet did not use all of them
-                    if (pInput->getExpectedBytesLength() > 0) {
-                        LOG(TRACE) << "Clearing unused request body.";
-                        pInput->ignore(pInput->getExpectedBytesLength());
-                    }
+            else if (iRet == EOF){
+                LOG(TRACE) << "Input stream of socket has been closed.";
+                needCloseConnection = true;
+            }
+            else{
+                // TODO Read body for POST parameters
+                LOG(TRACE) << "Reading HTTP request headers.";
+                // set timeout for header
+                pSocket->setReceiveTimeout(headerTimeout);
+                // get headers
+                headerContents = getHeaderContents();
+                if (headerContents == NULL || headerContents->empty()) {
+                    LOG(WARNING) << "Got bad headers from client.";
+                    needCloseConnection = true;
                 }
                 else {
-                    LOG(DEBUG) << "Skipped handling a request because of bad request.";
-                    needCloseConnection = true;
-                    pResponse->notifyOutputFinished();
+                    if (buildRequest(*headerContents)) {
+                        // set timeout for body
+                        pSocket->setReceiveTimeout(bodyTimeout);
+                        if (pRequest->getMethod() == "GET"){
+                            pInput->setExpectedBytesLength(0);
+                            // Call services to handle the request
+                            executeServlet();
+                        }
+                        else if (pRequest->getMethod() == "POST"){
+                            // Set the length of readable bytes
+                            if (!pRequest->getHeader("Content-Length").empty()) {
+                                pInput->setExpectedBytesLength(std::atoi(pRequest->getHeader("Content-Length").c_str()));
+                            }
+                            // Call services to handle the request
+                            executeServlet();
+                        }
+                        else{
+                            LOG(WARNING) << "Unsupported HTTP method \"" << pRequest->getMethod() << "\".";
+                            // 405 Method Not Allowed
+                            pResponse->sendError(405);
+                        }
+                        // clear request body if the servlet did not use all of them
+                        pInput->skipCurrentInput();
+                        if (pInput->getExpectedBytesLength() > 0) {
+                            LOG(TRACE) << "Clearing unused request body.";
+                            pInput->ignore(pInput->getExpectedBytesLength());
+                        }
+                    }
+                    else {
+                        LOG(WARNING) << "Skipped handling a request because of bad request.";
+                        needCloseConnection = true;
+                        pResponse->notifyOutputFinished();
+                    }
                 }
             }
             // Close the socket if needed
             if (needCloseConnection || !pResponse->isKeepAliveAllowed()) {
                 LOG(DEBUG) << "Closing socket.";
-                pSocket->shutdownBoth();
                 pSocket->close();
             }
             else {
@@ -123,12 +156,17 @@ void RequestHandlerThread::handleOneRequest() {
             }
         }
     }
-    catch (std::exception& ex) {
-        LOG(DEBUG) << "Clearing a socket because: " << +ex.what();
+    catch (SocketException& ex){
+        LOG(WARNING) << "Clearing a socket because of SocketException: " << +ex.what();
         if (pRequest != NULL) delete pRequest;
         if (pResponse != NULL) delete pResponse;
         if (headerContents != NULL) delete headerContents;
-
+    }
+    catch (std::exception& ex) {
+        LOG(DEBUG) << "Clearing a socket because of unknown exception: " << +ex.what();
+        if (pRequest != NULL) delete pRequest;
+        if (pResponse != NULL) delete pResponse;
+        if (headerContents != NULL) delete headerContents;
     }
 }
 
@@ -146,6 +184,7 @@ RequestHandlerThread::Vector* RequestHandlerThread::getHeaderContents() {
         contents->push_back(line);
     }
     // Should not be EOF.
+    delete contents;
     return NULL;
 }
 
@@ -318,6 +357,10 @@ void RequestHandlerThread::executeServlet() {
         String method = pRequest->getMethod();
         try {
             pServlet->doMethod(*pRequest, *pResponse);
+            // check error duing doMethod()
+            if (!pInput){
+                LOG(WARNING) << "Detected socket error after executing servlet: " + pInput->getLastSocketError();
+            }
             pResponse->notifyOutputFinished();
         }
         catch (IllegalOperationException& ex) {
@@ -376,7 +419,8 @@ void RequestHandlerThread::executeServlet() {
 // the working thread count.
 
 HttpServer::HttpServer(IHttpServletMapping& mapping, int port, int threadCount)
-: port(port), pListener(NULL), mapping(mapping), threadCount(threadCount) {
+: stopRequested(false), port(port), pListener(NULL), mapping(mapping), threadCount(threadCount),
+initialTimeout(0), headerTimeout(0), bodyTimeout(0){
 }
 
 // Desctructor.
@@ -391,6 +435,7 @@ HttpServer::~HttpServer() {
 // failed, it will throw an exception.
 
 void HttpServer::start() {
+    std::lock_guard<std::mutex> guard(lock);
     if (pListener != NULL) {
         throw std::logic_error("HTTP server has been started");
     }
@@ -415,25 +460,40 @@ void HttpServer::join() {
 // Asks the server to stop. Use join() to wait for it.
 
 void HttpServer::stop() {
+    std::lock_guard<std::mutex> guard(lock);
     if (pListener != NULL) {
+        stopRequested = true;
         pListener->stop();
-        pListener = NULL;
     }
 }
 
 // Returns true if the server has been started.
 
 bool HttpServer::isStarted() {
+    std::lock_guard<std::mutex> guard(lock);
     return pListener != NULL;
+}
+
+void HttpServer::setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout){
+    std::lock_guard<std::mutex> guard(lock);
+    this->initialTimeout = initialTimeout;
+    this->headerTimeout = headerTimeout;
+    this->bodyTimeout = bodyTimeout;
 }
 
 // Runs the thread.
 
 void HttpServer::run() {
-    // Create threads to handling
-    for (int i = 0; i < threadCount; i++) {
-        threads.push_back(new RequestHandlerThread(queue, mapping, i));
-        threads.back()->start();
+    {
+        std::lock_guard<std::mutex> guard(lock);
+        stopRequested = false;
+        // Create threads to handling
+        for (int i = 0; i < threadCount; i++) {
+            RequestHandlerThread* t = new RequestHandlerThread(queue, mapping);
+            t->setTimeouts(initialTimeout, headerTimeout, bodyTimeout);
+            threads.push_back(t);
+            t->start();
+        }
     }
     LOG(INFO) << "HTTP server has started on port " << port;
     Socket* pSocket = NULL;
@@ -446,29 +506,37 @@ void HttpServer::run() {
             pSocket = NULL;
         }
     }
-    catch (std::exception&) {
-        LOG(INFO) << "Closing HTTP server";
-        if (pSocket != NULL){
-            delete pSocket;
-        }
-        // The connection is closed or something.
-        // Close current sockets
-        for (int i = 0; i < threadCount; i++) {
-            Socket* pS = threads[i]->getSocket();
-            if (pS != NULL && pS->isValid()) {
-                pS->close();
+    catch (std::exception& ex) {
+        {
+            std::lock_guard<std::mutex> guard(lock);
+            if (!stopRequested){
+                // got unexpected exception
+                LOG(ERROR) << "Got unexpected exception of SocketListener: " << ex.what();
             }
+            else{
+                stopRequested = false;
+            }
+            LOG(INFO) << "Closing HTTP server.";
+            if (pSocket != NULL){
+                delete pSocket;
+            }
+            // The connection is closed or something.
+            // Close current sockets
+            for (int i = 0; i < threadCount; i++) {
+                threads[i]->closeCurrentSocket();
+            }
+            // Send empty pointers to the queue to stop theads.
+            for (int i = 0; i < threadCount; i++) {
+                queue.enQ(NULL);
+            }
+            // Waiting for threads
+            for (int i = 0; i < threadCount; i++) {
+                (*threads[i]).join();
+                delete threads[i];
+            }
+            delete pListener;
+            pListener = NULL;
         }
-        // Send empty pointers to the queue to stop theads.
-        for (int i = 0; i < threadCount; i++) {
-            queue.enQ(NULL);
-        }
-        // Waiting for threads
-        for (int i = 0; i < threadCount; i++) {
-            (*threads[i]).join();
-            delete threads[i];
-        }
-        pListener = NULL;
     }
 }
 

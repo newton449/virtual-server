@@ -1,7 +1,6 @@
 #pragma once
 // defines some interfaces for MainProgram.cpp. If an interface has different
 // implementations, find them in MainProgram_Windows.cpp and MainProgram_Linux.cpp
-
 #include <string>
 #include "MainObjectFactoryImpl.h"
 #include "XMLDocument.h"
@@ -24,6 +23,8 @@ private:
     void setupSignalHandler();
     // Create and run a HTTP server.
     void runHttpServer();
+    // clear
+    void clear();
 
     // Returns the path of logging config file.
     std::string getLoggingConfigFilePath();

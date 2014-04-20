@@ -10,6 +10,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gwt.version>2.6.0</gwt.version>
+        <virtualServerTarget>../TestTarget</virtualServerTarget>
     </properties>
     <dependencies>
         <dependency>
@@ -112,16 +113,16 @@
                         <phase>install</phase>
                         <configuration>
                             <tasks>
-                                <copy todir="../TestTarget/Home/web">
+                                <copy todir="${virtualServerTarget}/Home/web">
                                     <fileset dir="${project.build.directory}/${project.build.finalName}/home"/>
                                 </copy>                             
-                                <copy todir="../TestTarget/Installer/web">
+                                <copy todir="${virtualServerTarget}/Installer/web">
                                     <fileset dir="${project.build.directory}/${project.build.finalName}/installer"/>
                                 </copy>
-                                <copy todir="../TestTarget/Upload/web">
+                                <copy todir="${virtualServerTarget}/Upload/web">
                                     <fileset dir="${project.build.directory}/${project.build.finalName}/upload"/>
                                 </copy>
-                                <copy todir="../TestTarget/JsonTester/web">
+                                <copy todir="${virtualServerTarget}/JsonTester/web">
                                     <fileset dir="${project.build.directory}/${project.build.finalName}/json_tester"/>
                                 </copy>
                             </tasks>

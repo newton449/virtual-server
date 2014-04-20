@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "../interfaces/IClientManager.h"
+#include <mutex>
 
 using namespace std;
 
@@ -13,4 +14,5 @@ public:
 	vector<ClientMenuItem> getMenuItems();
 private:
 	vector<ClientMenuItem> items;
+    std::mutex lock;
 };

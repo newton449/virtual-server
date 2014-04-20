@@ -38,8 +38,8 @@ server.start();
 server.stop();
 server.join();
 
-==============
 Required files (all)
+====================
 - BlockingQueue.h, BlockingQueue.cpp
 - Communicator.h, Communicator.cpp
 - FileSystem.h, FileSystem.cpp
@@ -70,6 +70,7 @@ ver 1.0 : 4/15/2013
 #include "BlockingQueue.h"
 #include "SocketStream.h"
 #include "Logger.h"
+#include <mutex>
 
 /////////////////////////////////////////////////////////////////////////
 // A thread to handle each coming socket and execute servlets.
@@ -78,11 +79,15 @@ public:
     typedef std::string String;
     typedef std::vector<String> Vector;
 
-    // Constructor with the socket queue, the url-socket mapping and the id of the thread.
-    RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping, int id=0);
+    // Constructor with the socket queue, the url-socket mapping and the id of
+    // the thread.
+    RequestHandlerThread(BlockingQueue<Socket*>& queue, IHttpServletMapping& mapping);
     virtual ~RequestHandlerThread(){}
     // Returns the socket handled by the thread.
-    Socket* getSocket();
+    void closeCurrentSocket();
+    // Set timeouts when waiting for initial request, request header and request
+    // body in milliseconds. Use 0 to disable timeouts.
+    void setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout);
 private:
     BlockingQueue<Socket*>& queue;
     IHttpServletMapping& mapping;
@@ -92,7 +97,9 @@ private:
     HttpServletRequestImpl* pRequest;
     HttpServletResponseImpl* pResponse;
     bool needCloseConnection; // decided by both request and response
-    int id; // for logging
+    int initialTimeout;
+    int headerTimeout;
+    int bodyTimeout;
 
     /************************* functions *******************************/
     // Run the thread.
@@ -134,13 +141,22 @@ public:
     void stop();
     // Returns true if the server has been started.
     bool isStarted();
+    // Set timeouts when waiting for initial request, request header and request body in
+    // milliseconds. Use 0 to disable timeouts.
+    void setTimeouts(int initialTimeout, int headerTimeout, int bodyTimeout);
 private:
+    bool stopRequested;
     int port;
     SocketListener* pListener;
     BlockingQueue<Socket*> queue;
     IHttpServletMapping& mapping;
     std::vector<RequestHandlerThread*> threads;
     int threadCount;
+    std::mutex lock;
+    int initialTimeout;
+    int headerTimeout;
+    int bodyTimeout;
+
     // Runs the thread.
     void run();
 };

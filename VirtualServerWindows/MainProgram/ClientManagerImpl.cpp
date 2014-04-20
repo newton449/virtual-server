@@ -2,6 +2,7 @@
 #include "../interfaces/ILogger.h"
 
 void ClientManagerImpl::addMenuItem(ClientMenuItem item){
+    std::lock_guard<std::mutex> guard(lock);
     // insertion sort with binary search. good for small amount numbers.
     size_t start = 0;
     size_t end = items.size();
@@ -19,5 +20,6 @@ void ClientManagerImpl::addMenuItem(ClientMenuItem item){
 }
 
 vector<ClientMenuItem> ClientManagerImpl::getMenuItems(){
+    std::lock_guard<std::mutex> guard(lock);
     return items;
 }

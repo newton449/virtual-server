@@ -83,11 +83,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="D:\Temp\New Text Document.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="D:\Classified Documents\My Pictures\Icons\icon.png">
       <Filter>Resource Files</Filter>
     </Image>

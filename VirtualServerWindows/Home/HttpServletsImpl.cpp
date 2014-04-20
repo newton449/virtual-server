@@ -1,3 +1,6 @@
+#include <fstream>
+#include <string.h>
+#include <stdexcept>
 #include "HttpServletsImpl.h"
 #include "../interfaces/ILogger.h"
 #include "../interfaces/IClientManager.h"
@@ -44,12 +47,10 @@ void MenuListServlet::doMethod(IHttpServletRequest& request, IHttpServletRespons
 
 void ServerInfoServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse& response){
     LOG(TRACE) << "Sending menu list.";
-    char buf[100];
+    std::string line;
     std::istream& in = request.getInputStream();
-    in.get(buf, 100, '\n');
-    LOG(DEBUG) << "Got: " << buf;
-    in.get(buf, 100, '\n');
-    LOG(DEBUG) << "Got: " << buf;
+    getline(in, line);
+    LOG(DEBUG) << "Got: " << line;
     std::ostream& out = response.getOutputStream();
     // TODO platform
     out << "{\n"

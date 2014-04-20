@@ -7,21 +7,48 @@
 #include <stdexcept>
 
 MainObjectFactoryImpl* MainObjectFactoryImpl::INSTANCE = NULL;
+std::recursive_mutex MainObjectFactoryImpl::staticLock;
 
 MainObjectFactoryImpl* MainObjectFactoryImpl::getInstance() {
+    std::lock_guard<std::recursive_mutex> guard(staticLock);
     if (INSTANCE == NULL) {
         // create one
         INSTANCE = new MainObjectFactoryImpl();
         INSTANCE->setObject("IModuleManager", new ModuleManagerImpl());
         INSTANCE->setObject("IClientManager", new ClientManagerImpl());
         INSTANCE->setObject("PropertyMap", new PropertyMap());
+        INSTANCE->setObject("primaryKeys", new KeySet());
         INSTANCE->mapping = new DefaultHttpServletMapping();
     }
     return INSTANCE;
 }
 
+void MainObjectFactoryImpl::clearInstance(){
+    std::lock_guard<std::recursive_mutex> guard(staticLock);
+    if (INSTANCE != NULL){
+        delete INSTANCE;
+        INSTANCE = NULL;
+    }
+}
+
+MainObjectFactoryImpl::~MainObjectFactoryImpl(){
+    // delete known objects
+    delete mapping;
+
+    IModuleManager* o1 = getModuleManager();
+    delete o1;
+    IClientManager* o2 = getClientManager();
+    delete o2;
+    PropertyMap* o3 = getPropertyMap();
+    delete o3;
+    KeySet* o4 = getPrimaryKeys();
+    delete o4;
+    // TODO delete unknown objects
+}
+
 void* MainObjectFactoryImpl::getObject(const string& key) {
-    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    std::lock_guard<std::mutex> guard(lock);
+    unordered_map<string, void*>::const_iterator it = objectMap.find(key);
     if (it == objectMap.end()) {
         return NULL;
     }
@@ -29,7 +56,8 @@ void* MainObjectFactoryImpl::getObject(const string& key) {
 }
 
 void MainObjectFactoryImpl::setObject(const string& key, void* object) {
-    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    std::lock_guard<std::mutex> guard(lock);
+    unordered_map<string, void*>::const_iterator it = objectMap.find(key);
     if (it == objectMap.end()) {
         objectMap[key] = object;
     }
@@ -40,6 +68,36 @@ void MainObjectFactoryImpl::setObject(const string& key, void* object) {
     }
 }
 
+void* MainObjectFactoryImpl::replaceObject(const string& key, void* object) {
+    std::lock_guard<std::mutex> guard(lock);
+    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    if (it == objectMap.end()) {
+        objectMap[key] = object;
+        return NULL;
+    }
+    else {
+        // set new object and return old one
+        void* ret = it->second;
+        it->second = object;
+        return ret;
+    }
+}
+
+void* MainObjectFactoryImpl::removeObject(const string& key) {
+    std::lock_guard<std::mutex> guard(lock);
+    unordered_map<string, void*>::iterator it = objectMap.find(key);
+    if (it == objectMap.end()) {
+        return NULL;
+    }
+    else {
+        // set new object and return old one
+        void* ret = it->second;
+        objectMap.erase(it);
+        return ret;
+    }
+}
+
+
 IModuleManager* MainObjectFactoryImpl::getModuleManager() {
     return (IModuleManager*)getObject("IModuleManager");
 }
@@ -49,9 +107,15 @@ IClientManager* MainObjectFactoryImpl::getClientManager() {
 }
 
 DefaultHttpServletMapping* MainObjectFactoryImpl::getHttpServletMapping() {
+    std::lock_guard<std::mutex> guard(lock);
     return mapping;
 }
 
 PropertyMap* MainObjectFactoryImpl::getPropertyMap(){
     return (PropertyMap*)getObject("PropertyMap");
 }
+
+KeySet* MainObjectFactoryImpl::getPrimaryKeys(){
+    return (KeySet*)getObject("primaryKeys");
+}
+

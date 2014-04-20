@@ -30,6 +30,16 @@ int SocketBuffer::getExpectedBytesLength(){
     return expectedBytesLength;
 }
 
+std::string SocketBuffer::getLastSocketError(){
+    return lastError;
+}
+
+void SocketBuffer::skipCurrentInput(){
+    setg(inputBuffer_, inputBuffer_, inputBuffer_);
+
+}
+
+
 // Set buffer.
 std::streambuf* SocketBuffer::setbuf(char_type* s, std::streamsize n)
 {
@@ -52,8 +62,9 @@ SocketBuffer::int_type SocketBuffer::overflow(int_type c)
         try{
             pSocket->sendAll(&ch, 1);
         }
-        catch (std::exception&){
-            return traits_type::eof();
+        catch (std::exception& ex){
+            lastError = ex.what();
+            throw ex;
         }
         return traits_type::not_eof(c);
     }
@@ -66,8 +77,9 @@ std::streamsize SocketBuffer::xsputn(const char* s, std::streamsize n){
             pSocket->sendAll(s, (size_t)n);
             return n;
         }
-        catch (std::exception&){
-            return 0;
+        catch (std::exception& ex){
+            lastError = ex.what();
+            throw ex;
         }
     }
     return 0;
@@ -88,8 +100,8 @@ SocketBuffer::int_type SocketBuffer::underflow()
         return traits_type::eof();
     }
     if (gptr() == NULL || gptr() >= egptr()) {
-        // Read one char from socket.
-        // PENDING read more bytes
+        // Read bytes char from socket. It will try to read as many as possible. The readSize
+        // is decided by BUFFER_SIZE, expectedBytesLength and socket's left bytes size.
         readSize = BUFFER_SIZE;
         if (expectedBytesLength > 0 && expectedBytesLength < readSize){
             readSize = expectedBytesLength;
@@ -104,20 +116,29 @@ SocketBuffer::int_type SocketBuffer::underflow()
         else{
             readSize = 1;
         }
+        // read from socket
+        int actuallSize;
         try{
-            pSocket->receiveAll(inputBuffer_, readSize);
+            actuallSize = pSocket->receiveAll(inputBuffer_, readSize);
         }
-        catch (std::exception&){
-            // Errors occurred. Return EOF.
-            // PENDING should we throw exception if expectBytesLeft>=0?
-            return traits_type::eof();
+        catch (std::exception& ex){
+            // clear before throw exception
+            setg(inputBuffer_, inputBuffer_, inputBuffer_);
+            lastError = ex.what();
+            throw ex;
+        }
+        // cannot read more bytes. EOF
+        if (actuallSize == 0){
+            setg(inputBuffer_, inputBuffer_, inputBuffer_);
+            // EOF
+            return EOF;
         }
         if (expectedBytesLength > 0){
-            // One byte will be comsumed. Decrease expectBytesLeft.
-            expectedBytesLength -= readSize;
+            // Decrease expectedBytesLength.
+            expectedBytesLength -= actuallSize;
         }
         // Return the char.
-        setg(inputBuffer_, inputBuffer_, inputBuffer_ + readSize);
+        setg(inputBuffer_, inputBuffer_, inputBuffer_ + actuallSize);
         return traits_type::to_int_type(*inputBuffer_);
     }
     else {
@@ -127,8 +148,10 @@ SocketBuffer::int_type SocketBuffer::underflow()
 
 // batch input
 std::streamsize SocketBuffer::xsgetn(char* s, std::streamsize n){
+    // PENDING to be tested
+    std::cout << "xsgetn is called" << std::endl;
+    throw std::exception();
     if (n > 0){
-        // PENDING to be tested more and more
         if (expectedBytesLength >= 0 && expectedBytesLength < n){
             n = expectedBytesLength;
         }
@@ -146,23 +169,37 @@ std::streamsize SocketBuffer::xsgetn(char* s, std::streamsize n){
         else{
             // size wanted is larger than buffered
             readSize = 0;
+            // fill it with buffered
             memcpy(s, inputBuffer_ + pos, bufLeft);
+            // read more from socket
+            int actuallSize;
             try{
-                pSocket->receiveAll(s + bufLeft, (int)n - bufLeft);
+                actuallSize = pSocket->receiveAll(s + bufLeft, (int)n - bufLeft);
             }
-            catch (std::exception&){
-                // error. clear.
+            catch (std::exception& ex){
+                // error. clear. throw.
                 setg(inputBuffer_, inputBuffer_, inputBuffer_);
-                return 0;
+                throw ex;
             }
-            setg(inputBuffer_, inputBuffer_, inputBuffer_);
+            // reduce left bytes size
             if (expectedBytesLength > 0){
-                expectedBytesLength -= (int)n - bufLeft;
+                expectedBytesLength -= actuallSize;
             }
-            return n;
+            // reset buffer
+            setg(inputBuffer_, inputBuffer_, inputBuffer_);
+            // return final size
+            return bufLeft + actuallSize;
         }
     }
     return 0;
+}
+
+std::string SocketInputStream::getLastSocketError(){
+    return SocketBuffer::getLastSocketError();
+}
+
+void SocketInputStream::skipCurrentInput(){
+    SocketBuffer::skipCurrentInput();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -178,7 +215,7 @@ SocketInputStream::SocketInputStream(Socket* pSocket)
 void SocketInputStream::setExpectedBytesLength(int length){
     SocketBuffer::setExpectedBytesLength(length);
     // Reset state if EOF reached
-    if (eof()){
+    if (eof() && !bad()){
         clear();
     }
 }

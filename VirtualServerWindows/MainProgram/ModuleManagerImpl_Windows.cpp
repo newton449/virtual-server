@@ -3,6 +3,7 @@
 #include <locale>
 #include <codecvt>
 #include <string>
+#include <Windows.h>
 
 IModuleObjectFactory* ModuleManagerImpl::loadDllAndGetModuleFactory(string path){
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
