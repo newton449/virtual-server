@@ -75,6 +75,9 @@
     <ClInclude Include="XmlReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="chilkat-9.5.0-x86-vc12\include\CkZip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServletFactoryImpl.cpp">
