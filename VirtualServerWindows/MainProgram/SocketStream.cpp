@@ -34,7 +34,7 @@ std::string SocketBuffer::getLastSocketError(){
     return lastError;
 }
 
-void SocketBuffer::skipCurrentInput(){
+void SocketBuffer::clearInputBuffer(){
     setg(inputBuffer_, inputBuffer_, inputBuffer_);
 
 }
@@ -199,7 +199,10 @@ std::string SocketInputStream::getLastSocketError(){
 }
 
 void SocketInputStream::skipCurrentInput(){
-    SocketBuffer::skipCurrentInput();
+    SocketBuffer::clearInputBuffer();
+    if (this->getExpectedBytesLength() > 0) {
+        this->ignore(this->getExpectedBytesLength());
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////

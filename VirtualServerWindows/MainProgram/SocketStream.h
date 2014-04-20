@@ -81,7 +81,7 @@ public:
     // Returns the last socket error.
     std::string getLastSocketError();
 
-    void skipCurrentInput();
+    void clearInputBuffer();
 
 protected:
     /********************** overrided functions ************************/
