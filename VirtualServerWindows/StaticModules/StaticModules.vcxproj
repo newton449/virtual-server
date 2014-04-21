@@ -50,7 +50,7 @@
       <ProgramDatabaseFile>$(SolutionDir)$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy JsonTester "$(LocalDebuggerWorkingDirectory)JsonTester\" /E /I /H /Y /F</Command>
+      <Command>xcopy JsonTester "$(LocalDebuggerWorkingDirectory)\JsonTester\" /E /I /H /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -68,7 +68,7 @@
       <ProgramDatabaseFile>$(SolutionDir)$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy JsonTester "$(LocalDebuggerWorkingDirectory)JsonTester\" /E /I /H /Y /F</Command>
+      <Command>xcopy JsonTester "$(LocalDebuggerWorkingDirectory)\JsonTester\" /E /I /H /Y /F</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
