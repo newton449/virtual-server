@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="module">
+	  <xs:complexType>
+		<xs:all>
+			<!-- a display name, showed to users -->
+			<xs:element name="displayName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<!-- module's description, showed to users -->
+			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<!-- module's properties -->
+			<xs:element name="properties" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- one property. Tag's name is key and tag's text is value. -->
+						<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- module's dynamic libraries -->
+			<xs:element name="dynamicLibraries" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- module's one dynamic library -->
+						<xs:element name="dynamicLibrary" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<!-- path to find the file in module's directory -->
+									<xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+									<!-- platform of the library, such as Windows, Linux x86, Linux x64 -->
+									<xs:element name="platform" type="xs:string" minOccurs="1" maxOccurs="1"/>
+									<!-- the version, for future use -->
+									<xs:element name="version" type="xs:string" minOccurs="1" maxOccurs="1"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- client menu items for this module -->
+			<xs:element name="clientMenu" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- one menu item -->
+						<xs:element name="item" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<!-- The name will be used in the body of "a" tag. -->
+									<xs:element name="name" type="xs:string" minOccurs="1"/>
+									<!-- optional, showed in "title" attribute of "a" tag -->
+									<xs:element name="description" type="xs:string" minOccurs="0"/>
+									<!-- The URL will be used in "href" attribute in "a" tag. -->
+									<xs:element name="url" type="xs:string" minOccurs="1"/>
+									<!-- a float number for the item's order. The smaller, the fronter. -->
+									<xs:element name="orderNumber" type="xs:string" minOccurs="1"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- mappings of URLs and servlets. -->
+			<xs:element name="servlets" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- one mapping -->
+						<xs:element name="servlet" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<!-- The name of servlet. Names are separated in each module. -->
+									<xs:element name="name" type="xs:string" minOccurs="1"/>
+									<!-- the exact URL for the servlet -->
+									<xs:element name="url" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<!-- mappings of static resources. -->
+			<xs:element name="staticResources" minOccurs="0" maxOccurs="1">
+				<xs:complexType>
+					<xs:sequence>
+						<!-- one mapping -->
+						<xs:element name="staticResource" minOccurs="1" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<!-- the directory path in module's directory. It may use ".." to go to parent directory. -->
+									<xs:element name="directory" type="xs:string" minOccurs="1"/>
+									<!-- the context path for the resources -->
+									<xs:element name="contextPath" type="xs:string" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:all>
+	  </xs:complexType>
+	</xs:element>
+</xs:schema>
