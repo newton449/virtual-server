@@ -68,6 +68,9 @@
     <ClCompile Include="..\interfaces\ILogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HttpServletsImpl_Windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Module.xml">

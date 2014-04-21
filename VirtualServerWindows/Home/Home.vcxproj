@@ -104,6 +104,7 @@ xcopy Module.xml "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /F /H /Y<
   <ItemGroup>
     <ClCompile Include="..\interfaces\ILogger.cpp" />
     <ClCompile Include="HttpServletsImpl.cpp" />
+    <ClCompile Include="HttpServletsImpl_Windows.cpp" />
     <ClCompile Include="ModuleObjectFactoryImpl.cpp" />
     <ClCompile Include="ServletFactoryImpl.cpp" />
   </ItemGroup>
