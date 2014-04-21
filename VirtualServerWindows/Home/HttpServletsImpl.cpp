@@ -47,18 +47,20 @@ void MenuListServlet::doMethod(IHttpServletRequest& request, IHttpServletRespons
 
 void ServerInfoServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse& response){
     LOG(TRACE) << "Sending menu list.";
+    response.setHeader("Access-Control-Allow-Origin", "*");
     std::string line;
     std::istream& in = request.getInputStream();
     getline(in, line);
     LOG(DEBUG) << "Got: " << line;
     std::ostream& out = response.getOutputStream();
-    // TODO platform
+    // platform
     out << "{\n"
-#ifdef WIN32
-        << "    \"platformInfo\": \"Windows 8 v6.2 on amd64; en_US\",\n"
-#else
-        << "    \"platformInfo\": \"Linux debian 3.2.0 on amd64; en_US\",\n"
-#endif
+        << "    \"platformInfo\": \"";
+    if (systemInfo.empty()){
+        systemInfo=getSystemInfo();
+    }
+    out << systemInfo;
+    out << "\",\n"
         << "    \"items\": [\n";
     // get module list
     IModuleManager* manager = ModuleObjectFactoryImpl::getInstance()->getMainObjectFactory()->getModuleManager();

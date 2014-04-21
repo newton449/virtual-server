@@ -125,10 +125,6 @@ void RequestHandlerThread::handleOneRequest() {
                         }
                         // clear request body if the servlet did not use all of them
                         pInput->skipCurrentInput();
-                        if (pInput->getExpectedBytesLength() > 0) {
-                            LOG(TRACE) << "Clearing unused request body.";
-                            pInput->ignore(pInput->getExpectedBytesLength());
-                        }
                     }
                     else {
                         LOG(WARNING) << "Skipped handling a request because of bad request.";

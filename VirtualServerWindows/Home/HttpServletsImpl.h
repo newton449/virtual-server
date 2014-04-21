@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "../interfaces/IHttpServlet.h"
 
 class RedirectToHomeServlet : public IHttpServlet{
@@ -18,6 +19,10 @@ class ServerInfoServlet : public IHttpServlet{
 public:
     // Do the HTTP method.
     void doMethod(IHttpServletRequest& request, IHttpServletResponse& response);
+private:
+    std::string systemInfo;
+
+    std::string getSystemInfo();
 };
 
 class UploadingServlet : public IHttpServlet{
