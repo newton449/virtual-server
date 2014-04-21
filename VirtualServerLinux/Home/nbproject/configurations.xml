@@ -27,6 +27,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>../../VirtualServerWindows/Home/HttpServletsImpl.cpp</itemPath>
+      <itemPath>HttpServletsImpl_Linux.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/interfaces/ILogger.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/Home/ModuleObjectFactoryImpl.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/Home/ServletFactoryImpl.cpp</itemPath>
@@ -140,6 +141,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="HttpServletsImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="2">
       <toolsSet>
@@ -240,6 +243,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="HttpServletsImpl_Linux.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>

@@ -38,7 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/646640793/HttpServletsImpl.o \
 	${OBJECTDIR}/_ext/646640793/ModuleObjectFactoryImpl.o \
 	${OBJECTDIR}/_ext/646640793/ServletFactoryImpl.o \
-	${OBJECTDIR}/_ext/768354932/ILogger.o
+	${OBJECTDIR}/_ext/768354932/ILogger.o \
+	${OBJECTDIR}/HttpServletsImpl_Linux.o
 
 
 # C Compiler Flags
@@ -84,6 +85,11 @@ ${OBJECTDIR}/_ext/768354932/ILogger.o: ../../VirtualServerWindows/interfaces/ILo
 	${MKDIR} -p ${OBJECTDIR}/_ext/768354932
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/768354932/ILogger.o ../../VirtualServerWindows/interfaces/ILogger.cpp
+
+${OBJECTDIR}/HttpServletsImpl_Linux.o: HttpServletsImpl_Linux.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -fPIC  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/HttpServletsImpl_Linux.o HttpServletsImpl_Linux.cpp
 
 # Subprojects
 .build-subprojects:
