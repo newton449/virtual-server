@@ -98,7 +98,6 @@ xcopy Module.xml "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /F /H /Y<
     <ClInclude Include="..\interfaces\IModuleManager.h" />
     <ClInclude Include="..\interfaces\IModuleObjectFactory.h" />
     <ClInclude Include="..\interfaces\IServletFactory.h" />
-    <ClInclude Include="chilkat-9.5.0-x86-vc12\include\CkZip.h" />
     <ClInclude Include="FileMng.h" />
     <ClInclude Include="FileSystem.h" />
     <ClInclude Include="HttpServletsImpl.h" />

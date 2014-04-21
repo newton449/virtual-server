@@ -5,8 +5,11 @@
 #include "XmlHelper.h"
 #include "FileMng.h"
 
-PkgCreater::PkgCreater(std::string from, std::string to) : _from(from), _to(to)
-{}
+PkgCreater::PkgCreater(std::string from, std::string to, std::string pkgName) : _from(from), _to(to), _pkgName(pkgName)
+{
+	if (!FileSystem::Directory::exists(_to))
+		FileSystem::Directory::create(_to);
+}
 
 PkgCreater::~PkgCreater(){}
 
@@ -14,8 +17,9 @@ PkgCreater::~PkgCreater(){}
 bool PkgCreater::createPkg(std::vector<m_data> meta)
 {
 	//create a new dir for the pkg
-	std::string path = _to + "\\Download";
-	
+	//std::string path = _to + "\\Download";
+	std::string path = _to + '\\' + _pkgName;
+
 	FileSystem::Directory::create(path);
 
 	//traverse the meta list to make the new pkg
@@ -111,11 +115,14 @@ std::string PkgCreater::pkgZipper()
 
 	bool success;
 
-	if (FileSystem::File::exists(_to + "\\Download.zip"))
-		FileSystem::File::remove(_to + "\\Download.zip");
+	//std::string path = _to + "\\Download.zip";
+	std::string path = _to + '\\' + _pkgName + ".zip";
 
-	std::string path = _to + "\\Download.zip";
+	if (FileSystem::File::exists(path))
+		FileSystem::File::remove(path);
+
 	success = zip.NewZip(path.c_str());
+
 	if (success != true) {
 		printf("%s\n", zip.lastErrorText());
 		return "";
@@ -131,7 +138,7 @@ std::string PkgCreater::pkgZipper()
 	// append a dir tree to the zip file recursively
 
 	bool recurse = true;
-	success = zip.AppendFiles((_to + "\\Download").c_str(), recurse);
+	success = zip.AppendFiles((_to + '\\' + _pkgName/*"\\Download"*/).c_str(), recurse);
 	if (success != true) {
 		printf("%s\n", zip.lastErrorText());
 		return "";
@@ -146,7 +153,7 @@ std::string PkgCreater::pkgZipper()
 	//printf("Zip Created!\n");
 
 	// delete download folder
-	FileSystem::FileMng::deleteDir(_to + "\\Download");
+	FileSystem::FileMng::deleteDir(_to + '\\' + _pkgName);
 
 	return path;
 }

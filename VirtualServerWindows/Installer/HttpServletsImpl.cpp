@@ -261,7 +261,7 @@ void CreateServerServlet::doMethod(IHttpServletRequest& request, IHttpServletRes
 	std::vector<m_data> mdls;
 	parseMList(mdls, req);
 
-	PkgCreater pc(".", ".");
+	PkgCreater pc(".", "_file", "VirtualServer");
 	pc.createPkg(mdls);
 	std::string path = pc.pkgZipper();
 
@@ -273,11 +273,7 @@ void CreateServerServlet::doMethod(IHttpServletRequest& request, IHttpServletRes
 
 	response.getOutputStream() << "{\n"
 		<< "    \"fileKey\":\"" << key << "\"\n"
-		<< "}"; 
-
-	/*response.getOutputStream() << "{\n"
-		<< "    \"fileKey\": \"Test\"\n"
-		<< "}";*/
+		<< "}";
 
 }
 
@@ -368,6 +364,8 @@ int GetUrlServlet::COUNT = 0;
 
 void GetUrlServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse& response){
    
+	LOG(TRACE) << "Creating link for downloading the newly created pkg";
+
 	std::istream& in = request.getInputStream();
 	std::string line;
 	std::getline(in, line);
@@ -399,9 +397,10 @@ void GetUrlServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse&
 
 	if (COUNT >= 9) {
         // finished
-        //response.getOutputStream() << buildResult("/_file/Test.zip", 500436, 100, 0);
+        //response.getOutputStream() << buildResult("/_file/Download.zip", 500436, 100, 0);
 		FileSystem::FileInfo finfo(path);
-		response.getOutputStream() << buildResult("/./Download.zip", finfo.size(), 100, 0);
+		LOG(DEBUG) << "Build Url: " << Url(path);
+		response.getOutputStream() << buildResult(Url(path), finfo.size(), 100, 0);
 
         if (COUNT == 10) {
             COUNT = 0;
@@ -430,4 +429,20 @@ IHttpServlet::String GetUrlServlet::buildResult(String url, int size, float perc
     ret += "\n";
     ret += "}";
     return ret;
+}
+
+IHttpServlet::String GetUrlServlet::Url(String path)
+{
+	// directory path must begin with "/"
+	String url = "/";
+
+	for (int i = 0; i < path.size(); i++)
+	{
+		if (path[i] == '\\')
+			url += '/';
+		else
+			url += path[i];
+	}
+
+	return url;
 }
