@@ -98,8 +98,8 @@ xcopy Module.xml "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /F /H /Y<
     <ClInclude Include="..\interfaces\IModuleManager.h" />
     <ClInclude Include="..\interfaces\IModuleObjectFactory.h" />
     <ClInclude Include="..\interfaces\IServletFactory.h" />
+    <ClInclude Include="..\MainProgram\FileSystem.h" />
     <ClInclude Include="FileMng.h" />
-    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="HttpServletsImpl.h" />
     <ClInclude Include="JsonReader.h" />
     <ClInclude Include="ModuleObjectFactoryImpl.h" />
@@ -111,8 +111,8 @@ xcopy Module.xml "$(LocalDebuggerWorkingDirectory)\$(ProjectName)\" /I /F /H /Y<
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\interfaces\ILogger.cpp" />
+    <ClCompile Include="..\MainProgram\FileSystem_Windows.cpp" />
     <ClCompile Include="FileMng.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="HttpServletsImpl.cpp" />
     <ClCompile Include="JsonReader.cpp" />
     <ClCompile Include="ModuleObjectFactoryImpl.cpp" />

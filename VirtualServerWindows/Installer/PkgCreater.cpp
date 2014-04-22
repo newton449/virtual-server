@@ -3,8 +3,6 @@
 #include <queue>
 #include <fstream>
 #include "XmlHelper.h"
-#include "FileMng.h"
-#include "..\MainProgram\FileSystem.h"
 
 PkgCreater::PkgCreater(std::string from, std::string to, std::string pkgName) : _from(from), _to(to), _pkgName(pkgName)
 {

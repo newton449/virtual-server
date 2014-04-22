@@ -1,5 +1,5 @@
 #include "pf_data.h"
-#include "FileSystem.h"
+#include "FileMng.h"
 #include <iostream>
 
 class PkgCreater
@@ -9,7 +9,6 @@ public:
 	~PkgCreater();
 	bool createPkg(std::vector<m_data> meta);
 	std::string pkgZipper();
-	std::string currentModule(std::string path);
 
 private:
 	std::map<std::string, std::string> _typemap;
