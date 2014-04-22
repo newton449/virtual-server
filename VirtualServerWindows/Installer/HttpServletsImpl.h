@@ -23,6 +23,9 @@ class CheckDependenciesServlet : public IHttpServlet{
 public:
 	// Do the HTTP method.
 	void doMethod(IHttpServletRequest& request, IHttpServletResponse& response);
+
+private:
+	std::string checkDps(std::string json);
 };
 
 class CreateServerServlet : public IHttpServlet{
