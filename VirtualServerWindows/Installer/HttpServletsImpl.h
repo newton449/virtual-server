@@ -23,6 +23,9 @@ class CheckDependenciesServlet : public IHttpServlet{
 public:
 	// Do the HTTP method.
 	void doMethod(IHttpServletRequest& request, IHttpServletResponse& response);
+
+private:
+	std::string checkDps(std::string json);
 };
 
 class CreateServerServlet : public IHttpServlet{
@@ -35,7 +38,7 @@ private:
 	void updateMap(std::map<int, std::string> &map, std::vector<std::string> list);
 	void updateMList(std::vector<m_data> &mdls, std::map<int, std::string> &map, std::vector<std::string> vs);
 	void updateMInfo(m_data &m, std::map<int, std::string> &map, std::vector<std::string> rs);
-	std::string rmBlank(std::string s);
+	String rmBlank(String s);
 };
 
 class GetUrlServlet : public IHttpServlet{
@@ -46,5 +49,5 @@ private:
 	static int COUNT;
 
 	String buildResult(String url, int size, float percentage, int waiting);
-	
+	String Url(String path);
 };

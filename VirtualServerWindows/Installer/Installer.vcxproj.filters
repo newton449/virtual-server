@@ -57,9 +57,6 @@
     <ClInclude Include="FileMng.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="JsonReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -75,7 +72,7 @@
     <ClInclude Include="XmlReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="chilkat-9.5.0-x86-vc12\include\CkZip.h">
+    <ClInclude Include="..\MainProgram\FileSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -95,9 +92,6 @@
     <ClCompile Include="FileMng.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JsonReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -108,6 +102,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="XmlReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MainProgram\FileSystem_Windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

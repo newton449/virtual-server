@@ -3,10 +3,12 @@
 #include <queue>
 #include <fstream>
 #include "XmlHelper.h"
-#include "FileMng.h"
 
-PkgCreater::PkgCreater(std::string from, std::string to) : _from(from), _to(to)
-{}
+PkgCreater::PkgCreater(std::string from, std::string to, std::string pkgName) : _from(from), _to(to), _pkgName(pkgName)
+{
+	if (!FileSystem::Directory::exists(_to))
+		FileSystem::Directory::create(_to);
+}
 
 PkgCreater::~PkgCreater(){}
 
@@ -14,8 +16,9 @@ PkgCreater::~PkgCreater(){}
 bool PkgCreater::createPkg(std::vector<m_data> meta)
 {
 	//create a new dir for the pkg
-	std::string path = _to + "\\Download";
-	
+	//std::string path = _to + "\\Download";
+	std::string path = _to + FILE_SEPARATOR + _pkgName;
+
 	FileSystem::Directory::create(path);
 
 	//traverse the meta list to make the new pkg
@@ -25,14 +28,14 @@ bool PkgCreater::createPkg(std::vector<m_data> meta)
 		updateCnt(meta[i]);
 
 		// update map
-		updateMap(_from + '\\' + meta[i].name + "\\Module.xml");
+		updateMap(_from + FILE_SEPARATOR + meta[i].name + FILE_SEPARATOR + "Module.xml");
 
 		// create module dir
-		FileSystem::Directory::create(path + '\\' + meta[i].name);
+		FileSystem::Directory::create(path + FILE_SEPARATOR + meta[i].name);
 
 		// get subdirs and files
-		std::vector<std::string> subdir = FileSystem::Directory::getDirectories(_from + '\\' + meta[i].name);
-		std::vector<std::string> files = FileSystem::Directory::getFiles(_from + '\\' + meta[i].name);
+		std::vector<std::string> subdir = FileSystem::Directory::getDirectories(_from + FILE_SEPARATOR + meta[i].name);
+		std::vector<std::string> files = FileSystem::Directory::getFiles(_from + FILE_SEPARATOR + meta[i].name);
 
 		// copy subdirs
 		for (int j = 0; j < (int)subdir.size(); j++)
@@ -40,7 +43,7 @@ bool PkgCreater::createPkg(std::vector<m_data> meta)
 			if (subdir[j] == "." || subdir[j] == "..")
 				continue;
 
-			std::string str = '\\' + meta[i].name + '\\' + subdir[j];
+			std::string str = FILE_SEPARATOR + meta[i].name + FILE_SEPARATOR + subdir[j];
 			FileSystem::FileMng::copyDir(_from + str, path + str);
 		}
 		
@@ -49,7 +52,7 @@ bool PkgCreater::createPkg(std::vector<m_data> meta)
 		{	
 			if (!IsLib(files[j]))
 			{
-				std::string str = '\\' + meta[i].name + '\\' + files[j];
+				std::string str = FILE_SEPARATOR + meta[i].name + FILE_SEPARATOR + files[j];
 				FileSystem::FileMng::copyFile(_from + str, path + str);
 			}
 			else
@@ -58,7 +61,7 @@ bool PkgCreater::createPkg(std::vector<m_data> meta)
 				{ 
 					if (files[j] == _typemap[p])
 					{
-						std::string str = '\\' + meta[i].name + '\\' + _typemap[p];
+						std::string str = FILE_SEPARATOR + meta[i].name + FILE_SEPARATOR + _typemap[p];
 						FileSystem::FileMng::copyFile(_from + str, path + str);
 					}				
 				}
@@ -68,9 +71,9 @@ bool PkgCreater::createPkg(std::vector<m_data> meta)
 
 	// copy excecutables
 	if (_cnt.find("Windows") != _cnt.end())
-		FileSystem::FileMng::copyFile(_from + "\\run.bat", path + "\\run.bat");
+		FileSystem::FileMng::copyFile(_from + FILE_SEPARATOR + "run.bat", path + FILE_SEPARATOR + "run.bat");
 	if (_cnt.find("Linux x86") != _cnt.end() || _cnt.find("Linux x64") != _cnt.end())
-		FileSystem::FileMng::copyFile(_from + "\\run.sh", path + "\\run.sh");
+		FileSystem::FileMng::copyFile(_from + FILE_SEPARATOR + "run.sh", path + FILE_SEPARATOR + "run.sh");
 
 	return true;
 }
@@ -111,11 +114,14 @@ std::string PkgCreater::pkgZipper()
 
 	bool success;
 
-	if (FileSystem::File::exists(_to + "\\Download.zip"))
-		FileSystem::File::remove(_to + "\\Download.zip");
+	//std::string path = _to + "\\Download.zip";
+	std::string path = _to + FILE_SEPARATOR + _pkgName + ".zip";
 
-	std::string path = _to + "\\Download.zip";
+	if (FileSystem::File::exists(path))
+		FileSystem::File::remove(path);
+
 	success = zip.NewZip(path.c_str());
+
 	if (success != true) {
 		printf("%s\n", zip.lastErrorText());
 		return "";
@@ -131,7 +137,7 @@ std::string PkgCreater::pkgZipper()
 	// append a dir tree to the zip file recursively
 
 	bool recurse = true;
-	success = zip.AppendFiles((_to + "\\Download").c_str(), recurse);
+	success = zip.AppendFiles((_to + FILE_SEPARATOR + _pkgName/*"\\Download"*/).c_str(), recurse);
 	if (success != true) {
 		printf("%s\n", zip.lastErrorText());
 		return "";
@@ -146,7 +152,7 @@ std::string PkgCreater::pkgZipper()
 	//printf("Zip Created!\n");
 
 	// delete download folder
-	FileSystem::FileMng::deleteDir(_to + "\\Download");
+	FileSystem::FileMng::deleteDir(_to + FILE_SEPARATOR + _pkgName);
 
 	return path;
 }
