@@ -26,6 +26,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>../MainProgram/FileSystem_Linux.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/HttpServletsImpl.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/interfaces/ILogger.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp</itemPath>
@@ -140,6 +141,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../MainProgram/FileSystem_Linux.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="2">
       <toolsSet>
@@ -239,6 +245,11 @@
       <item path="../../VirtualServerWindows/interfaces/easylogging++.h"
             ex="false"
             tool="3"
+            flavor2="0">
+      </item>
+      <item path="../MainProgram/FileSystem_Linux.cpp"
+            ex="false"
+            tool="1"
             flavor2="0">
       </item>
     </conf>

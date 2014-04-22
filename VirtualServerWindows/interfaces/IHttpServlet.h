@@ -46,6 +46,7 @@ ver 0.9 : 4/18/2013
 #include <string>
 #include <vector>
 #include <map>
+#include <stdexcept>
 
 // An exception, thrown if a function should not be called. For example, in
 // IHttpServletResponse calling reset(), reset(), sendError() and set headers
