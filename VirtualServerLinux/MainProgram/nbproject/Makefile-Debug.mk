@@ -183,8 +183,6 @@ ${OBJECTDIR}/Threads_Linux.o: Threads_Linux.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../Home && ${MAKE}  -f Makefile CONF=Debug
-	cd ../Installer && ${MAKE}  -f Makefile CONF=Debug
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -193,8 +191,6 @@ ${OBJECTDIR}/Threads_Linux.o: Threads_Linux.cpp
 
 # Subprojects
 .clean-subprojects:
-	cd ../Home && ${MAKE}  -f Makefile CONF=Debug clean
-	cd ../Installer && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl
