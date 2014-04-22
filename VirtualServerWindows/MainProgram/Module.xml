@@ -48,5 +48,9 @@
       <directory>style</directory>
       <contextPath>/style</contextPath>
     </staticResource>
+    <staticResource>
+      <directory>../_file</directory>
+      <contextPath>/_file</contextPath>
+    </staticResource>
   </staticResources>
 </module>
