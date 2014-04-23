@@ -58,6 +58,8 @@ build: .build-post
 
 .build-post: .build-impl
 # Add your post 'build' code here...
+# copy run.sh to its final path
+	if [ "${CONF}" = "Debug_x64" ] || [ "${CONF}" = "Debug_x86" ]; then cp ./run.sh ../../TestTarget/run.sh; elif [ "${CONF}" = "Release_x64" ] || [ "${CONF}" = "Release_x86" ]; then cp ./run.sh ../../FinalTarget/run.sh; fi
 
 
 # clean

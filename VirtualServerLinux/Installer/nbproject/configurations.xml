@@ -46,7 +46,7 @@
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="2">
+    <conf name="Debug_x64" type="2">
       <toolsSet>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -54,6 +54,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <architecture>2</architecture>
           <standard>8</standard>
           <warningLevel>3</warningLevel>
         </ccTool>
@@ -147,7 +148,7 @@
             flavor2="0">
       </item>
     </conf>
-    <conf name="Release" type="2">
+    <conf name="Release_x64" type="2">
       <toolsSet>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -159,6 +160,9 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
+          <standard>8</standard>
+          <warningLevel>3</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -166,6 +170,223 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <output>../../FinalTarget/Installer/Installer_x64.so</output>
+        </linkerTool>
+      </compileType>
+      <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IClientManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServlet.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServletMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IMainObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IServletFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/easylogging++.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../MainProgram/FileSystem_Linux.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+    </conf>
+    <conf name="Debug_x86" type="2">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <architecture>1</architecture>
+          <standard>8</standard>
+          <warningLevel>3</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <output>../../TestTarget/Installer/Installer_x86.so</output>
+        </linkerTool>
+      </compileType>
+      <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IClientManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServlet.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IHttpServletMapping.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/ILogger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IMainObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IModuleObjectFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/IServletFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/interfaces/easylogging++.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../MainProgram/FileSystem_Linux.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release_x86" type="2">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <architecture>1</architecture>
+          <standard>8</standard>
+          <warningLevel>3</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>../../FinalTarget/Installer/Installer_x86.so</output>
+        </linkerTool>
       </compileType>
       <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
             ex="false"

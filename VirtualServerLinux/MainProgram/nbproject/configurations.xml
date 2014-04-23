@@ -85,7 +85,7 @@
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="1">
+    <conf name="Debug_x64" type="1">
       <toolsSet>
         <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -333,7 +333,7 @@
       <item path="Threads_Linux.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
-    <conf name="Release" type="1">
+    <conf name="Release_x64" type="1">
       <toolsSet>
         <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -344,11 +344,13 @@
           <developmentMode>5</developmentMode>
         </cTool>
         <ccTool>
-          <developmentMode>5</developmentMode>
+          <developmentMode>6</developmentMode>
+          <architecture>2</architecture>
           <standard>8</standard>
           <preprocessorList>
             <Elem>MAIN_PROGRAM</Elem>
           </preprocessorList>
+          <warningLevel>3</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -357,6 +359,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
+          <output>../../FinalTarget/MainProgram/MainProgram_Linux_x64</output>
           <linkerLibItems>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
@@ -603,6 +606,9 @@
           </preprocessorList>
           <warningLevel>3</warningLevel>
         </ccTool>
+        <asmTool>
+          <architecture>1</architecture>
+        </asmTool>
         <linkerTool>
           <output>../../TestTarget/MainProgram/MainProgram_Linux_x86</output>
           <linkerLibItems>
@@ -847,11 +853,13 @@
           <developmentMode>5</developmentMode>
         </cTool>
         <ccTool>
-          <developmentMode>5</developmentMode>
+          <developmentMode>6</developmentMode>
+          <architecture>1</architecture>
           <standard>8</standard>
           <preprocessorList>
             <Elem>MAIN_PROGRAM</Elem>
           </preprocessorList>
+          <warningLevel>3</warningLevel>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -860,6 +868,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
+          <output>../../FinalTarget/MainProgram/MainProgram_Linux_x86</output>
           <linkerLibItems>
             <linkerLibStdlibItem>DynamicLinking</linkerLibStdlibItem>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>

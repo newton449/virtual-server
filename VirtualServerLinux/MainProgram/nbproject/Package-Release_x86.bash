@@ -13,8 +13,8 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mainprogram
-OUTPUT_BASENAME=mainprogram
+OUTPUT_PATH=../../FinalTarget/MainProgram/MainProgram_Linux_x86
+OUTPUT_BASENAME=MainProgram_Linux_x86
 PACKAGE_TOP_DIR=mainprogram/
 
 # Functions

@@ -68,7 +68,7 @@ CXXFLAGS=-m32
 FFLAGS=
 
 # Assembler Flags
-ASFLAGS=
+ASFLAGS=--32
 
 # Link Libraries and Options
 LDLIBSOPTIONS=-ldl -lpthread

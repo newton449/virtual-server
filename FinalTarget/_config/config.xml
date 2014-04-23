@@ -2,7 +2,7 @@
 <config>
   <properties>
     <!-- HTTP server's port. Default value is 8080. -->
-    <MainProgram.httpServerPort>80</MainProgram.httpServerPort>
+    <MainProgram.httpServerPort>8080</MainProgram.httpServerPort>
     
     <!-- min count of theads for HTTP server -->
     <!--  <MainProgram.httpThreadMinCount>10</MainProgram.httpThreadMinCount> -->

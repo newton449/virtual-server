@@ -61,8 +61,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-m32
+CXXFLAGS=-m32
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -75,111 +75,111 @@ LDLIBSOPTIONS=-ldl -lpthread
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mainprogram
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ../../FinalTarget/MainProgram/MainProgram_Linux_x86
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mainprogram: ${OBJECTFILES}
-	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mainprogram ${OBJECTFILES} ${LDLIBSOPTIONS}
+../../FinalTarget/MainProgram/MainProgram_Linux_x86: ${OBJECTFILES}
+	${MKDIR} -p ../../FinalTarget/MainProgram
+	${LINK.cc} -o ../../FinalTarget/MainProgram/MainProgram_Linux_x86 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/_ext/832715153/ClientManagerImpl.o: ../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/ClientManagerImpl.o ../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/ClientManagerImpl.o ../../VirtualServerWindows/MainProgram/ClientManagerImpl.cpp
 
 ${OBJECTDIR}/_ext/832715153/DefaultHttpServletMapping.o: ../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/DefaultHttpServletMapping.o ../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/DefaultHttpServletMapping.o ../../VirtualServerWindows/MainProgram/DefaultHttpServletMapping.cpp
 
 ${OBJECTDIR}/_ext/832715153/HttpServer.o: ../../VirtualServerWindows/MainProgram/HttpServer.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/HttpServer.o ../../VirtualServerWindows/MainProgram/HttpServer.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/HttpServer.o ../../VirtualServerWindows/MainProgram/HttpServer.cpp
 
 ${OBJECTDIR}/_ext/832715153/HttpServerSupport.o: ../../VirtualServerWindows/MainProgram/HttpServerSupport.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/HttpServerSupport.o ../../VirtualServerWindows/MainProgram/HttpServerSupport.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/HttpServerSupport.o ../../VirtualServerWindows/MainProgram/HttpServerSupport.cpp
 
 ${OBJECTDIR}/_ext/832715153/HttpServletsImpl.o: ../../VirtualServerWindows/MainProgram/HttpServletsImpl.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/HttpServletsImpl.o ../../VirtualServerWindows/MainProgram/HttpServletsImpl.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/HttpServletsImpl.o ../../VirtualServerWindows/MainProgram/HttpServletsImpl.cpp
 
 ${OBJECTDIR}/_ext/832715153/MainObjectFactoryImpl.o: ../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/MainObjectFactoryImpl.o ../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/MainObjectFactoryImpl.o ../../VirtualServerWindows/MainProgram/MainObjectFactoryImpl.cpp
 
 ${OBJECTDIR}/_ext/832715153/MainProgram.o: ../../VirtualServerWindows/MainProgram/MainProgram.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/MainProgram.o ../../VirtualServerWindows/MainProgram/MainProgram.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/MainProgram.o ../../VirtualServerWindows/MainProgram/MainProgram.cpp
 
 ${OBJECTDIR}/_ext/832715153/ModuleManagerImpl.o: ../../VirtualServerWindows/MainProgram/ModuleManagerImpl.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/ModuleManagerImpl.o ../../VirtualServerWindows/MainProgram/ModuleManagerImpl.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/ModuleManagerImpl.o ../../VirtualServerWindows/MainProgram/ModuleManagerImpl.cpp
 
 ${OBJECTDIR}/_ext/832715153/SocketStream.o: ../../VirtualServerWindows/MainProgram/SocketStream.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/SocketStream.o ../../VirtualServerWindows/MainProgram/SocketStream.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/SocketStream.o ../../VirtualServerWindows/MainProgram/SocketStream.cpp
 
 ${OBJECTDIR}/_ext/832715153/StringUtils.o: ../../VirtualServerWindows/MainProgram/StringUtils.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/StringUtils.o ../../VirtualServerWindows/MainProgram/StringUtils.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/StringUtils.o ../../VirtualServerWindows/MainProgram/StringUtils.cpp
 
 ${OBJECTDIR}/_ext/832715153/Utilities.o: ../../VirtualServerWindows/MainProgram/Utilities.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/Utilities.o ../../VirtualServerWindows/MainProgram/Utilities.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/Utilities.o ../../VirtualServerWindows/MainProgram/Utilities.cpp
 
 ${OBJECTDIR}/_ext/832715153/tinyxml2.o: ../../VirtualServerWindows/MainProgram/tinyxml2.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/832715153
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/tinyxml2.o ../../VirtualServerWindows/MainProgram/tinyxml2.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/832715153/tinyxml2.o ../../VirtualServerWindows/MainProgram/tinyxml2.cpp
 
 ${OBJECTDIR}/_ext/768354932/ILogger.o: ../../VirtualServerWindows/interfaces/ILogger.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/768354932
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/768354932/ILogger.o ../../VirtualServerWindows/interfaces/ILogger.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/768354932/ILogger.o ../../VirtualServerWindows/interfaces/ILogger.cpp
 
 ${OBJECTDIR}/BlockingQueue_Linux.o: BlockingQueue_Linux.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BlockingQueue_Linux.o BlockingQueue_Linux.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/BlockingQueue_Linux.o BlockingQueue_Linux.cpp
 
 ${OBJECTDIR}/FileSystem_Linux.o: FileSystem_Linux.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileSystem_Linux.o FileSystem_Linux.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileSystem_Linux.o FileSystem_Linux.cpp
 
 ${OBJECTDIR}/Locks_Linux.o: Locks_Linux.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Locks_Linux.o Locks_Linux.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Locks_Linux.o Locks_Linux.cpp
 
 ${OBJECTDIR}/MainProgram_Linux.o: MainProgram_Linux.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MainProgram_Linux.o MainProgram_Linux.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MainProgram_Linux.o MainProgram_Linux.cpp
 
 ${OBJECTDIR}/ModuleManagerImpl_Linux.o: ModuleManagerImpl_Linux.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ModuleManagerImpl_Linux.o ModuleManagerImpl_Linux.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ModuleManagerImpl_Linux.o ModuleManagerImpl_Linux.cpp
 
 ${OBJECTDIR}/Sockets_Linux.o: Sockets_Linux.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Sockets_Linux.o Sockets_Linux.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Sockets_Linux.o Sockets_Linux.cpp
 
 ${OBJECTDIR}/Threads_Linux.o: Threads_Linux.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Threads_Linux.o Threads_Linux.cpp
+	$(COMPILE.cc) -O3 -Werror -DMAIN_PROGRAM -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Threads_Linux.o Threads_Linux.cpp
 
 # Subprojects
 .build-subprojects:
@@ -187,7 +187,7 @@ ${OBJECTDIR}/Threads_Linux.o: Threads_Linux.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/mainprogram
+	${RM} ../../FinalTarget/MainProgram/MainProgram_Linux_x86
 
 # Subprojects
 .clean-subprojects:
