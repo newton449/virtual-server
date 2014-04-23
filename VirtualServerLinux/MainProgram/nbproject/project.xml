@@ -8,18 +8,23 @@
             <cpp-extensions>cpp</cpp-extensions>
             <header-extensions>h</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
-            <make-dep-projects>
-                <make-dep-project>../Installer</make-dep-project>
-                <make-dep-project>../Home</make-dep-project>
-            </make-dep-projects>
+            <make-dep-projects/>
             <sourceRootList/>
             <confList>
                 <confElem>
-                    <name>Debug</name>
+                    <name>Debug_x64</name>
                     <type>1</type>
                 </confElem>
                 <confElem>
-                    <name>Release</name>
+                    <name>Release_x64</name>
+                    <type>1</type>
+                </confElem>
+                <confElem>
+                    <name>Debug_x86</name>
+                    <type>1</type>
+                </confElem>
+                <confElem>
+                    <name>Release_x86</name>
                     <type>1</type>
                 </confElem>
             </confList>
