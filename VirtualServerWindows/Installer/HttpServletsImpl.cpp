@@ -3,6 +3,7 @@
 #include "XmlReader.h"
 #include "XmlHelper.h"
 #include "JsonReader.h"
+#include "..\MainProgram\FileSystem.h"
 
 void ModulesListServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse& response){
 	
@@ -21,10 +22,10 @@ void ModulesListServlet::doMethod(IHttpServletRequest& request, IHttpServletResp
 			continue;
 
 		// this is a Module.xml in the dir, then the dir is a module dir.
-		if (FileSystem::File::exists(path + '\\' + d + "\\Module.xml"))
+		if (FileSystem::File::exists(path + FILE_SEPARATOR + d + FILE_SEPARATOR + "Module.xml"))
 		{
 			// check which platform is supported by the module
-			m_data m = loadMdInfo(path + '\\' + d, "Module.xml", map);
+			m_data m = loadMdInfo(path + FILE_SEPARATOR + d, "Module.xml", map);
 			mdls.push_back(m);
 		}
 
