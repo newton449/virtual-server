@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.newton449.virtualserverclient.upload.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -26,6 +22,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
@@ -49,25 +46,29 @@ public class UploadPanel extends Composite {
     @UiField
     Button submitButton;
     @UiField
-    FlowPanel filePanel;
+    FlowPanel uploadingFilesPanel;
     @UiField
     Tree dirTree;
     @UiField
     InlineLabel pathLabel;
     @UiField
     Hidden pathHidden;
+    @UiField
+    FlowPanel currentFilesPanel;
+    @UiField
+    InlineLabel versionLabel;
     FileUploadWrapper lastUploadWrapper;
     AcceptsOneWidget container;
 
     public UploadPanel() {
         initWidget(uiBinder.createAndBindUi(this));
 
-        // add an initial FileUpload to the filePanel
-        if (filePanel.getWidgetCount() == 0) {
+        // add an initial FileUpload to the uploadingFilesPanel
+        if (uploadingFilesPanel.getWidgetCount() == 0) {
             lastUploadWrapper = new FileUploadWrapper();
-            filePanel.add(lastUploadWrapper);
+            uploadingFilesPanel.add(lastUploadWrapper);
         } else {
-            lastUploadWrapper = (FileUploadWrapper) filePanel.getWidget(filePanel.getWidgetCount() - 1);
+            lastUploadWrapper = (FileUploadWrapper) uploadingFilesPanel.getWidget(uploadingFilesPanel.getWidgetCount() - 1);
         }
         // if a file is choosed or changed, refresh file panel
         lastUploadWrapper.getFileUpload().addChangeHandler(new ChangeHandler() {
@@ -82,7 +83,7 @@ public class UploadPanel extends Composite {
 
             @Override
             public void onDelete(FileUploadWrapper wrapper) {
-                filePanel.remove(wrapper);
+                uploadingFilesPanel.remove(wrapper);
             }
         });
         // submit form
@@ -123,9 +124,32 @@ public class UploadPanel extends Composite {
 
     private void onSelect(TreeItem item) {
         if (item.getText().startsWith("version")) {
-            onSelect(item.getParentItem());
-            return;
+            // set version
+            versionLabel.setText(item.getText());
+            onSelectWithoutVersion(item.getParentItem());
+
+            // set files
+            currentFilesPanel.clear();
+            JsArrayString files = ((TreeItemModel) item.getUserObject()).getFiles();
+            if (files == null || files.length() == 0) {
+                currentFilesPanel.add(new Label("No file."));
+            } else {
+                for (int i = 0; i < files.length(); i++) {
+                    currentFilesPanel.add(new Label(files.get(i)));
+                }
+            }
+        } else {
+            versionLabel.setText("NONE");
+            onSelectWithoutVersion(item);
+
+            // set files
+            currentFilesPanel.clear();
+            currentFilesPanel.add(new Label("No file."));
         }
+
+    }
+
+    private void onSelectWithoutVersion(TreeItem item) {
         // find full path
         String fullPath = "/" + item.getText();
         TreeItem parent = item.getParentItem();
@@ -167,13 +191,13 @@ public class UploadPanel extends Composite {
 
     void refreshFilePanel() {
         // check all uploads except for the last one
-        for (int i = 0; i < filePanel.getWidgetCount() - 1; i++) {
-            Widget w = filePanel.getWidget(i);
+        for (int i = 0; i < uploadingFilesPanel.getWidgetCount() - 1; i++) {
+            Widget w = uploadingFilesPanel.getWidget(i);
             if (w instanceof FileUploadWrapper) {
                 FileUploadWrapper wrapper = (FileUploadWrapper) w;
                 if (wrapper.getFileUpload().getFilename() == null || wrapper.getFileUpload().getFilename().isEmpty()) {
                     // no file is selected. remove it.
-                    filePanel.remove(i);
+                    uploadingFilesPanel.remove(i);
                     i--;
                 }
             }
@@ -193,10 +217,10 @@ public class UploadPanel extends Composite {
 
                 @Override
                 public void onDelete(FileUploadWrapper wrapper) {
-                    filePanel.remove(wrapper);
+                    uploadingFilesPanel.remove(wrapper);
                 }
             });
-            filePanel.add(lastUploadWrapper);
+            uploadingFilesPanel.add(lastUploadWrapper);
         }
     }
 
