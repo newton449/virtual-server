@@ -36,6 +36,11 @@
       <platform>Linux x64</platform>
       <version>0.1</version>
     </dynamicLibrary>
+    <dynamicLibrary>
+      <path>MainProgram_Linux_x64</path>
+      <platform>Linux x86</platform>
+      <version>0.1</version>
+    </dynamicLibrary>
   </dynamicLibraries>
 
   <!-- Map static resources. -->

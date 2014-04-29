@@ -31,6 +31,6 @@ std::string MainProgram::getCurrentPlatform() {
 #if __x86_64__ || __ppc64__
     return "Linux x64";
 #else
-    return "Linux x32";
+    return "Linux x86";
 #endif
 }
