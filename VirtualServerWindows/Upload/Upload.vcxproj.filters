@@ -77,9 +77,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\interfaces\ILogger.cpp">
-      <Filter>Header Files\interfaces</Filter>
-    </ClCompile>
     <ClCompile Include="HttpServletsImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -105,6 +102,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="XmlWriter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\interfaces\ILogger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
