@@ -8,3 +8,4 @@ _INITIALIZE_EASYLOGGINGPP
 std::ostringstream NULL_STREAM;
 #endif
 
+ 
