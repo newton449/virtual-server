@@ -43,7 +43,6 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>../../VirtualServerWindows/Installer/Module.xml</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -108,11 +107,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../VirtualServerWindows/Installer/Module.xml"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="../../VirtualServerWindows/MainProgram/BlockingQueue.h"
             ex="false"
             tool="3"
@@ -366,11 +360,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../VirtualServerWindows/Installer/Module.xml"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="../../VirtualServerWindows/MainProgram/BlockingQueue.h"
             ex="false"
             tool="3"
@@ -617,11 +606,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../VirtualServerWindows/Installer/Module.xml"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="../../VirtualServerWindows/MainProgram/BlockingQueue.h"
             ex="false"
             tool="3"
@@ -875,11 +859,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../VirtualServerWindows/Installer/Module.xml"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="../../VirtualServerWindows/MainProgram/BlockingQueue.h"
             ex="false"
             tool="3"
