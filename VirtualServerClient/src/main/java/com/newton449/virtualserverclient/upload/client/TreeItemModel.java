@@ -1,6 +1,7 @@
 package com.newton449.virtualserverclient.upload.client;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 
 /**
  *
@@ -32,6 +33,12 @@ public class TreeItemModel extends JavaScriptObject {
      ret[name] = value;
      return ret;
      }
+     }-*/;
+
+    public final native JsArrayString getFiles()/*-{
+     var childObject = this[Object.keys(this)[0]];
+     return childObject;
+            
      }-*/;
 
     public native final String getName()/*-{ 

@@ -1,0 +1,12 @@
+2014-04-28 22:17:12 [6424] INFO  Starting Virtual Server.
+2014-04-28 22:17:12 [6424] DEBUG Loading config.xml.
+2014-04-28 22:17:12 [6424] DEBUG Finished loading config.xml.
+2014-04-28 22:17:12 [6424] DEBUG Loading all modules.
+2014-04-28 22:17:12 [6424] INFO  Loading module: MainProgram
+2014-04-28 22:17:12 [6424] WARN  Cannot find Module.xml for module "MainProgram"
+2014-04-28 22:17:12 [6424] INFO  Loading module: Debug
+2014-04-28 22:17:12 [6424] WARN  Cannot find Module.xml for module "Debug"
+2014-04-28 22:17:12 [6424] INFO  Loading module: style
+2014-04-28 22:17:12 [6424] WARN  Cannot find Module.xml for module "style"
+2014-04-28 22:17:12 [6424] DEBUG Finished loading all modules.
+2014-04-28 22:17:12 [6424] ERROR Got exception when running HTTP server: Invalid HTTP server port

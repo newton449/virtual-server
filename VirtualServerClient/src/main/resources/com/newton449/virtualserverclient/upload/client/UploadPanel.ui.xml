@@ -42,7 +42,7 @@ Uncomment this for XHTML entities
         font-size: 115%;
         margin: 10px 5px;
         }
-        .filePanel{
+        .uploadingFilesPanel{
         border: 1px solid #C2C2C2;
         margin: 10px 2px;
         padding: 5px;
@@ -53,6 +53,12 @@ Uncomment this for XHTML entities
         text-align: right;
         }
         .submit{
+        }
+        .currentFilesPanel{
+         border: 1px solid #C2C2C2;
+        }
+        .currentFilesPanel div{
+         margin: 5px 20px;
         }
     </ui:style>
     <g:HTMLPanel>
@@ -101,8 +107,15 @@ Uncomment this for XHTML entities
         <g:FormPanel ui:field="form" action="/upload/upload" encoding="multipart/form-data" method="POST">
             <g:HTMLPanel addStyleNames="{style.east}">
                 <div class="{style.intro}">Current Path: <g:InlineLabel ui:field="pathLabel"></g:InlineLabel></div>
+                <div class="{style.intro}">Version: <g:InlineLabel ui:field="versionLabel">version_1</g:InlineLabel></div>
+                <div class="{style.intro}">Current Files:</div>
+                <g:FlowPanel addStyleNames="{style.currentFilesPanel}" ui:field="currentFilesPanel">
+                    <g:Label>file1.h</g:Label>
+                    <g:Label>file2.h</g:Label>
+                </g:FlowPanel>
+                <div class="{style.intro}">Upload Files:</div>
                 <g:Hidden ui:field="pathHidden" name="dir"></g:Hidden>
-                <g:FlowPanel addStyleNames="{style.filePanel}" ui:field="filePanel">
+                <g:FlowPanel addStyleNames="{style.uploadingFilesPanel}" ui:field="uploadingFilesPanel">
                     <s:FileUploadWrapper></s:FileUploadWrapper>
                 </g:FlowPanel>
                 <div class="{style.buttonPanel}">

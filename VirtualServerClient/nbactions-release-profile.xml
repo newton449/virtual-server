@@ -14,4 +14,19 @@
                 <virtualServerTarget>../FinalTarget</virtualServerTarget>
             </properties>
         </action>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>war</packaging>
+                <packaging>ear</packaging>
+                <packaging>ejb</packaging>
+            </packagings>
+            <goals>
+                <goal>gwt:debug</goal>
+            </goals>
+            <properties>
+                <netbeans.deploy.debugmode>true</netbeans.deploy.debugmode>
+                
+            </properties>
+        </action>
     </actions>
