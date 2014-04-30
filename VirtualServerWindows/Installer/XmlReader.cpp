@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include <stack>
 #include <algorithm>
+#include <stdexcept>
 
 XmlReader::XmlReader(const std::string& xml) 
   : _xml(xml), _position(0), localposition(0) {}
@@ -102,7 +103,8 @@ std::string XmlReader::element()
   // find end element </tag>
   localposition = std::min(locpos1,locpos2);
   if(localposition >= _xml.size())
-    throw std::exception("malformed XML");
+      throw std::runtime_error("malformed XML");
+    //throw std::exception("malformed XML");
   if(localposition == locpos1)
   {
     localposition = _xml.find('>',localposition);
@@ -121,7 +123,8 @@ std::string XmlReader::body()
   std::string elem = element();
   size_t locpos1 = elem.find('>');
   if(locpos1 >= elem.size())
-    throw std::exception("malformed XML");
+      throw std::runtime_error("malformed XML");
+    //throw std::exception("malformed XML");
   if(elem[locpos1-1] == '/')
     return "";
   std::string localtag = tag();
@@ -172,7 +175,8 @@ XmlReader::attribElems XmlReader::attributes()
       return _attributes;
     std::string value = extractIdentifier(localposition);
     if(locpos < localposition)
-      throw std::exception("malformed XML");
+        throw std::runtime_error("malformed XML");
+      //throw std::exception("malformed XML");
     std::pair<std::string,std::string> elem;
     elem.first = name;
     elem.second = value;

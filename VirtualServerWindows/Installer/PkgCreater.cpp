@@ -1,5 +1,5 @@
 #include "PkgCreater.h"
-#include "chilkat-9.5.0-x86-vc12\include\CkZip.h"
+//#include "chilkat-9.5.0-x86-vc12\include\CkZip.h"
 #include <queue>
 #include <fstream>
 #include "XmlHelper.h"

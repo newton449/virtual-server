@@ -47,7 +47,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <windows.h>
 #include <list>
 #include <iostream>
 #include <iostream>
@@ -57,7 +56,7 @@
 #include <thread>
 #include <mutex>
 
-#include "..\MainProgram\FileSystem.h"
+#include "interface.h"
 
 namespace FileSystem
 {

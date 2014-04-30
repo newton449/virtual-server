@@ -14,10 +14,17 @@
         <itemPath>../../VirtualServerWindows/interfaces/IModuleObjectFactory.h</itemPath>
         <itemPath>../../VirtualServerWindows/interfaces/IServletFactory.h</itemPath>
         <itemPath>../../VirtualServerWindows/interfaces/easylogging++.h</itemPath>
+        <itemPath>../../VirtualServerWindows/Installer/interface.h</itemPath>
       </logicalFolder>
+      <itemPath>../../VirtualServerWindows/Installer/FileMng.h</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/HttpServletsImpl.h</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/JsonReader.h</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.h</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/PkgCreater.h</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/ServletFactoryImpl.h</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/XmlHelper.h</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/XmlReader.h</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/pf_data.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -27,11 +34,16 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>../../VirtualServerWindows/Installer/FileMng.cpp</itemPath>
       <itemPath>../MainProgram/FileSystem_Linux.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/HttpServletsImpl.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/interfaces/ILogger.cpp</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/JsonReader.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/PkgCreater.cpp</itemPath>
       <itemPath>../../VirtualServerWindows/Installer/ServletFactoryImpl.cpp</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/XmlHelper.cpp</itemPath>
+      <itemPath>../../VirtualServerWindows/Installer/XmlReader.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -56,13 +68,26 @@
       <compileType>
         <ccTool>
           <architecture>2</architecture>
-          <standard>8</standard>
+          <commandLine>-std=c++0x</commandLine>
           <warningLevel>3</warningLevel>
         </ccTool>
         <linkerTool>
           <output>../../TestTarget/Installer/Installer_x64.so</output>
+          <linkerLibItems>
+            <linkerLibFileItem>chilkat-9.5.0-x86_64-linux-gcc/lib/libchilkat-9.5.0.so</linkerLibFileItem>
+          </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="../../VirtualServerWindows/Installer/FileMng.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/FileMng.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
             ex="false"
             tool="1"
@@ -78,6 +103,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp"
             ex="false"
             tool="1"
@@ -88,12 +123,52 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/interface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/pf_data.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -180,6 +255,16 @@
           <output>../../FinalTarget/Installer/Installer_x64.so</output>
         </linkerTool>
       </compileType>
+      <item path="../../VirtualServerWindows/Installer/FileMng.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/FileMng.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
             ex="false"
             tool="1"
@@ -195,6 +280,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp"
             ex="false"
             tool="1"
@@ -205,12 +300,52 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/interface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/pf_data.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -287,6 +422,16 @@
           <output>../../TestTarget/Installer/Installer_x86.so</output>
         </linkerTool>
       </compileType>
+      <item path="../../VirtualServerWindows/Installer/FileMng.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/FileMng.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
             ex="false"
             tool="1"
@@ -302,6 +447,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp"
             ex="false"
             tool="1"
@@ -312,12 +467,52 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/interface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/pf_data.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -404,6 +599,16 @@
           <output>../../FinalTarget/Installer/Installer_x86.so</output>
         </linkerTool>
       </compileType>
+      <item path="../../VirtualServerWindows/Installer/FileMng.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/FileMng.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/HttpServletsImpl.cpp"
             ex="false"
             tool="1"
@@ -419,6 +624,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/JsonReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ModuleObjectFactoryImpl.cpp"
             ex="false"
             tool="1"
@@ -429,12 +644,52 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/PkgCreater.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.cpp"
             ex="false"
             tool="1"
             flavor2="0">
       </item>
       <item path="../../VirtualServerWindows/Installer/ServletFactoryImpl.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlHelper.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/XmlReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/interface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../VirtualServerWindows/Installer/pf_data.h"
             ex="false"
             tool="3"
             flavor2="0">

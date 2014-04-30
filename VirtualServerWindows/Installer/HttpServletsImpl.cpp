@@ -3,13 +3,12 @@
 #include "XmlReader.h"
 #include "XmlHelper.h"
 #include "JsonReader.h"
-#include "..\MainProgram\FileSystem.h"
 
 void ModulesListServlet::doMethod(IHttpServletRequest& request, IHttpServletResponse& response){
 	
 	LOG(TRACE) << "Sending module list.";
 
-	std::string path = ".";
+	std::string path = "."; 
 
 	// check how many modules are supported in this server
 	std::map<std::string, std::string> map;
@@ -34,6 +33,8 @@ void ModulesListServlet::doMethod(IHttpServletRequest& request, IHttpServletResp
 	// pad the platform list to be the same as the longest list exist in the mdls
 	for (int i = 0; i < mdls.size(); i++)
 		checkPf(mdls[i], map);
+        
+        //LOG(DEBUG) << createRsp(mdls, map);
 
 	// create response
 	response.getOutputStream() << createRsp(mdls, map);

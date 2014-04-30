@@ -93,7 +93,7 @@
       <compileType>
         <ccTool>
           <architecture>2</architecture>
-          <standard>8</standard>
+          <commandLine>-std=c++0x</commandLine>
           <preprocessorList>
             <Elem>MAIN_PROGRAM</Elem>
           </preprocessorList>

@@ -53,6 +53,7 @@
  * ver 1.0 : 26 Jun 11
  * - first release
  */
+#include <string>
 #include <vector>
 
 class XmlReader
